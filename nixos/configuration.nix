@@ -149,6 +149,8 @@
      git
      kitty
      libsForQt5.kate
+     libsForQt5.qtstyleplugin-kvantum
+     kde-rounded-corners
      rclone
      rclone-browser
      brave
