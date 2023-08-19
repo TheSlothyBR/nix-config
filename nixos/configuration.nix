@@ -150,6 +150,7 @@
      kitty
      libsForQt5.kate
      libsForQt5.qtstyleplugin-kvantum
+     libsForQt5.sddm-kcm
      kde-rounded-corners
      rclone
      rclone-browser
