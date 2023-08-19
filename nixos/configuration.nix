@@ -76,7 +76,10 @@
       libinput.enable = true;
       # Enable the KDE Plasma Desktop Environment.
       displayManager = {
-        sddm.enable = true;
+        sddm = {
+          enable = true;
+          theme = "sugar-dark";
+        };
         # Launch in Wayland session
         defaultSession = "plasmawayland";
        };
@@ -84,6 +87,7 @@
         plasma5.enable = true;
       };
     };
+    flatpak.enable = true;
   };
 
   # Fix GTK theming in Wayland
@@ -142,7 +146,11 @@
  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages =
+  let
+    themes = pkgs.callPackage ./sddm-sugar-dark.nix {};
+  in
+  with pkgs; [
      neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
      lshw
@@ -152,13 +160,13 @@
      libsForQt5.qtstyleplugin-kvantum
      libsForQt5.sddm-kcm
      kde-rounded-corners
+     themes.sddm-sugar-dark
      rclone
      rclone-browser
      brave
      obsidian
      onlyoffice-bin
      zotero
-     tor
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
