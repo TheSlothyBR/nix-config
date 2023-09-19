@@ -163,7 +163,6 @@
      themes.sddm-sugar-dark
      rclone
      rclone-browser
-     brave
      obsidian
      onlyoffice-bin
      zotero
