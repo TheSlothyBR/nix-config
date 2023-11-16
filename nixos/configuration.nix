@@ -21,6 +21,10 @@
   nixpkgs = {
     config = {
       allowUnfree = true;
+      # Delete this line as soon as possible
+      permittedInsecurePackages = [
+        "electron-24.8.6"
+      ];
     };
   };
 
@@ -176,6 +180,10 @@
      obsidian
      onlyoffice-bin
      zotero
+  ];
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-24.8.6"
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
