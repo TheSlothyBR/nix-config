@@ -15,7 +15,7 @@
       efi.canTouchEfiVariables = true;
       systemd-boot.enable = true;
     };
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_4;
+    kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
   };
 
   nixpkgs = {
