@@ -90,6 +90,16 @@
     flatpak.enable = true;
   };
 
+  # Auto configure flathub repos in deterministic way
+  systemd.services.configure-flathub-repo = {
+    wantedBy = ["multi-user.target"];
+    path = [ pkgs.flatpak ];
+    script = ''
+      flatpak remote-add --if-not-exists flathub
+      https://flathub.org/repo/flathub.flatpakrepo
+    '';
+  };
+
   # Fix GTK theming in Wayland
   programs.dconf.enable = true;
 
