@@ -21,10 +21,6 @@
   nixpkgs = {
     config = {
       allowUnfree = true;
-      # Delete this line as soon as possible
-      permittedInsecurePackages = [
-        "electron-24.8.6"
-      ];
     };
   };
 

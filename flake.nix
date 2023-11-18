@@ -1,4 +1,5 @@
 {
+  #nix flake lock --update-input nixpkgs
   #sudo nixos-rebuild switch --flake ~/.dotfiles#myNixos
   description = "My Nix agnostic system configuration";
 
