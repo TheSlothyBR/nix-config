@@ -177,9 +177,6 @@
      themes.sddm-sugar-dark
      rclone
      rclone-browser
-     obsidian
-     onlyoffice-bin
-     zotero
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
