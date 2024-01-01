@@ -15,10 +15,17 @@
     #  url = "github:numtide/system-manager";
     #  inputs.nixpkgs.follows = "nixpkgs";
     #};
-    #home-manager = {
-    #  url = "github:nix-community/home-manager";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    plasma-manager = {
+      url = "github:pjones/plasma-manager";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };S
+    };
   };
 
   outputs = { nixpkgs, ... }@inputs:{
