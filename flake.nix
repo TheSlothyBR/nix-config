@@ -43,5 +43,5 @@
 		];
       };
     };
-   diskoConfigurations.ultra = import ./ultra-disko.nix;
+   diskoConfigurations.ultra = import ./nixos/ultra-disko.nix;
 }
