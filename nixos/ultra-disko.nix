@@ -7,8 +7,8 @@
         content = {
           type = "table";
           format = "gpt";
-          partitions = {
-            ESP = {
+          partitions = [
+            {
               name = "ESP";
               start = "1MiB";
               end = "512MiB";
@@ -19,8 +19,8 @@
                 format = "vfat";
                 mountpoint = "/boot";
               };
-            };
-            luks = {
+            }
+            {
               name = "ultra_crypted";
               type = "luks";
               start = "512MiB";
@@ -56,8 +56,8 @@
                   };
                 };
 	          };
-            };
-          };
+            }
+          ];
         };
       };
     };
