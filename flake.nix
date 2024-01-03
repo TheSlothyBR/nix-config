@@ -33,7 +33,7 @@
   };
 
   outputs = { nixpkgs, ... }@inputs:{
-    nixosConfigurations.ultra = nixpkgs.lib.nixosSystem {
+    nixosConfigurations."ultra" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
