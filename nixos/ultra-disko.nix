@@ -20,8 +20,7 @@
 			  };
             };
             luks = {
-              start = "512MiB";
-              end = "100%";
+              size = "100%";
               content = {
                 name = "ultra_crypted";
                 type = "luks";
