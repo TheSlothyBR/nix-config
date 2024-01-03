@@ -32,7 +32,7 @@
                 extraArgs = [ "-f" ]; # Override existing partition
                 postCreateHook = ''
                   btrfs subvolume snapshot -r /mnt/@root /mnt/@snapshots/@root-blank
-                ''
+                '';
                 subvolumes = {
                   "@persist" = {
                     mountpoint = "/persist";
