@@ -41,7 +41,7 @@
 
   # Enable networking
   networking = {
-    hostName = "nixos";
+    hostName = "ultra";
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
