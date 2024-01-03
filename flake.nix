@@ -7,6 +7,10 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-23.11";
     };
+    disko = {
+      url = "github:nix-community/disko";
+	  inputs.nixpkgs.follows = "nixpkgs";
+    };
     #flake-utils = {
     #  url = "github:numtide/flake-utils";
     #  inputs.nixpkgs.follows = "nixpkgs";
@@ -24,7 +28,7 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
-      };S
+      };
     };
   };
 
@@ -35,7 +39,8 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./nixos/configuration.nix
-        ];
+		  disko.nixosModules.disko
+		];
       };
     };
   };
