@@ -32,16 +32,15 @@
     };
   };
 
-  outputs = { nixpkgs, disko, ... }@inputs:{
+  outputs = { nixpkgs, ... }@inputs:{
     nixosConfigurations.ultra = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/configuration.nix
-		  disko.nixosModules.disko
-		  ./nixos/ultra-disko.nix
-		];
-      };
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [
+        inputs.disko.nixosModules.ultra
+		(import ./nixos/ultra-disko.nix { device = "/dev/sda"; })
+        ./nixos/configuration.nix
+	  ];
     };
-   diskoConfigurations.ultra = import ./nixos/ultra-disko.nix;
+  };
 }

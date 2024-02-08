@@ -1,65 +1,72 @@
-{ ... }: {
-  disko.devices = {
-    disk = {
-      sda = { # name of attr set can be anything, name for drive for convenience 
-        type = "disk";
-        device = "/dev/sda"; # can also be declared from the "disks" attr with "builtins.elemAt disks 0;"
-        content = {
-          type = "gpt";
-          partitions = {
-            ESP = {
-              name = "ESP";
-              start = "1MiB";
-              end = "512MiB";
-              type = "EF00";
-              content = {
-                type = "filesystem";
-                format = "vfat";
-                mountpoint = "/boot";
-                mountOptions = [ "defaults" ];
-			  };
-            };
-            luks = {
-              size = "100%";
-              content = {
-                name = "ultra_crypted";
-                type = "luks";
-			    askPassword = true;
-				settings.allowDiscards = true;
-				content = {
-                  type = "btrfs";
-                  extraArgs = [ "-f" ]; # Override existing partition
-                  postCreateHook = ''
-                    btrfs subvolume snapshot -r /mnt/@root /mnt/@snapshots/@root-blank
-                  '';
-                  subvolumes = {
-                    "@persist" = {
-                      mountpoint = "/persist";
-                      mountOptions = [ "compress=zstd" "noatime" ];
-                    };
-                    "@swap" = {
-                      mountpoint = "/.swapvol";
-                      swap.swapfile.size = "4G";
-                    };
-                    "@root" = {
-                      mountpoint = "/";
-                      mountOptions = [ "compress=zstd" "noatime" ];
-                    };
-                    "@snapshots" = {
-					  mountpoint = "/.snapshots";
-                      mountOptions = [ "compress=zstd" "noatime" ];
-                    };
-                    "@home" = {
-                      mountpoint = "/home";
-                      mountOptions = [ "compress=zstd" "noatime" ];
-				    };
-                  };
-	            };
-              };
-            };
-          };
+{ device ? "Set this to storage device, such as /dev/sda. Pass as argument to Disko when formating" }: {
+disko.devices = {
+  disk.main = {
+    inherit device;
+    type = "disk";
+    content = {
+      type = "gpt";
+      partitions = {
+        ESP = {
+          name = "ESP";
+          start = "1MiB";
+          end = "512MiB";
+          type = "EF00";
+          content = {
+            type = "filesystem";
+            format = "vfat";
+            mountpoint = "/boot";
+            mountOptions = [ "defaults" ];
+    	    };
+        };
+        luks = {
+          size = "100%";
+    	  content = {
+            type = "luks";
+    		name = "ultra_crypted";
+    		extraOpenArgs = [ ];
+    		content = {
+              type = "lvm_pv";
+    		  vg = "pool";
+    		};
+    	  };
         };
       };
     };
+    lvm_vg = {
+      pool = {
+        type = "lvm_vg";
+		lvs = {
+          root = {
+		    size = "100%FREE";
+			content = {
+			  type = "btrfs";
+			  extraArgs = [ "-f" ];
+			  subvolumes = {
+			    "/root" = {
+				  mountpoint = "/";
+				  mountOptions = [ "compress=zstd" ];
+				};
+                "/swap" = {
+                  mountpoint = "/.swapvol";
+                  swap.swapfile.size = "4G";
+                };
+				"/persist" = {
+				  mountpoint = "/persist";
+				  mountOptions = [ "subvol=persist" "compress=zstd" "noatime" ];
+				};
+				"/nix" = {
+				  mountpoint = "/nix";
+				  mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
+				};
+                "/snapshots" = {
+                  mountpoint = "/.snapshots";
+                  mountOptions = [ "subvol=snapshots" "compress=zstd" "noatime" ];
+                };
+			  };
+			};
+		  };
+        };
+	  };
+    };
   };
-}
+};
