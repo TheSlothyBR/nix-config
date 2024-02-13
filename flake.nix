@@ -7,10 +7,10 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-23.11";
     };
-    disko = {
-      url = "github:nix-community/disko";
-	  inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #disko = {
+    #  url = "github:nix-community/disko";
+	#  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     #flake-utils = {
     #  url = "github:numtide/flake-utils";
     #  inputs.nixpkgs.follows = "nixpkgs";
@@ -38,10 +38,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./nixos/configuration.nix
-		  disko.nixosModules.disko
-		  ./nixos/ultra-disko.nix
 		];
       };
     };
-   diskoConfigurations.ultra = import ./nixos/ultra-disko.nix;
 }
