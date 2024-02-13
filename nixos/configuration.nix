@@ -143,11 +143,21 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  virtualisation = {
+    virtualbox.host = {
+      enable = true;
+      enableExtensionPack = true;
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.caio = {
-    isNormalUser = true;
-    description = "Caio";
-    extraGroups = [ "networkmanager" "wheel" ];
+  users = {
+    users.caio = {
+      isNormalUser = true;
+      description = "Caio";
+      extraGroups = [ "networkmanager" "wheel" ];
+    };
+    extraGroups.vboxusers.members = [ "caio" ];
   };
 
   # Allow unfree packages
