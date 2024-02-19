@@ -6,7 +6,7 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./ultra-hardware-configuration.nix
   ];
 
   # Bootloader

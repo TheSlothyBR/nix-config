@@ -9,7 +9,10 @@
     };
     disko = {
       url = "github:nix-community/disko";
-	  inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    impermanence = {
+      url = "github:nix-community/impermanence";
     };
     #flake-utils = {
     #  url = "github:numtide/flake-utils";
@@ -23,13 +26,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    plasma-manager = {
-      url = "github:pjones/plasma-manager";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
-    };
+    #plasma-manager = {
+    #  url = "github:pjones/plasma-manager";
+    #  inputs = {
+    #    nixpkgs.follows = "nixpkgs";
+    #    home-manager.follows = "home-manager";
+    #  };
+    #};
   };
 
   outputs = { nixpkgs, ... }@inputs:{
@@ -37,10 +40,28 @@
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
-        inputs.disko.nixosModules.ultra
-		(import ./nixos/ultra-disko.nix { device = "/dev/sda"; })
-        ./nixos/configuration.nix
-	  ];
+        #inputs.disko.nixosModules.default
+        #(import ./nixos/ultra/ultra-disko.nix { device = "/dev/sda"; })
+
+        ./nixos/ultra/configuration.nix
+              
+        inputs.home-manager.nixosModules.default
+        #inputs.impermanence.nixosModules.impermanence
+      ];
+    };
+
+    nixosConfigurations.vm = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [
+        inputs.disko.nixosModules.default
+        (import ./nixos/vm/vm-disko.nix { device = "/dev/sda"; })
+
+        ./nixos/vm/configuration.nix
+
+        inputs.home-manager.nixosModules.default
+        inputs.impermanence.nixosModules.impermanence
+      ];
     };
   };
 }
