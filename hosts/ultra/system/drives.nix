@@ -6,6 +6,6 @@
 }:{
   imports = [
     inputs.disko.nixosModules.default
-    (imports ./disko.nix { drives = builtin.elemAt globals.ultra.drives 0; })
+    (import ./disko.nix { inherit globals; drives = builtins.elemAt globals.ultra.drives 0; })
   ];
 }

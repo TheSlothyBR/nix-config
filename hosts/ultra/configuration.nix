@@ -39,13 +39,12 @@
 
   # Configure keymap in X11
   services = { 
-    libinput = true;
+    libinput.enable = true;
     xserver.xkb = {
       layout = "br";
       variant = "nodeadkeys";
     };
   };
-  console.keyMap = "br-abnt2";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;

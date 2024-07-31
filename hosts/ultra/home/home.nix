@@ -2,6 +2,7 @@
   inputs
 , globals
 , nixpkgs
+, config
 , ...
 }:{
   imports = [
@@ -13,16 +14,18 @@
   };
   
   home-manager = {
+    extraSpecialArgs = { inherit inputs; };
     useUserPackages = true;
     useGlobalPkgs = true;
-  };
-
-  home = {
-    stateVersion = "24.05";
-    username = "${globals.ultra.userName}";
-    homeDirectory = "/home/${globals.ultra.userName}";
-    packages = [
-      
-    ];
+    users.${globals.ultra.userName} = {
+      home = {
+        stateVersion = "24.05";
+        username = "${globals.ultra.userName}";
+        homeDirectory = "/home/${globals.ultra.userName}";
+        packages = [
+          
+        ];
+      };
+    };
   };
 }

@@ -33,13 +33,14 @@
     };
   };
 
-  outputs = let
-    globals = import ./globals.nix;
-  in @inputs 
-  {  
+  outputs =
+  {
     nixpkgs
   , ...
-  }: {
+  } @inputs: let
+    globals = import ./globals.nix;
+  in
+  {
     nixosConfigurations = {
       "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem rec {
         system = "${globals.ultra.system}";
@@ -49,8 +50,8 @@
         modules = [
           ./hosts/ultra/system/drives.nix
           ./hosts/ultra/system/impermanence
-          ./hosts/ultra/system/hardware-configuration.nix
-          ./hosts/ultra/home/home-manager.nix
+          #./hosts/ultra/system/hardware-configuration.nix
+          ./hosts/ultra/home/home.nix
           ./hosts/ultra/configuration.nix
         ];
       };
