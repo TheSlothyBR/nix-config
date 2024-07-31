@@ -2,7 +2,6 @@
   inputs
 , globals
 , nixpkgs
-, config
 , ...
 }:{
   imports = [

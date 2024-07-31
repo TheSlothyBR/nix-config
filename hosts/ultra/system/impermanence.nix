@@ -7,8 +7,13 @@
   
   imports = [
     inputs.impermanence.nixosModules.impermanence
-    inputs.impermanence.nixosModules.home-manager.impermanence
   ];
+
+  home-manager.users.${globals.ultra.userName} = {
+    imports = [
+      inputs.impermanence.nixosModules.home-manager.impermanence
+    ];
+  };
 
   boot.initrd = {
     supportedFilesystems = ["btrfs"];
