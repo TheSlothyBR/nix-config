@@ -36,6 +36,7 @@
   outputs =
   {
     nixpkgs
+  , self
   , ...
   } @inputs: let
     globals = import ./globals.nix;
@@ -49,7 +50,7 @@
         };
         modules = [
           ./hosts/ultra/system/drives.nix
-          ./hosts/ultra/system/impermanence
+          ./hosts/ultra/system/impermanence.nix
           #./hosts/ultra/system/hardware-configuration.nix
           ./hosts/ultra/home/home.nix
           ./hosts/ultra/configuration.nix
