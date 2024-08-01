@@ -6,7 +6,7 @@
   disko.devices = {
     disk = {
       main = {
-        device = builtins.alemAt drives 0;
+        device = drives;
         type = "disk";
         content = {
           type = "gpt";
@@ -53,12 +53,14 @@
               postCreateHook = ''
                 TMP=$(mktemp -d);
                 mount -t btrfs -o subvol=/ "/dev/mapper/pool-system" "$TMP";
-                trap 'umount $TMP; rm -rf $TMP' EXIT;
-                btrfs subvolume snapshot -r $TMP /mnt/.snapshots/blank-root;
+                mkdir $TMP/.snapshots;
+                mount -t btrfs -o subvol=/snapshots "/dev/mapper/pool-system" "$TMP/.snapshots";
+                trap 'umount -A $TMP; rm -rf $TMP' EXIT;
+                btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
               postMountHook = ''
                 mkdir -p /mnt/persist/system/etc/nixos;
-                cp -r ${globals.configRoot} /mnt/persist/system/etc/nixos;
+                cp -r /nix-config /mnt/persist/system/etc/nixos;
               '';
               subvolumes = {
                 "/persist" = {

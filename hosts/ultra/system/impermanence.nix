@@ -9,25 +9,19 @@
     inputs.impermanence.nixosModules.impermanence
   ];
 
-  home-manager.users.${globals.ultra.userName} = {
-    imports = [
-      inputs.impermanence.nixosModules.home-manager.impermanence
-    ];
-  };
-
   boot.initrd = {
-    supportedFilesystems = ["btrfs"];
+    supportedFilesystems = [ "btrfs" ];
     systemd = {
       enable = true;
       services."wipe-root" = {
         description = "Impermanence root wipe";
-        wantedBy = ["initrd.target"];
-        requires = ["dev-disk-by\\x2dlabel-crypted.device"];
+        wantedBy = [ "initrd.target" ];
+        requires = [ "dev-pool-system.device" ];
         after = [
-          "dev-disk-by\\x2dlabel-crypted.device"
-          "systemd-cryptsetup@$crypted.service"
+          "dev-pool-system.device"
+          "systemd-cryptsetup@ultra.service"
         ];
-        before = ["sysroot.mount"];
+        before = [ "sysroot.mount" ];
         unitConfig.DefaultDependencies = "no";
         serviceConfig.Type = "oneshot";
         script = ''
@@ -36,10 +30,7 @@
             mount -t btrfs -o subvol=/ /dev/mapper/pool-system "$MNTPOINT"
             trap 'umount "$MNTPOINT"' EXIT
 
-            btrfs subvolume list -o "$MNTPOINT/root" | cut -f9 -d ' ' |
-            while read -r subvolume; do
-              btrfs subvolume delete "$MNTPOINT/$subvolume"
-            done && btrfs subvolume delete "$MNTPOINT/root"
+            btrfs subvolume delete "$MNTPOINT/root"
             btrfs subvolume snapshot "$MNTPOINT/.snapshots/blank-root" "$MNTPOINT/root"
           )
         '';
@@ -52,8 +43,8 @@
       "enforce-impermanence-home" = {
         "/persist/home" = {
           d = {
-            group = "wheel";
-            user = "root";
+            group = "users";
+            user = "${globals.ultra.userName}";
             mode = "0755";
           };
         };
@@ -79,25 +70,32 @@
     ];
   };
 
-  home.persistence."/persist/home" = {
-    directories = [
-      "Documents"
-      "Downloads"
-      "Music"
-      "Pictures"
-      "Videos"
-      ".gnupg"
-      ".ssh"
-      ".local/share/keyrings"
-      ".local/share/direnv"
-	  {
-	    directory = ".local/share/Steam";
-		method = "symlink";
-	  }
-	];
-	files = [
-	  ".screenrc"
-	];
-	allowOther = true;
+  programs.fuse.userAllowOther = true;
+
+  home-manager.users.${globals.ultra.userName} = {
+    imports = [
+      inputs.impermanence.nixosModules.home-manager.impermanence
+    ];
+    home.persistence."/persist/home" = {
+      directories = [
+        "Documents"
+        "Downloads"
+        "Music"
+        "Pictures"
+        "Videos"
+        ".gnupg"
+        ".ssh"
+        ".local/share/keyrings"
+        ".local/share/direnv"
+        {
+          directory = ".local/share/Steam";
+          method = "symlink";
+        }
+      ];
+      files = [
+        ".screenrc"
+      ];
+      allowOther = true;
+    };
   };
 }

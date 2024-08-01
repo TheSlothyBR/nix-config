@@ -8,15 +8,12 @@
     inputs.home-manager.nixosModules.home-manager
   ];
 
-  programs.home-manager = {
-    enable = true;
-  };
-  
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useUserPackages = true;
     useGlobalPkgs = true;
     users.${globals.ultra.userName} = {
+      programs.home-manager.enable = true;
       home = {
         stateVersion = "24.05";
         username = "${globals.ultra.userName}";
