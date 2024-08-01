@@ -1,5 +1,7 @@
 {
   configRoot = ./.;
+  customPkgs = ./pkgs;
+  overlays = ./overlays;
   ultra = {
     hostName = "ultra";
     userName = "ultra";
