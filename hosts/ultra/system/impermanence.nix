@@ -34,7 +34,7 @@
             while read -r subvolume; do
               btrfs subvolume delete "$MNTPOINT/$subvolume"
             done && btrfs subvolume delete "$MNTPOINT/root"
-            btrfs subvolume snapshot "$MNTPOINT/.snapshots/blank-root" "$MNTPOINT/root"
+            btrfs subvolume snapshot "$MNTPOINT/snapshots/blank-root" "$MNTPOINT/root"
           )
         '';
       };
@@ -61,8 +61,8 @@
     hideMounts = true;
     directories = [
       "/etc/nixos"
-	  "/etc/secureboot"
-	  "/etc/NetworkManager/system-connections"
+      "/etc/secureboot"
+      "/etc/NetworkManager/system-connections"
       "/var/log"
       "/var/lib/bluetooth"
       "/var/lib/nixos"

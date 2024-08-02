@@ -9,8 +9,9 @@
     ./home/home.nix
     ../common/nix-config.nix
     ./system/systemd-boot.nix
-    #../common/apps/yazi.nix
-    #../common/plasma.nix
+    ../common/sddm.nix
+    ../common/plasma.nix
+    ../common/apps/yazi.nix
   ];
   
   networking = {
@@ -75,7 +76,7 @@
   environment.systemPackages = with pkgs; [
     neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     git
-	sbctl
+    sbctl
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
