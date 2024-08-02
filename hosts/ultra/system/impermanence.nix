@@ -27,10 +27,13 @@
         script = ''
           MNTPOINT=$(mktemp -d)
           (
-            mount -t btrfs -o subvol=root /dev/pool/system "$MNTPOINT"
+            mount -t btrfs -o subvol=/ /dev/pool/system "$MNTPOINT"
             trap 'umount "$MNTPOINT"' EXIT
 
-            btrfs subvolume delete "$MNTPOINT/root"
+            btrfs subvolume list -o "$MNTPOINT/root" | cut -f9 -d ' ' |
+            while read -r subvolume; do
+              btrfs subvolume delete "$MNTPOINT/$subvolume"
+            done && btrfs subvolume delete "$MNTPOINT/root"
             btrfs subvolume snapshot "$MNTPOINT/.snapshots/blank-root" "$MNTPOINT/root"
           )
         '';

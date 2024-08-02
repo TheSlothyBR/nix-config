@@ -53,7 +53,7 @@
               postCreateHook = ''
                 TMP=$(mktemp -d);
                 mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
-                mkdir $TMP/.snapshots;
+                mkdir -p $TMP/{persist,nix,root,.snapshots,.swapvol};
                 mount -t btrfs -o subvol=snapshots "/dev/pool/system" "$TMP/.snapshots";
                 trap 'umount -A $TMP; rm -rf $TMP' EXIT;
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
