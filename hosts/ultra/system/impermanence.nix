@@ -27,7 +27,7 @@
         script = ''
           MNTPOINT=$(mktemp -d)
           (
-            mount -t btrfs -o subvol=/ /dev/mapper/pool-system "$MNTPOINT"
+            mount -t btrfs -o subvol=/root /dev/pool/system "$MNTPOINT"
             trap 'umount "$MNTPOINT"' EXIT
 
             btrfs subvolume delete "$MNTPOINT/root"
