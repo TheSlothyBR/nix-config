@@ -8,8 +8,9 @@
   imports = [
     ./home/home.nix
     ../common/nix-config.nix
-    ../common/apps/yazi.nix
-    ../common/plasma.nix
+    ./system/systemd-boot.nix
+    #../common/apps/yazi.nix
+    #../common/plasma.nix
   ];
   
   networking = {

@@ -52,9 +52,9 @@
               extraArgs = [ "-f" ];
               postCreateHook = ''
                 TMP=$(mktemp -d);
-                mount -t btrfs -o subvol=/root "/dev/mapper/pool-system" "$TMP";
+                mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
                 mkdir $TMP/.snapshots;
-                mount -t btrfs -o subvol=/snapshots "/dev/mapper/pool-system" "$TMP/.snapshots";
+                mount -t btrfs -o subvol=snapshots "/dev/pool/system" "$TMP/.snapshots";
                 trap 'umount -A $TMP; rm -rf $TMP' EXIT;
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
