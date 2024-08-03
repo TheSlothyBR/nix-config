@@ -1,5 +1,4 @@
-{
-  globals
+{ globals
 , inputs
 , nixpkgs
 , ...

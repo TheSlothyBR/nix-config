@@ -34,8 +34,7 @@
   };
 
   outputs =
-  {
-    nixpkgs
+  { nixpkgs
   , self
   , ...
   } @inputs: let
@@ -48,12 +47,12 @@
         specialArgs = {
           inherit inputs globals;
         };
-        modules = [
-          ./hosts/ultra/system/drives.nix
-          ./hosts/ultra/system/impermanence.nix
-          ./hosts/ultra/system/hardware-configuration.nix
-          ./hosts/ultra/home/home.nix
-          ./hosts/ultra/configuration.nix
+        modules = with (./hosts/ultra/); [
+          system/drives.nix
+          system/impermanence.nix
+          system/hardware-configuration.nix
+          home/home.nix
+          configuration.nix
         ];
       };
     };

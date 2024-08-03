@@ -1,9 +1,11 @@
 {
   nix = {
     settings = {
+      auto-optimize-store = true;
       experimental-features = [
         "nix-command"
         "flakes"
+        "repl-flake"
       ];
       trusted-users = [
         "root"
@@ -12,14 +14,8 @@
     };
     gc = {
       automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than +2";
-    };
-  };
-
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
+      dates = "daily";
+      options = "--delete-older-than 2d";
     };
   };
 }
