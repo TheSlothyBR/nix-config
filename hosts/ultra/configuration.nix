@@ -21,6 +21,9 @@
     ../common/sddm.nix
     ../common/plasma.nix
 
+    ../common/flatpak.nix
+    ../common/apps/brave.nix
+
     ../common/apps/neovim.nix
     ../common/apps/git.nix
     ../common/apps/wezterm.nix

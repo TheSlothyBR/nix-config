@@ -85,17 +85,9 @@
         "Music"
         "Pictures"
         "Videos"
-        ".gnupg"
         ".ssh"
-        ".local/share/keyrings"
-        ".local/share/direnv"
-        {
-          directory = ".local/share/Steam";
-          method = "symlink";
-        }
-      ];
-      files = [
-        ".screenrc"
+        ".var"
+        ".local/share"
       ];
       allowOther = true;
     };

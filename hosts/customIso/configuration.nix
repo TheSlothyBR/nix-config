@@ -16,10 +16,15 @@
 
   isoImage.squashfsCompression = "gzip -Xcompression-level 1";
 
-  boot.extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
+  boot = {
+    kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
+    extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
+  };
 
   environment.systemPackages = with pkgs; [
     neovim
     git
+    curl
+    fsarchiver
   ];
 }
