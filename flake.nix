@@ -36,7 +36,6 @@
 
   outputs =
   { nixpkgs
-  , self
   , ...
   } @inputs: let
     globals = import ./globals.nix;
@@ -54,6 +53,14 @@
           ./hosts/ultra/system/hardware-configuration.nix
           ./hosts/ultra/home/home.nix
           ./hosts/ultra/configuration.nix
+        ];
+      };
+      customIso = nixpkgs.lib.nixosSystem rec {
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          ./hosts/customIso/configuration.nix
         ];
       };
     };
