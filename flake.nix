@@ -31,6 +31,7 @@
         home-manager.follows = "home-manager";
       };
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
 
   outputs =
@@ -47,12 +48,12 @@
         specialArgs = {
           inherit inputs globals;
         };
-        modules = with (./hosts/ultra/); [
-          system/drives.nix
-          system/impermanence.nix
-          system/hardware-configuration.nix
-          home/home.nix
-          configuration.nix
+        modules = [
+          ./hosts/ultra/system/drives.nix
+          ./hosts/ultra/system/impermanence.nix
+          ./hosts/ultra/system/hardware-configuration.nix
+          ./hosts/ultra/home/home.nix
+          ./hosts/ultra/configuration.nix
         ];
       };
     };

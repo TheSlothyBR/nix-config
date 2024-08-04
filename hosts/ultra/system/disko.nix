@@ -57,10 +57,9 @@
                 trap 'umount -A $TMP; rm -rf $TMP' EXIT;
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
-              let config = ${globals.configRoot}; in
               postMountHook = ''
                 mkdir -p /mnt/persist/system/etc/nixos;
-                cp -r ${config} /mnt/persist/system/etc/nixos;
+                cp -r /nix-config /mnt/persist/system/etc/nixos;
               '';
               subvolumes = {
                 "/persist" = {

@@ -24,7 +24,7 @@ done
 
 for config in $configs; do
     if [[ "$config" == "$FLAKE" ]]; then
-      nix --extra-experimental-feature 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake "./${config}"
+      nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#${config}"
       break
     else
       echo "Error: unknown configuration provided"

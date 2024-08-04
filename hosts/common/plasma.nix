@@ -1,8 +1,10 @@
 { pkgs
 , inputs
 , config
+, globals
 , ...
 }:{
+  config = {
   services.desktopManager.plasma6.enable = true;
 
   environment = {
@@ -19,14 +21,12 @@
     ];
   };
 
-  config = {
-    environment.systemPackages = with pkgs.kdePackages; [
-      qtstyleplugin-kvantum
-      kdePackages.sddm-kcm
-    ] ++ [
-      #kde-rounded-corners
-    ];
-  };
+  environment.systemPackages = with pkgs.kdePackages; [
+    qtstyleplugin-kvantum
+    sddm-kcm
+  ] ++ [
+    #kde-rounded-corners
+  ];
 
   home-manager = {
     sharedModules  = [
@@ -44,4 +44,5 @@
       };
     };
   };
+};
 }

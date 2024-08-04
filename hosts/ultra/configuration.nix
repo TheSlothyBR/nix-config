@@ -4,28 +4,28 @@
 , inputs
 , ...
 }:{
-  imports = with (../common/); [
-    kernel.nix
-    nix-config.nix
-    unfree-pkgs.nix
-    systemd-boot.nix
-    sound.nix
+  imports = [
+    ../common/kernel.nix
+    ../common/nix-config.nix
+    ../common/unfree-pkgs.nix
+    ../common/systemd-boot.nix
+    ../common/sound.nix
 
-    networking.nix
-    bluetooth.nix
-    wifi-adapter.nix
+    ../common/networking.nix
+    ../common/bluetooth.nix
+    ../common/wifi-adapter.nix
 
-    inputs.nix
-    gestures.nix
+    ../common/inputs.nix
+    ../common/gestures.nix
 
-    sddm.nix
-    plasma.nix
+    ../common/sddm.nix
+    ../common/plasma.nix
 
-    apps/neovim.nix
-    apps/git.nix
-    apps/wezterm.nix
-    apps/utils.nix
-    apps/yazi.nix
+    ../common/apps/neovim.nix
+    ../common/apps/git.nix
+    ../common/apps/wezterm.nix
+    ../common/apps/utils.nix
+    ../common/apps/yazi.nix
   ] ++ [
     ./home/home.nix
   ];
@@ -44,6 +44,7 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
+  #users.mutableUsers = true
   users.users."${globals.ultra.userName}" = {
     isNormalUser = true;
     extraGroups = [ 
@@ -52,7 +53,8 @@
       "video"
       "wheel"
     ];
-    initialPassword = " ";
+    initialHashedPassword = " ";
+    #hashedPassword = "";
   };
 
   system.stateVersion = "24.05";
