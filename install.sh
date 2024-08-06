@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 configs=(
   ultra
 )
@@ -48,13 +50,13 @@ done
 for config in $configs; do
     if [[ "$config" == "$FLAKE" ]]; then
 
-      if [[ ! -f ./flake.lock ]]; then
-        nix --extra-experimental-features 'nix-command flakes' flake lock
-        git add .
-      elif grep -q "string" "./hosts/${config}/system/hardware-configuration.nix"; then
-        nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "./hosts/${config}/system/hardware-configuration.nix"
-        git add .
-      fi
+     #if [[ ! -f ./flake.lock ]]; then
+     #  nix --extra-experimental-features 'nix-command flakes' flake lock
+     #  git add .
+     #elif grep -q "string" "./hosts/${config}/system/hardware-configuration.nix"; then
+     #  nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "./hosts/${config}/system/hardware-configuration.nix"
+     #  git add .
+     #fi
 
       if [[ NO_INSTALL -eq 0 ]]; then
         nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#${config}"
