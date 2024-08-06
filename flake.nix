@@ -40,6 +40,7 @@
 
   outputs =
   { nixpkgs
+  , self
   , ...
   } @inputs: let
     globals = import ./globals.nix;
