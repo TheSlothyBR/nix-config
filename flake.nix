@@ -32,6 +32,10 @@
       };
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+    #sops-nix = {
+    #  url = "github:mic92/sops-nix";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
   };
 
   outputs =
@@ -62,6 +66,24 @@
         modules = [
           ./hosts/customIso/configuration.nix
         ];
+      };
+
+      packages = {
+          default = self.packages.install;
+
+          install = pkgs.writeShellApplication {
+            name = "install";
+            runtimeInputs = with pkgs; [ git ];
+            text = ''${./install.sh} "$@"'';
+          };
+        };
+      apps = {
+        default = self.apps.install;
+
+        install = {
+          type = "app";
+          program = "${self.packages.install}/bin/install";
+        };
       };
     };
   };
