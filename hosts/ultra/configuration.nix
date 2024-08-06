@@ -29,8 +29,6 @@
     ../common/apps/wezterm.nix
     ../common/apps/utils.nix
     ../common/apps/yazi.nix
-  ] ++ [
-    ./home/home.nix
   ];
   
   time.timeZone = "America/Sao_Paulo";
@@ -56,7 +54,8 @@
       "video"
       "wheel"
     ];
-    initialHashedPassword = " ";
+    initialPassword = " ";
+    #initialHashedPassword = " ";
     #hashedPassword = "";
   };
 
