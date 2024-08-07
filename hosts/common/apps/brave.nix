@@ -4,7 +4,10 @@
 }:{
   home-manager.users.${globals.ultra.userName} = {
     services.flatpak.packages = [
-      "com.brave.Browser"
+      {
+        appId = "com.brave.Browser";
+        origin = "flathub";
+      }
     ];
   };
 }

@@ -69,10 +69,11 @@
         ];
       };
 
-      packages = let 
-        pkgs = import nixpkgs { system = "x86_64-linux"; };
+      packages = let
+        system = "x86_64-linux";
+        pkgs = import nixpkgs { inherit system; };
       in {
-          default = self.packages.install;
+          default = self.packages.${system}.install;
 
           install = pkgs.writeShellApplication {
             name = "install";
@@ -81,11 +82,11 @@
           };
         };
       apps = {
-        default = self.apps.install;
+        default = self.apps.${system}.install;
 
         install = {
           type = "app";
-          program = "${self.packages.install}/bin/install";
+          program = "${self.packages.${system}.install}/bin/install";
         };
       };
     };
