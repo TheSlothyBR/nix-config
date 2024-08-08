@@ -1,10 +1,10 @@
-{ nixpkgs
-, ...
-}:{
+let
+  architectures = [ "x86_64-linux" ];
+in {
+  inherit architectures;
   configRoot = ./.;
   customPkgs = ./pkgs;
   overlays = ./overlays;
-  architectures = [ "x86_64-linux" ];
   ultra = {
     hostName = "ultra";
     userName = "ultra";

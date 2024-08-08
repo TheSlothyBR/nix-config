@@ -48,7 +48,7 @@
   {
     nixosConfigurations = {
       "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem rec {
-        system = "${globals.ultra.system}";
+        nixpkgs.hostPlatform = "${globals.ultra.system}";
         specialArgs = {
           inherit inputs globals;
         };
