@@ -62,7 +62,7 @@
       };
       customIso = nixpkgs.lib.nixosSystem rec {
         specialArgs = {
-          inherit inputs;
+          inherit inputs globals;
         };
         modules = [
           ./hosts/customIso/configuration.nix
@@ -70,7 +70,7 @@
       };
 
       packages = let
-        system = "x86_64-linux";
+        system = builtins.elemAt globals.architectures 0;
         pkgs = import nixpkgs { inherit system; };
       in {
           default = self.packages.${system}.install;
@@ -81,7 +81,9 @@
             text = ''${./install.sh} "$@"'';
           };
         };
-      apps = {
+      apps = let
+        system = builtins.elemAt globals.architectures 0;
+      in {
         default = self.apps.${system}.install;
 
         install = {

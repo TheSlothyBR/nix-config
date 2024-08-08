@@ -21,8 +21,9 @@
     ../common/sddm.nix
     ../common/plasma.nix
 
-    ../common/flatpak.nix
-    ../common/apps/brave.nix
+    #systemd service fails as flatpak cant seem to access flathub repo uri through proxy, failing the system rebuild on vm
+    #../common/flatpak.nix
+    #../common/apps/brave.nix
 
     ../common/apps/neovim.nix
     ../common/apps/git.nix

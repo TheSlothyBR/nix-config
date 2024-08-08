@@ -1,13 +1,14 @@
-{ pkgs
+{ nixpkgs
 , modulesPath
 , config
+, globals
 , ...
 }:{
   imports = [
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
   ];
 
-  nixpkgs.hostPlatform = "x86_64-linux";
+  nixpkgs.hostPlatform = builtins.elemAt globals.architectures 0;
 
   nix.settings.experimental-features = [ 
     "nix-command"

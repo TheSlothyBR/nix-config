@@ -3,7 +3,10 @@
 , globals
 , ...
 }:{
-  # only enable option is needed, rest is workaround for flatpak issue 5488
+  # only enable option is needed, rest is workaround for flatpak issue #5488
+  imports = [
+    inputs.nix-flatpak.nixosModules.nix-flatpak
+  ];
   services.flatpak = {
     enable = true;
     uninstallUnmanaged = true;
@@ -50,11 +53,11 @@
             "!fallback-x11"
           ];
         };
-      };
-      # Needed for desktop icons to show up due to nix-flatpak bug: #31
-      xdg.systemDirs.data = [
-        "${home-manager.users.${globals.ultra.userName}.home.homeDirectory}/.local/share/flatpak/exports/share"
-      ];
+      };   
     };
+    # Needed for desktop icons to show up due to nix-flatpak bug: #31
+    xdg.systemDirs.data = [
+      "/home/${globals.ultra.userName}/.local/share/flatpak/exports/share"
+    ];
   };
 }
