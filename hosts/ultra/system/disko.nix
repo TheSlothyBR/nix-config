@@ -27,7 +27,9 @@
               content = {
                 type = "luks";
                 name = "crypted";
+                #passwordFile = "/tmp/luks_password";
                 askPassword = true;
+                #settings.fallbackToPassword = true;
                 extraFormatArgs = [ "--pbkdf argon2id" ];
                 extraOpenArgs = [ "--allow-discards" ];
                 content = {

@@ -32,10 +32,10 @@
       };
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-    #sops-nix = {
-    #  url = "github:mic92/sops-nix";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
+    sops-nix = {
+      url = "github:mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -50,7 +50,7 @@
       "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem rec {
         nixpkgs.hostPlatform = "${globals.ultra.system}";
         specialArgs = {
-          inherit inputs globals;
+          inherit inputs outputs globals;
         };
         modules = [
           ./hosts/ultra/system/drives.nix
