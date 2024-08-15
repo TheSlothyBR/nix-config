@@ -43,7 +43,7 @@
   , self
   , ...
   } @inputs: let
-    globals = import ./globals.nix;
+    globals = import ./pkgs/globals.nix;
   in
   {
     nixosConfigurations = {
@@ -71,14 +71,15 @@
 
       packages = let
         system = builtins.elemAt globals.architectures 0;
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = nixpkgs.legacyPackages.${system};
       in {
-          default = self.packages.${system}.install;
+          ${system}.default = (import ./pkgs/install.nix { inherit pkgs; });
 
-          install = pkgs.writeShellApplication {
-            name = "install";
-            runtimeInputs = with pkgs; [ git ];
-            text = ''${./install.sh} "$@"'';
+          #install = pkgs.writeShellApplication {
+          #  name = "install";
+          #  runtimeInputs = with pkgs; [ git ];
+          #  text = ''${./pkgs/install.sh} "$@"'';
+          #};
           };
         };
       apps = let
@@ -88,7 +89,7 @@
 
         install = {
           type = "app";
-          program = "${self.packages.${system}.install}/bin/install";
+          program = "${self.packages.${system}.default}/bin/install";
         };
       };
     };
