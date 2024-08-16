@@ -45,12 +45,13 @@
   } @inputs: let
     globals = import ./pkgs/globals.nix;
   in
+  rec
   {
     nixosConfigurations = {
-      "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem rec {
-        nixpkgs.hostPlatform = "${globals.ultra.system}";
+      "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem {
+        #nixpkgs.hostPlatform = "${globals.ultra.system}";
         specialArgs = {
-          inherit inputs outputs globals;
+          inherit inputs self globals;
         };
         modules = [
           ./hosts/ultra/system/drives.nix
@@ -60,7 +61,7 @@
           ./hosts/ultra/configuration.nix
         ];
       };
-      customIso = nixpkgs.lib.nixosSystem rec {
+      customIso = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs globals;
         };
@@ -68,29 +69,30 @@
           ./hosts/customIso/configuration.nix
         ];
       };
+    };
 
-      packages = let
-        system = builtins.elemAt globals.architectures 0;
-        pkgs = nixpkgs.legacyPackages.${system};
-      in {
-          ${system}.default = (import ./pkgs/install.nix { inherit pkgs; });
+    packages = let
+      system = builtins.elemAt globals.architectures 0;
+      pkgs = nixpkgs.legacyPackages.${system};
+      lib = nixpkgs.lib;
+    in {
+        default = self.packages.${system}.install; 
+        install = (import ./pkgs/install.nix { inherit pkgs lib; });
 
-          #install = pkgs.writeShellApplication {
-          #  name = "install";
-          #  runtimeInputs = with pkgs; [ git ];
-          #  text = ''${./pkgs/install.sh} "$@"'';
-          #};
-          };
-        };
-      apps = let
-        system = builtins.elemAt globals.architectures 0;
-      in {
-        default = self.apps.${system}.install;
+        #install = pkgs.writeShellApplication {
+        #  name = "install";
+        #  runtimeInputs = with pkgs; [ git ];
+        #  text = ''${./pkgs/install.sh} "$@"'';
+        #};
+    };
+    apps = let
+      system = builtins.elemAt globals.architectures 0;
+    in {
+      default = self.apps.${system}.install;
 
-        install = {
-          type = "app";
-          program = "${self.packages.${system}.default}/bin/install";
-        };
+      install = {
+        type = "app";
+        program = "${self.packages.${system}.install}/bin/install";
       };
     };
   };
