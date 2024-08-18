@@ -13,8 +13,8 @@
    # environment = {
    #   "SOPS_AGE_KEYS" = "$(keepassxc-cli attachment-export)";
    # };
-   age = {
-     sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
-   };
+    age = {
+      sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
+    };
   };
 }
