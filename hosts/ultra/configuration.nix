@@ -9,10 +9,14 @@
     ../common/unfree-pkgs.nix
     ../common/systemd-boot.nix
     ../common/sound.nix
+    ../common/battery-optimisation.nix
 
     ../common/networking.nix
     ../common/bluetooth.nix
     ../common/wifi-adapter.nix
+
+    ../common/ssh.nix
+    ../common/sops.nix
 
     ../common/inputs.nix
     ../common/gestures.nix
@@ -45,7 +49,7 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  #sops.secrets.${globals.ultra.hostName}.password.neededForUsers = true
+  sops.secrets."${globals.ultra.hostName}.password".neededForUsers = true
   #users.mutableUsers = true
   users.users."${globals.ultra.userName}" = {
     isNormalUser = true;
@@ -55,9 +59,9 @@
       "video"
       "wheel"
     ];
-    initialPassword = " ";
+    #initialPassword = " ";
     #initialHashedPassword = " ";
-    #hashedPasswordFile = config.sops.secrets.${globals.ultra.hostName}.password.path;
+    hashedPasswordFile = config.sops.secrets."${globals.ultra.hostName}.password".path;
   };
 
   system.stateVersion = "24.05";

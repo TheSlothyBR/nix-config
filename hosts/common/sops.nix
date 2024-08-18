@@ -14,7 +14,7 @@
    #   "SOPS_AGE_KEYS" = "$(keepassxc-cli attachment-export)";
    # };
    age = {
-     sshKeyPaths = config.services.openssh.hostKeys;
+     sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
    };
   };
 }

@@ -1,7 +1,10 @@
 { outputs
+, pkgs
+, lib
+, globals
 , ...
 }:let
-  hosts = builtins.filter (x:x != "customIso" || "packages" || "apps" ) (lib.attrNames outputs.nixosConfigurations);
+  hosts = builtins.filter (x: ! (x == "customIso")) (lib.attrNames outputs.nixosConfigurations);
 in {
   services.openssh = {
    enable = true;
@@ -16,7 +19,7 @@ in {
 
    hostKeys = [
       {
-        path = "/persist/system/etc/ssh/<privateKeyName>";
+        path = "/persist/system/etc/ssh/${globals.ultra.hostName}_ed25519_key";
         type = "ed25519";
       }
     ];
@@ -24,10 +27,10 @@ in {
 
   programs.ssh = {
     knownHosts = lib.genAttrs hosts  (hostname: {
-      publicKeyFile = "/persist/system/etc/nixos/dotfiles/common/secrets/<${hostname}keyName>.pub";
+      publicKeyFile = "/persist/system/etc/nixos/dotfiles/common/secrets/${hostname}_ed25519_key.pub";
     });
   };
-  
+ 
   security = {
     pam.services.sudo = {config, ...}: {
       rules.auth.rssh = {

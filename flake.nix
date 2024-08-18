@@ -43,15 +43,15 @@
   , self
   , ...
   } @inputs: let
+    inherit (self) outputs;
     globals = import ./pkgs/globals.nix;
   in
   rec
   {
     nixosConfigurations = {
       "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem {
-        #nixpkgs.hostPlatform = "${globals.ultra.system}";
         specialArgs = {
-          inherit inputs self globals;
+          inherit inputs outputs globals;
         };
         modules = [
           ./hosts/ultra/system/drives.nix

@@ -1,6 +1,6 @@
 keys:
   - &hosts:
-    - &ultra <key>
+    - &ultra age1c495zkpqvhlqhv8dm5yjxpdcwylqurm4ry4t2tjfr37pqjd82a4sfe293n
 creation_rules:
   - path_regex: hosts/common/secrets/secrets.yaml$
     key_groups:

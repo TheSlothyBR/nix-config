@@ -1,6 +1,6 @@
 {
   services = {
-    system76-scheduler.settings.cfsprofiles.enable = true;
+    system76-scheduler.settings.cfsProfiles.enable = true;
 
     #auto-cpufreq = {
     #  enable = true;
