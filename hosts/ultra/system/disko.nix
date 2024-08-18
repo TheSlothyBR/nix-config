@@ -1,5 +1,6 @@
 { drives ? "Set this to storage drives, such as /dev/sda. Pass as arguments to disko when formating"
 , globals
+, pkgs
 , ...
 }:{
   disko.devices = {
@@ -52,10 +53,11 @@
               type = "btrfs";
               extraArgs = [ "-f" ];
               preCreateHook = ''
+                SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
                 mkdir -p /tmp/usb;
-                mount "/dev/sdb1" "/tmp/usb";
+                mount "/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
                 touch /tmp/luks_password;
-                sops -d --extract '["${globals.ultra.hostName}"]["luks"]' "/tmp/usb/data/secrets/secrets.yaml" > /tmp/luks_password
+                ${pkgs.sops}/bin/sops -d --extract '["${globals.ultra.hostName}"]["luks"]' "/tmp/usb/data/secrets/secrets.yaml" > /tmp/luks_password
               '';
               postCreateHook = ''
                 TMP=$(mktemp -d);
@@ -67,8 +69,10 @@
               '';
               postMountHook = ''
                 mkdir -p /mnt/persist/system/etc/nixos;
-                trap 'rm -rf /tmp/luks_password;' EXIT;
                 cp -r /nix-config /mnt/persist/system/etc/nixos;
+                cp /tmp/usb/data/secrets/keys.txt /persist/home/.config/sops/age/keys.txt;
+                trap 'umount -A /tmp/usb; rm -rf /tmp/luks_password;' EXIT;
+                cp /tmp/usb/data/secrets/${globals.ultra.hostName}_ed25519_key /persist/system/etc/ssh/;
               '';
               subvolumes = {
                 "/persist" = {

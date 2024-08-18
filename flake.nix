@@ -72,7 +72,7 @@
     };
 
     packages = let
-      system = builtins.elemAt globals.architectures 0;
+      system = builtins.elemAt globals.meta.architectures 0;
       pkgs = nixpkgs.legacyPackages.${system};
       lib = nixpkgs.lib;
     in {
@@ -85,7 +85,7 @@
         #};
     };
     apps = let
-      system = builtins.elemAt globals.architectures 0;
+      system = builtins.elemAt globals.meta.architectures 0;
     in {
       ${system}.install = {
         type = "app";
