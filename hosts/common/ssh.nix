@@ -27,7 +27,7 @@ in {
 
   programs.ssh = {
     knownHosts = lib.genAttrs hosts  (hostname: {
-      publicKeyFile = "/persist/system/etc/nixos/dotfiles/common/secrets/${hostname}_ed25519_key.pub";
+      publicKeyFile = "./secrets/${hostname}_ed25519_key.pub";
     });
   };
  

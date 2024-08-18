@@ -27,9 +27,9 @@
               content = {
                 type = "luks";
                 name = "crypted";
-                #passwordFile = "/tmp/luks_password";
-                askPassword = true;
-                #settings.fallbackToPassword = true;
+                passwordFile = "/tmp/luks_password";
+                #askPassword = true;
+                settings.fallbackToPassword = true;
                 extraFormatArgs = [ "--pbkdf argon2id" ];
                 extraOpenArgs = [ "--allow-discards" ];
                 content = {
@@ -51,6 +51,12 @@
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ];
+              preCreateHook = ''
+                mkdir -p /tmp/usb;
+                mount "/dev/sdb1" "/tmp/usb";
+                touch /tmp/luks_password;
+                sops -d --extract '["${globals.ultra.hostName}"]["luks"]' "/tmp/usb/data/secrets/secrets.yaml" > /tmp/luks_password
+              '';
               postCreateHook = ''
                 TMP=$(mktemp -d);
                 mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
@@ -61,6 +67,7 @@
               '';
               postMountHook = ''
                 mkdir -p /mnt/persist/system/etc/nixos;
+                trap 'rm -rf /tmp/luks_password;' EXIT;
                 cp -r /nix-config /mnt/persist/system/etc/nixos;
               '';
               subvolumes = {
