@@ -78,7 +78,7 @@
     in {
         #${system}.install = (import ./pkgs/install.nix { inherit pkgs lib; });
 
-        install = pkgs.writeShellApplication {
+        ${system}.install = pkgs.writeShellApplication {
           name = "install";
           runtimeInputs = with pkgs; [ git sops ];
           text = ''
