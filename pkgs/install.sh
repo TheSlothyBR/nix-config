@@ -47,7 +47,7 @@ done
 for config in $configs; do
 	if [[ "$config" == "$FLAKE" ]]; then
 
-      if grep -q "{}" "./hosts/${flake}/system/hardware-configuration.nix"; then
+      if grep -q "{}" "./hosts/${config}/system/hardware-configuration.nix"; then
         nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "./hosts/${flake}/system/hardware-configuration.nix"
       fi
 

@@ -74,12 +74,10 @@
     packages = let
       system = builtins.elemAt globals.meta.architectures 0;
       pkgs = nixpkgs.legacyPackages.${system};
-      #lib = nixpkgs.lib;
     in {
-        #${system}.install = (import ./pkgs/install.nix { inherit pkgs lib; });
         default = self.packages.${system}.install;
 
-        install = pkgs.writeShellApplication {
+        ${system}.install = pkgs.writeShellApplication {
           name = "install";
           runtimeInputs = with pkgs; [ git sops ];
           text = ''
@@ -87,7 +85,8 @@
             cd /dotfiles
             git checkout structured
             
-            trap 'umount -A /tmp/usb' EXIT;
+            chmod +x /dotfiles/pkgs/install.sh
+            trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             /dotfiles/pkgs/install.sh "$@"
           '';
         };
@@ -97,7 +96,7 @@
     in {
       default = self.apps.${system}.install;
 
-      install = {
+      ${system}.install = {
         type = "app";
         program = "${self.packages.${system}.install}/bin/install";
       };
