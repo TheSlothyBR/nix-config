@@ -53,7 +53,6 @@
               type = "btrfs";
               extraArgs = [ "-f" ];
               preCreateHook = ''
-                SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
                 mkdir -p /tmp/usb;
                 mount "/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
                 touch /tmp/luks_password;
@@ -71,7 +70,7 @@
                 mkdir -p /mnt/persist/system/etc/nixos;
                 cp -r /nix-config /mnt/persist/system/etc/nixos;
                 cp /tmp/usb/data/secrets/keys.txt /persist/home/.config/sops/age/keys.txt;
-                trap 'umount -A /tmp/usb; rm -rf /tmp/luks_password;' EXIT;
+                trap 'rm -rf /tmp/luks_password;' EXIT;
                 cp /tmp/usb/data/secrets/${globals.ultra.hostName}_ed25519_key /persist/system/etc/ssh/;
               '';
               subvolumes = {

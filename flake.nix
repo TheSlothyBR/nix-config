@@ -74,22 +74,29 @@
     packages = let
       system = builtins.elemAt globals.meta.architectures 0;
       pkgs = nixpkgs.legacyPackages.${system};
-      lib = nixpkgs.lib;
+      #lib = nixpkgs.lib;
     in {
-        ${system}.install = (import ./pkgs/install.nix { inherit pkgs lib; });
+        #${system}.install = (import ./pkgs/install.nix { inherit pkgs lib; });
 
-        #install = pkgs.writeShellApplication {
-        #  name = "install";
-        #  runtimeInputs = with pkgs; [ git ];
-        #  text = ''${./pkgs/install.sh} "$@"'';
-        #};
+        install = pkgs.writeShellApplication {
+          name = "install";
+          runtimeInputs = with pkgs; [ git sops ];
+          text = ''
+            git clone https://github.com/TheSlothyBR/nix-config /dotfiles
+            cd /dotfiles
+            git checkout structured
+            
+            trap 'umount -A /tmp/usb' EXIT;
+            /dotfiles/pkgs/install.sh "$@"
+          '';
+        };
     };
     apps = let
       system = builtins.elemAt globals.meta.architectures 0;
     in {
       ${system}.install = {
         type = "app";
-        program = "${self.packages.${system}.install}/install";
+        program = "${self.packages.${system}.install}/bin/install";
       };
     };
   };
