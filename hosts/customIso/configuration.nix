@@ -8,7 +8,7 @@
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
   ];
 
-  nixpkgs.hostPlatform = builtins.elemAt globals.architectures 0;
+  nixpkgs.hostPlatform = builtins.elemAt globals.meta.architectures 0;
 
   nix.settings.experimental-features = [ 
     "nix-command"

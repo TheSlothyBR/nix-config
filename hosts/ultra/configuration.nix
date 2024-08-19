@@ -49,7 +49,7 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  sops.secrets."${globals.ultra.hostName}.password".neededForUsers = true
+  sops.secrets."${globals.ultra.hostName}.password".neededForUsers = true;
   #users.mutableUsers = true
   users.users."${globals.ultra.userName}" = {
     isNormalUser = true;
