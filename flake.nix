@@ -77,8 +77,9 @@
       #lib = nixpkgs.lib;
     in {
         #${system}.install = (import ./pkgs/install.nix { inherit pkgs lib; });
+        default = self.packages.${system}.install;
 
-        ${system}.install = pkgs.writeShellApplication {
+        install = pkgs.writeShellApplication {
           name = "install";
           runtimeInputs = with pkgs; [ git sops ];
           text = ''
@@ -94,7 +95,9 @@
     apps = let
       system = builtins.elemAt globals.meta.architectures 0;
     in {
-      ${system}.install = {
+      default = self.apps.${system}.install;
+
+      install = {
         type = "app";
         program = "${self.packages.${system}.install}/bin/install";
       };
