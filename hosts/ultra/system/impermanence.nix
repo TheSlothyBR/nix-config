@@ -82,6 +82,7 @@
       directories = [
         "Documents"
         "Downloads"
+        "Drive"
         "Music"
         "Pictures"
         "Videos"

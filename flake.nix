@@ -79,7 +79,7 @@
 
         ${system}.install = pkgs.writeShellApplication {
           name = "install";
-          runtimeInputs = with pkgs; [ git sops ];
+          runtimeInputs = with pkgs; [ git sops rclone ];
           text = ''
             git clone https://github.com/TheSlothyBR/nix-config /dotfiles
             cd /dotfiles

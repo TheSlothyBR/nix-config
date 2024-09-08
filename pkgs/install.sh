@@ -57,11 +57,14 @@ for config in $configs; do
 	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
 		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#${config}"
 		nixos-install --cores $CORES --max-jobs $JOBS --root /mnt --flake ".#${config}"
+        #rclone copyto OneDrive:Apps/KeePassXC/s.kdbx /persist/home/Drive/Apps/KeePassXC/s.kdbx --config "/home/${config}/.config/rclone/rclone.conf"
 		exit
 	  else
 		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#${config}"
 		nixos-install --root /mnt --flake ".#${config}"
-		exit
+		
+        #rclone copyto OneDrive:Apps/KeePassXC/s.kdbx /persist/home/Drive/Apps/KeePassXC/s.kdbx --config "/home/${config}/.config/rclone/rclone.conf"
+        exit
 	  fi
 
 	else

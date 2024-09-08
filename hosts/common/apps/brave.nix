@@ -1,5 +1,4 @@
-{ config
-, globals
+{ globals
 , ...
 }:{
   home-manager.users.${globals.ultra.userName} = {
