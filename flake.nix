@@ -73,7 +73,7 @@
 
     packages = let
       system = builtins.elemAt globals.meta.architectures 0;
-      pkgs = nixpkgs.legacyPackages."${system}";
+      pkgs = import nixpkgs { inherit system; };#nixpkgs.legacyPackages."${system}";
     in {
         default = pkgs.writeShellApplication {
           name = "install";
