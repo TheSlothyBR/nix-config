@@ -84,9 +84,10 @@
             git clone https://github.com/TheSlothyBR/nix-config /dotfiles
             cd /dotfiles
             git checkout structured
-            
+        
+            SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
             chmod +x /dotfiles/pkgs/install.sh
-            trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
+            trap 'unset SOPS_AGE_KEY_FILE; rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             /dotfiles/pkgs/install.sh "$@"
           '';
         };
