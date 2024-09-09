@@ -75,9 +75,7 @@
       system = builtins.elemAt globals.meta.architectures 0;
       pkgs = nixpkgs.legacyPackages."${system}";
     in {
-        default = self.packages."${system}".install;
-
-        install = pkgs.writeShellApplication {
+        default = pkgs.writeShellApplication {
           name = "install";
           runtimeInputs = with pkgs; [ git sops rclone ];
           text = ''
@@ -94,9 +92,7 @@
     apps = let
       system = builtins.elemAt globals.meta.architectures 0;
     in {
-      default = self.apps."${system}".install;
-
-      install = {
+      default = {
         type = "app";
         program = "${self.packages.${system}.install}/bin/install";
       };
