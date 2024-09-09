@@ -85,7 +85,6 @@
             cd /dotfiles
             git checkout structured
         
-            SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
             chmod +x /dotfiles/pkgs/install.sh
             trap 'unset SOPS_AGE_KEY_FILE; rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             /dotfiles/pkgs/install.sh "$@"

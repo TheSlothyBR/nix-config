@@ -1,11 +1,12 @@
-configs=(
+config=(
   ultra
+  corsair
 )
 
 NO_INSTALL=1
 CORES=0
 JOBS=1
-SOPS_AGE_KEY_FILE="/tmp/usb/data/secrets/keys.txt"
+SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
 
 if [[ $# -eq 0 ]]; then
   echo "Provide a Nix Flake config name, check script for options"
@@ -48,7 +49,7 @@ for config in $configs; do
 	if [[ "$config" == "$FLAKE" ]]; then
 
       if grep -q "{}" "./hosts/${config}/system/hardware-configuration.nix"; then
-        nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "./hosts/${flake}/system/hardware-configuration.nix"
+        nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "./hosts/${config}/system/hardware-configuration.nix"
       fi
 
 	  if [[ NO_INSTALL -eq 0 ]]; then
@@ -62,7 +63,6 @@ for config in $configs; do
 	  else
 		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#${config}"
 		nixos-install --root /mnt --flake ".#${config}"
-		
         #rclone copyto OneDrive:Apps/KeePassXC/s.kdbx /persist/home/Drive/Apps/KeePassXC/s.kdbx --config "/home/${config}/.config/rclone/rclone.conf"
         exit
 	  fi
