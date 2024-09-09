@@ -7,15 +7,16 @@
   hosts = builtins.filter (x: ! (x == "customIso")) (lib.attrNames outputs.nixosConfigurations);
 in {
   services.openssh = {
-   enable = true;
-   settings = {
-     PasswordAuthentication = false;
-     PermitRootLogin = "no";
-     StreamLocalBindUnlink = "yes";
-     GatewayPorts = "clientspecified";
-     AcceptEnv = "WAYLAND_DISPLAY";
-     X11Forwarding = true;
-   };
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+      StreamLocalBindUnlink = "yes";
+      GatewayPorts = "clientspecified";
+      AcceptEnv = "WAYLAND_DISPLAY";
+      X11Forwarding = true;
+    };
+  };
 
    #hostKeys = [
    #    {
@@ -47,5 +48,6 @@ in {
     sudo.extraConfig = ''
       Defaults env_keep+=SSH_AUTH_SOCK
     '';
+    
   };
 }

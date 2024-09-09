@@ -1,7 +1,8 @@
 { pkgs
 , config
+, ...
 }:{
-  config == {
+  config = {
     environment.systemPackages = with pkgs; [
       keepassxc
     ];
