@@ -73,11 +73,11 @@
 
     packages = let
       system = builtins.elemAt globals.meta.architectures 0;
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = nixpkgs.legacyPackages."${system}";
     in {
-        default = self.packages.${system}.install;
+        default = self.packages."${system}".install;
 
-        ${system}.install = pkgs.writeShellApplication {
+        install = pkgs.writeShellApplication {
           name = "install";
           runtimeInputs = with pkgs; [ git sops rclone ];
           text = ''
@@ -87,16 +87,16 @@
         
             chmod +x /dotfiles/pkgs/install.sh
             trap 'unset SOPS_AGE_KEY_FILE; rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
-            /dotfiles/pkgs/install.sh "$@"
+            ${/dotfiles/pkgs/install.sh} "$@"
           '';
         };
     };
     apps = let
       system = builtins.elemAt globals.meta.architectures 0;
     in {
-      default = self.apps.${system}.install;
+      default = self.apps."${system}".install;
 
-      ${system}.install = {
+      install = {
         type = "app";
         program = "${self.packages.${system}.install}/bin/install";
       };

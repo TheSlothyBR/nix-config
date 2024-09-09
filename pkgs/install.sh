@@ -1,3 +1,5 @@
+!#/usr/bin/env bash
+
 config=(
   ultra
   corsair

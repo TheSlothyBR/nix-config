@@ -1,4 +1,5 @@
 { pkgs
+, inputs
 , ...
 }:{
   imports = [
@@ -11,7 +12,7 @@
     environment = {
       "SOPS_AGE_KEYS" = ''
         $(keepassxc-cli attachment-export --stdout "/persist/home/Drive/Apps/KeePassXC/s.kdbx" "Age Keys" "keys.txt")
-      ''
+      '';
     };
     #age = {
     #  sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
