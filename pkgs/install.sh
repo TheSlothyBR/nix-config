@@ -1,4 +1,4 @@
-!#/usr/bin/env bash
+#!/bin/sh
 
 config=(
   ultra
@@ -8,7 +8,7 @@ config=(
 NO_INSTALL=1
 CORES=0
 JOBS=1
-SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
+export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
 
 if [[ $# -eq 0 ]]; then
   echo "Provide a Nix Flake config name, check script for options"
@@ -30,12 +30,12 @@ while [[ $# -gt 0 ]]; do
 	  NO_INSTALL=0
 	  shift
 	  ;;
-	--cores)
+	-c|--cores)
 	  CORES=$2
 	  shift
 	  shift
 	  ;;
-	--max-jobs)
+	-j|--max-jobs)
 	  JOBS=$2
 	  shift
 	  shift
@@ -47,11 +47,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-for config in $configs; do
+for config in "${configs[@]}"; do
 	if [[ "$config" == "$FLAKE" ]]; then
 
-      if grep -q "{}" "./hosts/${config}/system/hardware-configuration.nix"; then
-        nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "./hosts/${config}/system/hardware-configuration.nix"
+      if grep -q "{}" "/dotfiles/hosts/${config}/system/hardware-configuration.nix"; then
+        nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "/dotfiles/hosts/${config}/system/hardware-configuration.nix"
       fi
 
 	  if [[ NO_INSTALL -eq 0 ]]; then
