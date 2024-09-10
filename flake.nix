@@ -81,9 +81,9 @@
           text = ''
             #''${/dotfiles/pkgs/install.sh} "$@"
 
-            nix-shell -p git --command "git clone https://gitub.com/TheSlothyBR/nix-config /dotfiles && cd /dotfiles && git checkout structured"
+            nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles && cd /dotfiles && git checkout structured"
             
-            CONFIGS=(
+            configs=(
               ultra
               corsair
             )
@@ -134,7 +134,7 @@
             mount "/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
             trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             
-            for config in "''${CONFIGS[@]}"; do
+            for config in "''${configs[@]}"; do
             	if [[ "$config" == "$FLAKE" ]]; then
             
                   if grep -q "{}" "/dotfiles/hosts/''${config}/system/hardware-configuration.nix"; then
