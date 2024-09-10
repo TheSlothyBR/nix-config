@@ -83,7 +83,7 @@
 
             nix-shell -p git --command "git clone https://gitub.com/TheSlothyBR/nix-config /dotfiles && cd /dotfiles && git checkout structured"
             
-            config=(
+            configs=(
               ultra
               corsair
             )
@@ -130,6 +130,8 @@
               esac
             done
             
+            mkdir -p /tmp/usb;
+            mount "/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
             trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             
             for config in "''${configs[@]}"; do

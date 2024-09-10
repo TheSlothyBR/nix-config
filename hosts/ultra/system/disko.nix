@@ -53,8 +53,6 @@
               type = "btrfs";
               extraArgs = [ "-f" ];
               preCreateHook = ''
-                mkdir -p /tmp/usb;
-                mount "/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
                 touch /tmp/luks_password;
                 ${pkgs.sops}/bin/sops -d --extract '["${globals.ultra.hostName}"]["luks"]' "/dotfiles/hosts/common/secrets/secrets.yaml" > /tmp/luks_password
               '';
