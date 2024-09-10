@@ -22,7 +22,7 @@
     #};
     age = {
     #  sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
-      keyFile = "/persist/system//var/lib/sops.nix/key.txt";
+      keyFile = "/persist/system//var/lib/sops.nix/keys.txt";
     #  generateKey = true;
     };
   };

@@ -60,7 +60,8 @@
               '';
               postMountHook = ''
                 mkdir -p /mnt/persist/system/etc/nixos;
-                cp /tmp/usb/data/secrets/keys.txt /persist/system/var//lib/sops.nix/
+                mkdir -p /mnt/persist/system/var/lib/sops.nix
+                cp /tmp/usb/data/secrets/keys.txt /mnt/persist/system/var/lib/sops.nix/
                 trap 'rm -rf /tmp/luks_password;' EXIT;
                 cp -r /dotfiles /mnt/persist/system/etc/nixos;
               '';

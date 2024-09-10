@@ -85,7 +85,9 @@
             touch /tmp/luks_password
             nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles \
             && cd /dotfiles && git checkout structured \
-            && sops -d --extract '["${globals.ultra.hostName}"]["luks"]' "/dotfiles/hosts/common/secrets/secrets.yaml" > /tmp/luks_password"
+           
+            export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt \
+            && sops -d --extract '[\"${globals.ultra.hostName}\"][\"luks\"]' /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password"
             
             configs=(
               ultra
@@ -95,7 +97,6 @@
             NO_INSTALL=1
             CORES=0
             JOBS=1
-            export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
             
             if [[ $# -eq 0 ]]; then
               echo "Provide a Nix Flake config name, check script for options"
