@@ -29,8 +29,6 @@
                 type = "luks";
                 name = "crypted";
                 passwordFile = "/tmp/luks_password";
-                #askPassword = true;
-                #settings.fallbackToPassword = true;
                 extraFormatArgs = [ "--pbkdf argon2id" ];
                 extraOpenArgs = [ "--allow-discards" ];
                 content = {
@@ -52,10 +50,6 @@
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ];
-              preCreateHook = ''
-                touch /tmp/luks_password;
-                ${pkgs.sops}/bin/sops -d --extract '["${globals.ultra.hostName}"]["luks"]' "/dotfiles/hosts/common/secrets/secrets.yaml" > /tmp/luks_password
-              '';
               postCreateHook = ''
                 TMP=$(mktemp -d);
                 mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
@@ -68,8 +62,6 @@
                 mkdir -p /mnt/persist/system/etc/nixos;
                 trap 'rm -rf /tmp/luks_password;' EXIT;
                 cp -r /dotfiles /mnt/persist/system/etc/nixos;
-                #cp /tmp/usb/data/secrets/keys.txt /persist/home/.config/sops/age/keys.txt;
-                #cp /tmp/usb/data/secrets/${globals.ultra.hostName}_ed25519_key /persist/system/etc/ssh/;
               '';
               subvolumes = {
                 "/persist" = {

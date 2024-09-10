@@ -51,7 +51,9 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  sops.secrets."${globals.ultra.hostName}.password".neededForUsers = true;
+  #users.users.root.hashedPassword = "!";
+
+  sops.secrets."${globals.ultra.hostName}/password".neededForUsers = true;
   #users.mutableUsers = true
   users.users."${globals.ultra.userName}" = {
     isNormalUser = true;
@@ -61,9 +63,7 @@
       "video"
       "wheel"
     ];
-    #initialPassword = " ";
-    #initialHashedPassword = " ";
-    hashedPasswordFile = config.sops.secrets."${globals.ultra.hostName}.password".path;
+    hashedPasswordFile = config.sops.secrets."${globals.ultra.hostName}/password".path;
   };
 
   system.stateVersion = "24.05";
