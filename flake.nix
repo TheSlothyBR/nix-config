@@ -80,7 +80,8 @@
           runtimeInputs = with pkgs; [ git sops rclone ];
           text = ''
             #''${/dotfiles/pkgs/install.sh} "$@"
-
+            mkdir -p /tmp/usb;
+            mount "/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
             nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles && cd /dotfiles && git checkout structured"
             
             configs=(
@@ -130,8 +131,6 @@
               esac
             done
             
-            mkdir -p /tmp/usb;
-            mount "/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
             trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             
             for config in "''${configs[@]}"; do
