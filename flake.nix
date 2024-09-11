@@ -86,8 +86,7 @@
             nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles \
             && cd /dotfiles && git checkout structured \
            
-            export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt \
-            && sops -d --extract '[\"${globals.ultra.hostName}\"][\"luks\"]' /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password"
+            export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt"
             
             configs=(
               ultra
@@ -135,6 +134,7 @@
               esac
             done
             
+            sops -d --extract '["$FLAKE"]["luks"]' /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password"
             trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             
             for config in "''${configs[@]}"; do
@@ -150,12 +150,12 @@
             	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
             		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#''${config}"
             		nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --flake ".#''${config}"
-                    #rclone copyto OneDrive:Apps/KeePassXC/s.kdbx /persist/home/Drive/Apps/KeePassXC/s.kdbx --config "/home/''${config}/.config/rclone/rclone.conf"
+                    rclone copyto OneDrive:Apps/KeePassXC/tests.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
             		exit
             	  else
             		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#''${config}"
             		nixos-install --root /mnt --flake ".#''${config}"
-                    #rclone copyto OneDrive:Apps/KeePassXC/s.kdbx /persist/home/Drive/Apps/KeePassXC/s.kdbx --config "/home/''${config}/.config/rclone/rclone.conf"
+                    rclone copyto OneDrive:Apps/KeePassXC/tests.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
                     exit
             	  fi
             

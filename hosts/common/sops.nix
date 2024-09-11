@@ -7,9 +7,7 @@
   ];
 
   environment.sessionVariables = {
-    "SOPS_AGE_KEYS" = ''
-        $(keepassxc-cli attachment-export --stdout "/persist/home/Drive/Apps/KeePassXC/s.kdbx" "Age Keys" "keys.txt")
-      '';
+    "SOPS_AGE_KEYS" = "$(${pkgs.keepassxc}/bin/keepassxc-cli attachment-export --stdout \"/persist/home/Drive/Apps/KeePassXC/test.kdbx\" \"Age Keys\" \"keys.txt\")";
   };
 
   sops = {
