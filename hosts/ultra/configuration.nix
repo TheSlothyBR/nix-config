@@ -18,7 +18,7 @@
     ../common/ssh.nix
     ../common/sops.nix
     ../common/apps/keepassxc.nix
-    ../common/auto-unlock.nix
+    ./system/auto-unlock.nix
     
     ../common/inputs.nix
     ../common/gestures.nix
