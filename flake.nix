@@ -84,8 +84,7 @@
             mount /dev/sdb1 /tmp/usb #"/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
             touch /tmp/luks_password
             nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles \
-            && cd /dotfiles && git checkout structured \
-            export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt"
+            && cd /dotfiles && git checkout structured"
             
             configs=(
               ultra
@@ -134,12 +133,13 @@
             done
             
 
-            if [[ ! -n $(find "/dotfiles/hosts/''${FLAKE}/system/" -name "hardware-configuration.nix")]]; then
-                echo "Error: no placeholder hardware-configuration.nix file found"
-                exit
-            fi
-            sops -d --extract '["''${FLAKE}"]["luks"]' /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password
-            trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
+            #if [[ ! -n $(find "/dotfiles/hosts/''${FLAKE}/system/" -name "hardware-configuration.nix")]]; then
+            #    echo "Error: no placeholder hardware-configuration.nix file found"
+            #    exit
+            #fi
+            export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
+            sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password
+            trap 'rm -rf /dotfiles; umount -A /tmp/usb; unset SOPS_AGE_KEY_FILE' EXIT;
             
             for config in "''${configs[@]}"; do
             	if [[ "$config" == "$FLAKE" ]]; then

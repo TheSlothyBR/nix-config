@@ -19,13 +19,13 @@
   sops = {
     defaultSopsFile = ./secrets/secrets.yaml;
     defaultSopsFormat = "yaml";
-    environment = {
-      "SOPS_AGE_KEY_FILE" = "/tmp/usb/data/secrets/keys.txt";
-    };
-    #age = {
-    #  sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
-    #  keyFile = "/persist/system/var/lib/sops.nix/keys.txt";
-    #  generateKey = true;
+    #environment = {
+    #  "SOPS_AGE_KEY_FILE" = "/tmp/usb/data/secrets/keys.txt";
     #};
+    age = {
+    #  sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
+      keyFile = "/tmp/keys.txt";
+    #  generateKey = true;
+    };
   };
 }

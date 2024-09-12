@@ -51,10 +51,10 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  #users.users.root.hashedPassword = "!";
+  users.users.root.hashedPassword = "!";
 
   sops.secrets."${globals.ultra.hostName}/password".neededForUsers = true;
-  #users.mutableUsers = true
+  users.mutableUsers = true;
   users.users."${globals.ultra.userName}" = {
     isNormalUser = true;
     extraGroups = [ 
