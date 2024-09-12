@@ -85,7 +85,6 @@
             touch /tmp/luks_password
             nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles \
             && cd /dotfiles && git checkout structured \
-           
             export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt"
             
             configs=(
@@ -134,7 +133,12 @@
               esac
             done
             
-            sops -d --extract '["$FLAKE"]["luks"]' /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password"
+
+            if [[ ! -n $(find "/dotfiles/hosts/''${FLAKE}/system/" -name "hardware-configuration.nix")]]; then
+                echo "Error: no placeholder hardware-configuration.nix file found"
+                exit
+            fi
+            sops -d --extract '["''${FLAKE}"]["luks"]' /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password
             trap 'rm -rf /dotfiles; umount -A /tmp/usb' EXIT;
             
             for config in "''${configs[@]}"; do
@@ -149,13 +153,13 @@
             		exit
             	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
             		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#''${config}"
-            		nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --flake ".#''${config}"
-                    rclone copyto OneDrive:Apps/KeePassXC/tests.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
+                    rclone copyto OneDrive:Apps/KeePassXC/test.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
+                    nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake ".#''${config}"
             		exit
             	  else
             		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#''${config}"
-            		nixos-install --root /mnt --flake ".#''${config}"
-                    rclone copyto OneDrive:Apps/KeePassXC/tests.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
+                    rclone copyto OneDrive:Apps/KeePassXC/test.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
+                    nixos-install --root /mnt --no-root-password --flake ".#''${config}"
                     exit
             	  fi
             

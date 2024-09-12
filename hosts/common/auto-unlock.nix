@@ -13,8 +13,8 @@
   in {
   security.pam.services = {
     keepassxc.text = ''
-      session optional pam_exec.so expose_authtok  ${script}
-    '';
+      session optional pam_exec.so expose_authtok{pkgs.keepassxc}/bin/keepassxc --pw-stdin $PAM_AUTH_TOK test.kdbx
+    ''; #${script}
     sddm-autologin.text = ''
       auth     requisite pam_nologin.so
 	  auth     required  pam_succeed_if.so uid >= ${toString config.services.displayManager.sddm.autoLogin.minimumUid} quiet
