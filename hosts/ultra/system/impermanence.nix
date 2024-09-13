@@ -89,7 +89,7 @@
         ".ssh"
         ".var"
         ".local/share"
-        ".config/sops/age"
+        ".config"
       ];
       allowOther = true;
     };

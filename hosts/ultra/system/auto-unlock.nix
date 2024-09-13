@@ -2,22 +2,8 @@
 , pkgs
 , config
 , ...
-}:let
-    script = pkgs.writeShellScriptBin "unlocker" ''
-    if ! pgrep keepassxc; then
-      #keepassxc && dbus-send --print-reply --dest=org.keepassxc.KeePassXC.MainWindow \
-      #/keepassxc org.keepassxc.KeePassXC.MainWindow.openDatabase \
-      #string:"s.kdbx" string:"$PAM_AUTH_TOK"
-      nohup $SHELL <<EOF &
-echo $PAM_AUTH_TOK | nohup  ${pkgs.keepassxc}/bin/keepassxc --pw-stdin /persist/home/Drive/Apps/KeePassXC/test.kdbx
-EOF
-    fi
-  '';
-  in {
+}:{
   security.pam.services = {
-    keepassxc.text = ''
-      session optional pam_exec.so expose_authtok ${script}/bin/unlocker
-    '';
     sddm-autologin.text = ''
       auth     requisite pam_nologin.so
 	  auth     required  pam_succeed_if.so uid >= ${toString config.services.displayManager.sddm.autoLogin.minimumUid} quiet
