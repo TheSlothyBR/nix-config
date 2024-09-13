@@ -57,6 +57,7 @@
 
   environment.persistence."/persist/system" = {
     hideMounts = true;
+    defaultDirectoryMethod = "symlink";
     directories = [
       "/etc/nixos"
       "/etc/secureboot"
@@ -79,6 +80,7 @@
       inputs.impermanence.nixosModules.home-manager.impermanence
     ];
     home.persistence."/persist/home" = {
+      defaultDirectoryMethod = "symlink";
       directories = [
         "Documents"
         "Downloads"

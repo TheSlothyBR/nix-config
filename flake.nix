@@ -16,10 +16,6 @@
     #  url = "github:nix-community/lanzaboote";
     #  inputs.nixpkgs.follows = "nixpkgs";
     #};
-    #system-manager = {
-    #  url = "github:numtide/system-manager";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -77,11 +73,10 @@
     in {
         ${system}.install = pkgs.writeShellApplication {
           name = "install";
-          runtimeInputs = with pkgs; [ git sops rclone ];
+          runtimeInputs = with pkgs; [ git sops ];
           text = ''
-            #''${/dotfiles/pkgs/install.sh} "$@"
             mkdir -p /tmp/usb
-            mount /dev/sdb1 /tmp/usb #"/dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1" "/tmp/usb";
+            mount /dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0\:0-part1 /tmp/usb
             touch /tmp/luks_password
             nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles \
             && cd /dotfiles && git checkout structured"
@@ -90,16 +85,16 @@
               ultra
               corsair
             )
-            
+
             NO_INSTALL=1
             CORES=0
             JOBS=1
-            
+
             if [[ $# -eq 0 ]]; then
               echo "Provide a Nix Flake config name, check script for options"
               exit
             fi
-            
+
             while [[ $# -gt 0 ]]; do
               case $1 in
             	-h|--help)
@@ -108,8 +103,8 @@
             	  ;;
             	-f|--flake)
             	  FLAKE=$2
-            	  shift # past argument
-            	  shift # past value
+            	  shift
+            	  shift
             	  ;;
             	--format-only)
             	  NO_INSTALL=0
@@ -137,6 +132,8 @@
             #    echo "Error: no placeholder hardware-configuration.nix file found"
             #    exit
             #fi
+            # Should probably check the existance of a lock file also
+            
             export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
             sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" /dotfiles/hosts/common/secrets/secrets.yaml > /tmp/luks_password
             trap 'rm -rf /dotfiles; umount -A /tmp/usb; unset SOPS_AGE_KEY_FILE' EXIT;
@@ -153,12 +150,10 @@
             		exit
             	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
             		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#''${config}"
-                    rclone copyto OneDrive:Apps/KeePassXC/test.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
                     nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake ".#''${config}"
             		exit
             	  else
             		nix --extra-experimental-features 'nix-command flakes' run github:nix-community/disko -- --mode disko --flake ".#''${config}"
-                    rclone copyto OneDrive:Apps/KeePassXC/test.kdbx /mnt/persist/home/Drive/Apps/KeePassXC/test.kdbx --config "/mnt/persist/home/.config/rclone/rclone.conf"
                     nixos-install --root /mnt --no-root-password --flake ".#''${config}"
                     exit
             	  fi
