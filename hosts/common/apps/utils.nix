@@ -5,7 +5,6 @@
   config = {
     environment.systemPackages = with pkgs; [
       wget
-      sbctl
     ] ++ [
       nh
       nix-output-monitor #required by nh

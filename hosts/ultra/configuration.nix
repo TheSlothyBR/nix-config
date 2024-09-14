@@ -28,13 +28,15 @@
 
     #systemd service fails as flatpak cant seem to access flathub repo uri through proxy, failing the system rebuild on vm
     #../common/flatpak.nix
-    #../common/apps/brave.nix
+    ../common/apps/brave.nix
+    ../common/apps/obsidian.nix
+    ../common/apps/kate.nix
 
     ../common/apps/neovim.nix
     ../common/apps/git.nix
     ../common/apps/wezterm.nix
     ../common/apps/utils.nix
-    ../common/apps/yazi.nix
+    #../common/apps/yazi.nix
   ];
   
   time.timeZone = "America/Sao_Paulo";
