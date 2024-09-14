@@ -78,8 +78,7 @@
             mkdir -p /tmp/usb
             mount /dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0:0-part1 /tmp/usb
             touch /tmp/luks_password
-            nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles \
-            && cd /dotfiles && git checkout structured"
+            nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config /dotfiles && cd /dotfiles"
             
             configs=(
               ultra
