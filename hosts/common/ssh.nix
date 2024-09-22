@@ -25,9 +25,9 @@ in {
   };
   
   programs.ssh = {
-    knownHosts = lib.genAttrs hosts (hostname: {
-      publicKeyFile = ./secrets/${hostname}_ed25519_key.pub;
-    });
+    #knownHosts = lib.genAttrs hosts (hostname: {
+    #  publicKeyFile = ./secrets/${hostname}_ed25519_key.pub;
+    #});
   };
 
   security.pam.sshAgentAuth = {
