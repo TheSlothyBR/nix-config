@@ -32,6 +32,7 @@
     ../common/apps/obsidian.nix
     ../common/apps/kate.nix
 
+    ../common/apps/rclone.nix
     ../common/apps/neovim.nix
     ../common/apps/git.nix
     ../common/apps/wezterm.nix

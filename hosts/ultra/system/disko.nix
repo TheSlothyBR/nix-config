@@ -62,6 +62,7 @@
                 mkdir -p /mnt/persist/system/etc/nixos;
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
                 cp /tmp/usb/data/secrets/keys.txt /mnt/persist/system/var/lib/sops-nix/
+                chmod 0600 /mnt/persist/system/var/lib/sops-nix/keys.txt
                 trap 'rm -rf /tmp/luks_password;' EXIT;
                 cp -r /dotfiles /mnt/persist/system/etc/nixos;
               '';
