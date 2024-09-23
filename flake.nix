@@ -158,15 +158,15 @@
                   fi
             
             	  if [[ NO_INSTALL -eq 0 ]]; then
-            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake .#"''${config}"
+            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
             		exit
             	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
-            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake .#"''${config}"
-                    nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake .#"''${config}"
+            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+                    nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/dotfiles#''${config}"
             		exit
             	  else
-            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake .#"''${config}"
-                    nixos-install --root /mnt --no-root-password --flake .#"''${config}"
+            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+                    nixos-install --root /mnt --no-root-password --flake "/dotfiles#''${config}"
                     exit
             	  fi
             
