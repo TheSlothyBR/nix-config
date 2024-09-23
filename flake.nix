@@ -162,11 +162,11 @@
             		exit
             	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
             		nix --experimental-features "nix-command flakes" --no-update-lock-file run github:nix-community/disko -- --mode disko --flake .#''${config}
-                    nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake .#''${config}
+                    nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake .#"''${config}"
             		exit
             	  else
             		nix --experimental-features "nix-command flakes" --no-update-lock-file run github:nix-community/disko -- --mode disko --flake .#''${config}
-                    nixos-install --root /mnt --no-root-password --flake .#''${config}
+                    nixos-install --root /mnt --no-root-password --flake .#"''${config}"
                     exit
             	  fi
             
