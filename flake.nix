@@ -181,9 +181,13 @@
     apps = let
       system = builtins.elemAt globals.meta.architectures 0;
     in {
-      default = {
-        type = "app";
-        program = "${self.packages.${system}.install}/bin/install";
+      ${system} = {
+        default = self.apps.${system}.install;
+
+        install = {
+          type = "app";
+          program = "${self.packages.${system}.install}/bin/install";
+        };
       };
     };
   };
