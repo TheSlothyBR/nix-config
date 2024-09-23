@@ -158,14 +158,14 @@
                   fi
             
             	  if [[ NO_INSTALL -eq 0 ]]; then
-            		nix --experimental-features "nix-command flakes" --no-update-lock-file run github:nix-community/disko -- --mode disko --flake .#"''${config}"
+            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake .#"''${config}"
             		exit
             	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
-            		nix --experimental-features "nix-command flakes" --no-update-lock-file run github:nix-community/disko -- --mode disko --flake .#"''${config}"
+            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake .#"''${config}"
                     nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake .#"''${config}"
             		exit
             	  else
-            		nix --experimental-features "nix-command flakes" --no-update-lock-file run github:nix-community/disko -- --mode disko --flake .#"''${config}"
+            		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake .#"''${config}"
                     nixos-install --root /mnt --no-root-password --flake .#"''${config}"
                     exit
             	  fi
