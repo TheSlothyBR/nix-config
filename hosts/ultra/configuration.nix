@@ -10,6 +10,7 @@
     ../common/systemd-boot.nix
     ../common/sound.nix
     ../common/battery-optimisation.nix
+    ../common/zswap.nix
 
     ../common/networking.nix
     ../common/bluetooth.nix
