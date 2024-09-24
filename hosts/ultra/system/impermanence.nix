@@ -116,7 +116,7 @@
         ".var"
         ".local/share"
         ".config"
-        { directory = ".ssh"; mode = "0700"; }
+        ".ssh"
         { directory = ".local/share/Steam"; method = "symlink"; }
       ];
       allowOther = true;
