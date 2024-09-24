@@ -41,8 +41,8 @@
 
   systemd = {
     tmpfiles.settings = {
-      "enforce-impermanence-home" = {
-        "/persist/home" = {
+      "enforce-rclone-home" = {
+        "/persist/home/.config/rclone" = {
           d = {
             group = "users";
             user = "${globals.ultra.userName}";
@@ -72,7 +72,7 @@
     ];
   };
 
-  environment.persistence."/persist/home" = {
+  environment.persistence."/persist" = {
     hideMounts = true;
     users.${globals.ultra.userName} = {
       directories = [
@@ -96,7 +96,7 @@
     imports = [
       inputs.impermanence.nixosModules.home-manager.impermanence
     ];
-    home.persistence."/persist/home" = {
+    home.persistence."/persist/home/${globals.ultra.userName}" = {
       directories = [
         #"Documents"
         #"Downloads"
