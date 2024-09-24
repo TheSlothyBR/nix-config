@@ -8,6 +8,20 @@
     rclone-browser
   ];
 
+  systemd = {
+    tmpfiles.settings = {
+      "enforce-rclone-path-permission" = {
+        "/persist/home/${globals.ultra.userName}/.config/rclone" = {
+          d = {
+            group = "users";
+            user = "${globals.ultra.userName}";
+            mode = "0740";
+          };
+        };
+      };
+    };
+  };
+
   sops.secrets."drive/token" = {};
   sops.secrets."drive/id" = {};
   sops = {

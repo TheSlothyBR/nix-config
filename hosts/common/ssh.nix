@@ -34,4 +34,12 @@ in {
     enable = true;
     authorizedKeysFiles = ["/etc/ssh/authorized_keys.d/%u"];
   };
+
+  environment.persistence."/persist" = {
+    users.${globals.ultra.userName} = {
+      directories = [
+        { directory = ".ssh"; mode = "0700"; }
+      ];
+    };
+  };
 }

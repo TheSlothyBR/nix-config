@@ -24,6 +24,7 @@
     ../common/inputs.nix
     ../common/gestures.nix
 
+    ../common/plymouth.nix
     ../common/sddm.nix
     ../common/plasma.nix
 

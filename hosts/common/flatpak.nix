@@ -28,6 +28,14 @@
     ];
   };
 
+  environment.persistence."/persist" = {
+    users.${globals.ultra.userName} = {
+      directories = [
+        ".var"
+      ];
+    };
+  }
+
   home-manager.users.${globals.ultra.userName} = {
     imports = [
       inputs.nix-flatpak.homeManagerModules.nix-flatpak

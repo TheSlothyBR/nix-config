@@ -41,15 +41,6 @@
 
   systemd = {
     tmpfiles.settings = {
-      "enforce-rclone-path-permission" = {
-        "/persist/home/${globals.ultra.userName}/.config/rclone" = {
-          d = {
-            group = "users";
-            user = "${globals.ultra.userName}";
-            mode = "0755";
-          };
-        };
-      };
       "enforce-steam-path" = {
         "/persist/home/${globals.ultra.userName}/.local/share/Steam" = {
           d = {
@@ -81,23 +72,21 @@
     ];
   };
 
-  #environment.persistence."/persist" = {
-  #  hideMounts = true;
-  #  users.${globals.ultra.userName} = {
-  #    directories = [
-  #      "Documents"
-  #      "Downloads"
-  #      "Drive"
-  #      "Music"
-  #      "Pictures"
-  #      "Videos"
-  #      { directory = ".ssh"; mode = "0700"; }
-  #      ".var"
-  #      ".local/share"
-  #      ".config"
-  #    ];
-  #  };
-  #};
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    users.${globals.ultra.userName} = {
+      directories = [
+        "Documents"
+        "Downloads"
+        "Drive"
+        "Music"
+        "Pictures"
+        "Videos"
+        ".local/share"
+        ".config"
+      ];
+    };
+  };
 
   programs.fuse.userAllowOther = true;
 
@@ -107,16 +96,6 @@
     ];
     home.persistence."/persist/home/${globals.ultra.userName}" = {
       directories = [
-        "Documents"
-        "Downloads"
-        "Drive"
-        "Music"
-        "Pictures"
-        "Videos"
-        ".var"
-        ".local/share"
-        ".config"
-        ".ssh"
         { directory = ".local/share/Steam"; method = "symlink"; }
       ];
       allowOther = true;
