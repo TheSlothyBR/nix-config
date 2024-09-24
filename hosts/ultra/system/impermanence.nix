@@ -86,23 +86,23 @@
     ];
   };
 
-  environment.persistence."/persist" = {
-    hideMounts = true;
-    users.${globals.ultra.userName} = {
-      directories = [
-        "Documents"
-        "Downloads"
-        "Drive"
-        "Music"
-        "Pictures"
-        "Videos"
-        { directory = ".ssh"; mode = "0700"; }
-        ".var"
-        ".local/share"
-        ".config"
-      ];
-    };
-  };
+  #environment.persistence."/persist" = {
+  #  hideMounts = true;
+  #  users.${globals.ultra.userName} = {
+  #    directories = [
+  #      "Documents"
+  #      "Downloads"
+  #      "Drive"
+  #      "Music"
+  #      "Pictures"
+  #      "Videos"
+  #      { directory = ".ssh"; mode = "0700"; }
+  #      ".var"
+  #      ".local/share"
+  #      ".config"
+  #    ];
+  #  };
+  #};
 
   programs.fuse.userAllowOther = true;
 
@@ -112,6 +112,16 @@
     ];
     home.persistence."/persist/home/${globals.ultra.userName}" = {
       directories = [
+        "Documents"
+        "Downloads"
+        "Drive"
+        "Music"
+        "Pictures"
+        "Videos"
+        ".var"
+        ".local/share"
+        ".config
+        { directory = ".ssh"; mode = "0700"; }
         { directory = ".local/share/Steam"; method = "symlink"; }
       ];
       allowOther = true;
