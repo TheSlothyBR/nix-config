@@ -115,7 +115,7 @@
         "Videos"
         ".var"
         ".local/share"
-        ".config
+        ".config"
         { directory = ".ssh"; mode = "0700"; }
         { directory = ".local/share/Steam"; method = "symlink"; }
       ];
