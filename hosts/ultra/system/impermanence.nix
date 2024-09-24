@@ -41,8 +41,8 @@
 
   systemd = {
     tmpfiles.settings = {
-      "enforce-rclone-home" = {
-        "/persist/home/.config/rclone" = {
+      "enforce-rclone-path-permission" = {
+        "/persist/home/${globals.ultra.userName}/.config/rclone" = {
           d = {
             group = "users";
             user = "${globals.ultra.userName}";
@@ -53,6 +53,20 @@
     };
   };
 
+  systemd = {
+    tmpfiles.settings = {
+      "enforce-steam-path" = {
+        "/persist/home/${globals.ultra.userName}/.local/share/Steam" = {
+          d = {
+            group = "users";
+            user = "${globals.ultra.userName}";
+            mode = "0777";
+          };
+        };
+      };
+    };
+  };
+  
   fileSystems."/persist".neededForBoot = true;
 
   environment.persistence."/persist/system" = {
@@ -98,16 +112,6 @@
     ];
     home.persistence."/persist/home/${globals.ultra.userName}" = {
       directories = [
-        #"Documents"
-        #"Downloads"
-        #"Drive"
-        #"Music"
-        #"Pictures"
-        #"Videos"
-        #".ssh"
-        #".var"
-        #".local/share"
-        #".config"
         { directory = ".local/share/Steam"; method = "symlink"; }
       ];
       allowOther = true;
