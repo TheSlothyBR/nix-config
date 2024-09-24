@@ -39,19 +39,19 @@
     };
   };
 
-  systemd = {
-    tmpfiles.settings = {
-      "enforce-steam-path" = {
-        "/persist/home/${globals.ultra.userName}/.local/share/Steam" = {
-          d = {
-            group = "users";
-            user = "${globals.ultra.userName}";
-            mode = "0777";
-          };
-        };
-      };
-    };
-  };
+  #systemd = {
+  #  tmpfiles.settings = {
+  #    "enforce-steam-path" = {
+  #      "/persist/home/${globals.ultra.userName}/.local/share/Steam" = {
+  #        d = {
+  #          group = "users";
+  #          user = "${globals.ultra.userName}";
+  #          mode = "0777";
+  #        };
+  #      };
+  #    };
+  #  };
+  #};
 
   fileSystems."/persist".neededForBoot = true;
 
@@ -95,9 +95,9 @@
       inputs.impermanence.nixosModules.home-manager.impermanence
     ];
     home.persistence."/persist/home/${globals.ultra.userName}" = {
-      directories = [
-        { directory = ".local/share/Steam"; method = "symlink"; }
-      ];
+      #directories = [
+      #  { directory = ".local/share/Steam"; method = "symlink"; }
+      #];
       allowOther = true;
     };
   };

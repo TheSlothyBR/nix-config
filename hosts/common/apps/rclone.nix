@@ -33,7 +33,7 @@ token = ${config.sops.placeholder."drive/token"}
 drive_id = ${config.sops.placeholder."drive/id"}
 drive_type = personal
       '';
-      path = "/persist/home/.config/rclone/rclone.conf";
+      path = "/persist/home/${globals.ultra.userName}/.config/rclone/rclone.conf";
       owner = "${globals.ultra.userName}";
       mode = "0660";
     };
