@@ -4,14 +4,14 @@
   boot = {
     plymouth = {
       enable = true;
-      theme = "Hud 3";
+      theme = "hud_3";
       themePackages = with pkgs; [
         (adi1090x-plymouth-themes.override {
-          selected_themes = [ "Hud 3" ];
+          selected_themes = [ "hud_3" ];
         })
       ];
     };
-    
+
     #consoleLogLevel = 0;
     #initrd.verbose = false;
     #kernelParams = [
@@ -25,4 +25,8 @@
     #];
     #loader.timeout = 0;
   };
+
+  environment.systemPackages = with pkgs.kdePackages; [
+    plymouth-kcm
+  ];
 }
