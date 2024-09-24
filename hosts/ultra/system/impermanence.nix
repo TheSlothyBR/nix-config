@@ -50,11 +50,6 @@
           };
         };
       };
-    };
-  };
-
-  systemd = {
-    tmpfiles.settings = {
       "enforce-steam-path" = {
         "/persist/home/${globals.ultra.userName}/.local/share/Steam" = {
           d = {
@@ -66,7 +61,7 @@
       };
     };
   };
-  
+
   fileSystems."/persist".neededForBoot = true;
 
   environment.persistence."/persist/system" = {
