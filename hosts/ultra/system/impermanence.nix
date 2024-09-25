@@ -76,6 +76,7 @@
     hideMounts = true;
     users.${globals.ultra.userName} = {
       directories = [
+        "Desktop"
         "Documents"
         "Downloads"
         "Drive"
