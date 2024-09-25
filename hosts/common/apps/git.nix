@@ -1,10 +1,16 @@
 { pkgs
+, globals
 , config
 , ...
 }:{
-  config = {
-    environment.systemPackages = with pkgs; [
-      git
-    ];
+
+  sops.secrets."git/name" = {};
+  sops.secrets."git/email" = {};
+  home-manager.users.${globals.ultra.userName} = {
+    programs.git = {
+      enable = true;
+      userName = config.sops.secrets."git/name".path;
+      userEmail = config.sops.secrets."git/email".path;
+    };
   };
 }
