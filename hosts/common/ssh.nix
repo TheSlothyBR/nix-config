@@ -24,12 +24,18 @@ in {
     #];
   };
   
-  #programs.ssh = {
+  programs.ssh = {
+    startAgent = true;
     #knownHosts = lib.genAttrs hosts (hostname: {
     #  publicKeyFile = ./secrets/${hostname}_ed25519_key.pub;
     #});
-  #};
+  };
 
+  home-manager.users.${globals.ultra.userName} = {
+    home.file."/home/${globals.ultra.userName}/.config/environment.d/ssh-agent.conf".text = ''
+SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent
+    '';
+  };
   security.pam.sshAgentAuth = {
     enable = true;
     authorizedKeysFiles = ["/etc/ssh/authorized_keys.d/%u"];
