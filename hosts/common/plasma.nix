@@ -4,7 +4,6 @@
 , globals
 , ...
 }:{
-  config = {
   services.desktopManager.plasma6.enable = true;
 
   environment = {
@@ -16,7 +15,6 @@
       khelpcenter
       konsole
       okular
-      plasma-browser-integration
       print-manager
     ];
   };
@@ -27,7 +25,7 @@
   ] ++ [
     #kde-rounded-corners
   ];
-
+  
   home-manager = {
     sharedModules  = [
       inputs.plasma-manager.homeManagerModules.plasma-manager
@@ -44,5 +42,4 @@
       };
     };
   };
-};
 }
