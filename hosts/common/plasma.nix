@@ -19,26 +19,52 @@
     ];
   };
 
+  #imports = [
+  #  ../../overlays/colloid-kde-overlay.nix
+  #];
+
   environment.systemPackages = with pkgs; [
     kdePackages.qtstyleplugin-kvantum
     kdePackages.sddm-kcm
+    colloid-kde
     (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
-    #kde-rounded-corners
   ];
-  
+
+  qt = {
+    enable = true;
+    platformTheme = "kde";
+    style = "kvantum";
+  };
+
   home-manager = {
     sharedModules  = [
       inputs.plasma-manager.homeManagerModules.plasma-manager
     ];
     users.${globals.ultra.userName} = {
+      xdg.configFile = {
+        "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
+      };
+
       programs.plasma = {
         enable = true;
         overrideConfig = true;
 	workspace = {
-          theme = "breeze-dark";
-	  colorScheme = "BreezeDark";
+          theme = "Colloid-dark";
+	  colorScheme = "ColloidDark";
+	  #wallpaper
+	  windowDecorations = {
+            library = "org.kde.kwin.aurorae";
+	    theme = "__aurorae__svg__Colloid-dark-round";
+	  };
+	  splashScreen = {
+            theme = "Colloid-dark";
+	  };
+	  cursor = {
+	    theme = "breeze_cursors";
+	  };
 	  iconTheme = "YaruPlasma-Dark";
 	  soundTheme = "ocean";
+          clickItemTo = "select";
 	};
 	panels = [
           {
@@ -212,11 +238,6 @@
 	    ];
           }
 	];
-        #resetFilesExclude = [];
-        #file = { "file/relative/to/home" = ''explicit settings'' };
-        # kwinoutputconfig.json has refresh and resolution info, has to be manualy set
-        #configFile = {}; #same pourpose as home-manager options
-        #dataFile = {};
       };
     };
   };
