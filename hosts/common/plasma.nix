@@ -19,10 +19,10 @@
     ];
   };
 
-  environment.systemPackages = with pkgs.kdePackages; [
-    qtstyleplugin-kvantum
-    sddm-kcm
-  ] ++ [
+  environment.systemPackages = with pkgs; [
+    kdePackages.qtstyleplugin-kvantum
+    kdePackages.sddm-kcm
+    (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
     #kde-rounded-corners
   ];
   
@@ -37,6 +37,7 @@
 	workspace = {
           theme = "breeze-dark";
 	  colorScheme = "BreezeDark";
+	  iconTheme = "YaruPlasma-Dark";
 	  soundTheme = "ocean";
 	};
 	panels = [
@@ -45,7 +46,7 @@
 	    floating = true;
 	    alignment = "left";
 	    lengthMode = "fill";
-	    height = 36;
+	    height = 34;
 	    hiding = "none";
 	    widgets = [
 	      {
@@ -59,7 +60,13 @@
 		  sidebarPosition = "left";
 		};
               }
-	      "org.kde.plasma.pager"
+	      {
+	        name = "org.kde.plasma.pager";
+		config.General = {
+                  displayedText = "Number";
+		  showWindowsIcons = true;
+		};
+	      }
               "org.kde.plasma.appmenu" 
 	      "org.kde.plasma.panelspacer" 
 	      {
@@ -70,22 +77,53 @@
 		    scaleToFit = false;
 		  };
 		  items = {
+		    showAll = false;
                     shown = [
-	              "org.kde.plasma.battery"
-	              "org.kde.plasma.brightness"
-	              "org.kde.plasma.cameraindicator"
-	              "org.kde.plasma.clipboard"
-	              "org.kde.plasma.devicenotifier"
-	              "org.kde.plasma.manage-inputmethod"
-	              "org.kde.plasma.mediacontroller"
-	              "org.kde.plasma.kscreen"
-	              "org.kde.plasma.bluetooth"
-	              "org.kde.plasma.notifications"
-	              "org.kde.plasma.keyboardlayout"
-	              "org.kde.plasma.keyboardindicator"
 	              "org.kde.plasma.networkmanagement"
 	              "org.kde.plasma.volume"
+	              "org.kde.plasma.battery"
+		      "org.kde.plasma.systemMonitor"
 		    ];
+		    hidden = [
+		      "org.kde.plasma.bluetooth"
+	              "org.kde.plasma.brightness"
+	              "org.kde.plasma.notifications"
+	              "org.kde.plasma.devicenotifier"
+	              "org.kde.plasma.cameraindicator"
+	              "org.kde.plasma.mediacontroller"
+	              "org.kde.plasma.clipboard"
+	              "org.kde.plasma.kscreen"
+		    ];
+	            configs = {
+                      systemMonitor = {
+                        displayStyle = "org.kde.ksysguard.barchart";
+		        title = "System Resources";
+		        showTitle = true;
+		        showLegend = true;
+		        sensors = [
+                          {
+                            name = "cpu/all/usage";
+		            color = "87, 118, 182";
+		            label = "CPU";
+		          }
+                          {
+                            name = "gpu/all/usage";
+		            color = "181, 150, 87";
+		            label = "GPU";
+		          }
+                          {
+                            name = "memory/physical/usedPercent";
+		            color = "168, 101, 157";
+		            label = "Memory";
+		          }
+                          {
+                            name = "memory/swap/usedPercent";
+		            color = "92, 177, 107";
+		            label = "Swap";
+		          }
+		        ];
+		      };
+		    };
 		  };
 		};
 	      }
@@ -133,10 +171,10 @@
                 iconTasks = {
 		  launchers = [
 		    "preferred://filemanager"
-		    "/etc/profiles/per-user/${globals.ultra.userName}/share/applications/org.wezfurlong.wezterm.desktop"
+		    "applications:org.wezfurlong.wezterm.desktop"
 		    "preferred://browser"
-		    "/run/current-system/sw/share/applications/org.keepassxc.KeePassXC.desktop"
-		    "/run/current-system/sw/share/applications/rclone-browser.desktop"
+		    "applications:org.keepassxc.KeePassXC.desktop"
+		    "applications:rclone-browser.desktop"
 		  ];
 		  appearance = {
                     showTooltips = true;
