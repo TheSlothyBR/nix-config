@@ -19,9 +19,9 @@
     ];
   };
 
-  #imports = [
-  #  ../../overlays/colloid-kde-overlay.nix
-  #];
+  imports = [
+    ../../overlays/colloid-kde-overlay.nix
+  ];
 
   environment.systemPackages = with pkgs; [
     kdePackages.qtstyleplugin-kvantum
