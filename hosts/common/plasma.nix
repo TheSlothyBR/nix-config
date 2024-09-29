@@ -199,6 +199,7 @@
 		    "preferred://filemanager"
 		    "applications:org.wezfurlong.wezterm.desktop"
 		    "preferred://browser"
+		    "applications:obsidian.desktop"
 		    "applications:org.keepassxc.KeePassXC.desktop"
 		    "applications:rclone-browser.desktop"
 		  ];
