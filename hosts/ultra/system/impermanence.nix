@@ -80,6 +80,7 @@
         "Documents"
         "Downloads"
         "Drive"
+        "Games"
         "Music"
         "Pictures"
         "Videos"
@@ -87,6 +88,10 @@
         ".config"
       ];
     };
+  };
+
+  environment.sessionVariables = {
+    DRIVE = "$HOME/Drive";
   };
 
   programs.fuse.userAllowOther = true;
