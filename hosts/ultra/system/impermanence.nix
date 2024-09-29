@@ -85,7 +85,7 @@
         "Pictures"
         "Videos"
         ".local/share"
-        ".config"
+        #".config"
       ];
     };
   };

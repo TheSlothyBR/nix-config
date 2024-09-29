@@ -11,6 +11,7 @@
         })
       ];
     };
+    loader.systemd-boot.consoleMode = "max";
 
     consoleLogLevel = 0;
     initrd.verbose = false;
