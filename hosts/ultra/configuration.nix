@@ -20,6 +20,7 @@
     ../common/sops.nix
     ../common/apps/keepassxc.nix
     ./system/auto-unlock.nix
+    ./system/security.nix
     
     ../common/inputs.nix
     ../common/gestures.nix
