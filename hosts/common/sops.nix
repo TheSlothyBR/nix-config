@@ -18,18 +18,18 @@
     };
   };
   
-  home-manager = {
-    sharedModules = [ 
-      inputs.sops-nix.homeManagerModules.sops
-    ];
-    users.${globals.ultra.userName} = {
-      sops = {
-        defaultSopsFile = ./secrets/secrets.yaml;
-        defaultSopsFormat = "yaml";
-        age = {
-          keyFile = "/persist/home/${globals.ultra.userName}/keys.txt";
-        };
-      };
-    };
-  };
+  #home-manager = {
+  #  sharedModules = [ 
+  #    inputs.sops-nix.homeManagerModules.sops
+  #  ];
+  #  users.${globals.ultra.userName} = {
+  #    sops = {
+  #      defaultSopsFile = ./secrets/secrets.yaml;
+  #      defaultSopsFormat = "yaml";
+  #      age = {
+  #        keyFile = "/persist/home/${globals.ultra.userName}/keys.txt";
+  #      };
+  #    };
+  #  };
+  #};
 }

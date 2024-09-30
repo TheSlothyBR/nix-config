@@ -6,16 +6,26 @@
     keepassxc
   ];
 
-  systemd.tmpfiles.settings = {
-    "persist-keepassxc-local-settings" = {
-      "/home/${globals.ultra.userName}/.config/keepassxc/keepassxc.ini" = {
-        f = {
-          group = "users";
-	  user = "${globals.ultra.userName}";
-	  mode = "0740";
-	  argument = "[General]\nConfigVersion=2\n[GUI]TrayIconAppearance=monochrome-light\n[SSHAgent]\nEnabled=true";
-	};
-      };
+  systemd.services."generate-keepassxc-config" = {
+    description = "Generate KeePassXC config";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "${globals.ultra.userName}";
+      Group = "users";
     };
+    script = ''
+      mkdir -p ~/.config/keepassxc
+      cat << 'EOF' > ~/.config/keepassxc/keepassxc.ini
+[General]
+ConfigVersion=2
+
+[GUI]
+TrayIconAppearance=monochrome-light
+
+[SSHAgent]
+Enabled=true
+EOF
+    '';
   };
 }

@@ -1,6 +1,6 @@
-{ globals
-, config
+{ config
 , pkgs
+, globals
 , ...
 }:{
   environment.systemPackages = with pkgs; [
@@ -8,46 +8,32 @@
     rclone-browser
   ];
 
-  #systemd = {
-  #  tmpfiles.settings = {
-  #    "enforce-rclone-path-permission" = {
-  #      "/home/${globals.ultra.userName}/.config/rclone" = {
-  #        d = {
-  #          group = "users";
-  #          user = "${globals.ultra.userName}";
-  #          mode = "0740";
-  #        };
-  #      };
-  #    };
-  #  };
-  #};
+  sops.secrets."drive/token" = {
+    owner = "${globals.ultra.userName}";
+  };
+  sops.secrets."drive/id" = {
+    owner = "${globals.ultra.userName}";
+  };
 
-  home-manager.users.${globals.ultra.userName} = {
-    sops = {
-      secrets = {
-        drive-token = {
-          path = "%r/drive/token";
-          key = "drive/token";
-	  mode = "0400";
-	};
-        drive-id = {
-          path = "%r/drive/id";
-          key = "drive/id";
-	  mode = "0400";
-        };
-      };
-      templates."rclone.conf" = {
-        content = ''
+  systemd.services."generate-rclone-config" = {
+    description = "Generate Rclone Config";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "${globals.ultra.userName}";
+      Group = "users";
+    };
+    script = ''
+      mkdir -p ~/.config/rclone
+      cat << 'EOF' > ~/.config/rclone/rclone.conf
 [OneDrive]
 type = onedrive
-token = ${config.home-manager.users.${globals.ultra.userName}.sops.placeholder.drive-token}
-drive_id = ${config.home-manager.users.${globals.ultra.userName}.sops.placeholder.drive-id}
+token = token-placeholder
+drive_id = id-placeholder
 drive_type = personal
-        '';
-        path = "/home/${globals.ultra.userName}/.config/rclone/rclone.conf";
-        owner = "${globals.ultra.userName}";
-        mode = "0600";
-      };
-    };
+EOF
+      sed -i "s@token-placeholder@$(cat ${config.sops.secrets."drive/token".path})@g" ~/.config/rclone/rclone.conf
+      sed -i "s@id-placeholder@$(cat ${config.sops.secrets."drive/id".path})@g" ~/.config/rclone/rclone.conf
+    '';
   };
 }
