@@ -41,6 +41,16 @@ SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent
     authorizedKeysFiles = ["/etc/ssh/authorized_keys.d/%u"];
   };
 
+  systemd.services."link-ssh_known_hosts" = {
+    description = "Creates symlink for root known hosts";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "sops-nix.service" ];
+    seviceConfig.Type = "oneshot";
+    script = ''
+      ln -sf /home/${globals.ultra.userName}/.ssh/known_hosts /etc/ssh/ssh_known_hosts
+    '';
+  };
+
   environment.persistence."/persist" = {
     users.${globals.ultra.userName} = {
       directories = [

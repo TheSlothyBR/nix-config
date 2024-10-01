@@ -39,20 +39,6 @@
     };
   };
 
-  #systemd = {
-  #  tmpfiles.settings = {
-  #    "enforce-steam-path" = {
-  #      "/persist/home/${globals.ultra.userName}/.local/share/Steam" = {
-  #        d = {
-  #          group = "users";
-  #          user = "${globals.ultra.userName}";
-  #          mode = "0777";
-  #        };
-  #      };
-  #    };
-  #  };
-  #};
-
   fileSystems."/persist".neededForBoot = true;
 
   environment.persistence."/persist/system" = {
@@ -83,15 +69,16 @@
         "Games"
         "Music"
         "Pictures"
-        "Videos"
-        ".local/share"
-        #".config"
+        "Public"
+	"Templates"
+	"Videos"
       ];
     };
   };
 
   environment.sessionVariables = {
     DRIVE = "$HOME/Drive";
+    GAMES = "$HOME/Games";
   };
 
   programs.fuse.userAllowOther = true;

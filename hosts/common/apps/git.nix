@@ -19,7 +19,7 @@
     after = [ "sops-nix.service" ];
     serviceConfig.Type = "oneshot";
     script = ''
-      ln -s /home/${globals.ultra.userName}/.config/git/config /etc/gitconfig
+      ln -sf /home/${globals.ultra.userName}/.config/git/config /etc/gitconfig
     ''; 
   };
 }

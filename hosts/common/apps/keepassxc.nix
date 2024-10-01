@@ -22,9 +22,22 @@ ConfigVersion=2
 
 [GUI]
 TrayIconAppearance=monochrome-light
+HideUsernames=true
 
 [SSHAgent]
 Enabled=true
+
+[Browser]
+Enabled=true
+CustomProxyLocation=
+EOF
+
+      mkdir -p ~/.cache/keepassxc
+      cat << 'EOF' > ~/.cache/keepassxc/keepassxc.ini
+[General]
+LastOpenedDatabases=/home/${globals.ultra.userName}/Drive/Apps/KeePassXC/s.kdbx
+LastDatabases=/home/${globals.ultra.userName}/Drive/Apps/KeePassXC/s.kdbx
+LastActiveDatabase=/home/${globals.ultra.userName}/Drive/Apps/KeePassXC/s.kdbx
 EOF
     '';
   };
