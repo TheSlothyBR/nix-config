@@ -45,7 +45,7 @@ SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent
     description = "Creates symlink for root known hosts";
     wantedBy = [ "multi-user.target" ];
     after = [ "sops-nix.service" ];
-    seviceConfig.Type = "oneshot";
+    serviceConfig.Type = "oneshot";
     script = ''
       ln -sf /home/${globals.ultra.userName}/.ssh/known_hosts /etc/ssh/ssh_known_hosts
     '';

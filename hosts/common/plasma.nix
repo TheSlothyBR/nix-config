@@ -239,7 +239,61 @@
 	    ];
           }
 	];
-        dataFile."dolphin/view_properties/global/.directory".Settings.HiddenFilesShown = true;
+	powerdevil = {
+          AC = {
+            autoSuspend = {
+	      action = "sleep";
+	      idleTimeout = 600;
+	    };
+	    turnOffDisplay = {
+	      idleTimeout = 300;
+	      idleTimeoutWhenLocked = 30;
+	    };
+	    dimDisplay.enable = false;
+	    whenLaptopLidClosed = "hibernate";
+	    whenSleepingEnter = "standbyThenHibernate";
+	  };
+	  battery = {
+            autoSuspend = {
+	      action = "sleep";
+	      idleTimeout = 300;
+	    };
+	    turnOffDisplay = {
+	      idleTimeout = 180;
+	      idleTimeoutWhenLocked = 30;
+	    };
+	    dimDisplay.enable = false;
+	    whenLaptopLidClosed = "turnOffScreen";
+	    whenSleepingEnter = "standbyThenHibernate";
+	  };
+	  lowBattery = {
+            autoSuspend = {
+	      action = "hibernate";
+	      idleTimeout = 300;
+	    };
+	    turnOffDisplay = {
+	      idleTimeout = 180;
+	      idleTimeoutWhenLocked = 30;
+	    };
+	    dimDisplay.enable = false;
+	    whenLaptopLidClosed = "hibernate";
+	    whenSleepingEnter = "standbyThenHibernate";
+	  };
+	};
+	configFile = {
+	  powerdevilrc = {
+	    "AC/Display".UseProfileSpecificDisplayBrightness = true;
+	    "AC/Display".DisplayBrightness = 90;
+	    "Battery/Display".UseProfileSpecificDisplayBrightness = true;
+	    "Battery/Display".DisplayBrightness = 15;
+	    "LowBattery/Display".DisplayBrightness = 15;
+	  };
+	};
+        dataFile = {
+	  "dolphin/view_properties/global/.directory" = {
+	    Settings.HiddenFilesShown = true;
+          };
+	};
       };
     };
   };
