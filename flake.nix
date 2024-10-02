@@ -5,6 +5,13 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-24.05";
     };
+    nixpkgs-unstable = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,10 +23,6 @@
     #  url = "github:nix-community/lanzaboote";
     #  inputs.nixpkgs.follows = "nixpkgs";
     #};
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     plasma-manager = {
       url = "github:pjones/plasma-manager";
       inputs = {
@@ -49,7 +52,8 @@
       "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs globals lib;
-        };
+          isConfig = "${globals.ultra.hostName}";
+	};
         modules = [
           ./hosts/ultra/system/drives.nix
           ./hosts/ultra/system/impermanence.nix
