@@ -41,13 +41,14 @@
   } @inputs: let
     inherit (self) outputs;
     globals = import ./pkgs/globals.nix;
+    lib = ((_: _.lib.extend (final: prev: (import ./lib final) // inputs.home-manager.lib)) inputs.nixpkgs);
   in
   rec
   {
     nixosConfigurations = {
       "${globals.ultra.hostName}" = nixpkgs.lib.nixosSystem {
         specialArgs = {
-          inherit inputs outputs globals;
+          inherit inputs outputs globals lib;
         };
         modules = [
           ./hosts/ultra/system/drives.nix
@@ -55,7 +56,7 @@
           ./hosts/ultra/system/hardware-configuration.nix
           ./hosts/ultra/home/home.nix
           ./hosts/ultra/configuration.nix
-        ];
+	];
       };
       customIso = nixpkgs.lib.nixosSystem {
         specialArgs = {

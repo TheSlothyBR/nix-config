@@ -282,11 +282,11 @@
 	};
 	configFile = {
 	  powerdevilrc = {
-	    "AC/Display".UseProfileSpecificDisplayBrightness = true;
-	    "AC/Display".DisplayBrightness = 90;
-	    "Battery/Display".UseProfileSpecificDisplayBrightness = true;
-	    "Battery/Display".DisplayBrightness = 15;
-	    "LowBattery/Display".DisplayBrightness = 15;
+	    "[AC][Display]".UseProfileSpecificDisplayBrightness = true;
+	    "[AC][Display]".DisplayBrightness = 90;
+	    "[Battery][Display]".UseProfileSpecificDisplayBrightness = true;
+	    "[Battery][Display]".DisplayBrightness = 15;
+	    "[LowBattery][Display]".DisplayBrightness = 15;
 	  };
 	};
         dataFile = {

@@ -1,6 +1,7 @@
 { globals
 , inputs
 , config
+, lib
 , ...
 }:{
   imports = [
