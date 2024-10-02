@@ -11,9 +11,19 @@
  #     }
  #   ];
  # };
-  config = {
-    environment.systemPackages = with pkgs; [
-      brave
-    ];
+  environment.systemPackages = with pkgs; [
+    brave
+  ];
+  
+  environment.persistence."/persist" = {
+    users.${globals.ultra.userName} = {
+      directories = [
+        ".config/BraveSoftware/Brave-Browser/Default/Extensions"
+      ];
+      files = [
+        ".config/BraveSoftware/Brave-Browser/Default/Preferences"
+        ".config/BraveSoftware/Brave-Browser/Local State"
+      ];
+    };
   };
 }

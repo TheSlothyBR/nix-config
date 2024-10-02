@@ -1,10 +1,17 @@
-{ pkgs
-, config
+{ inputs
+, pkgs
+, globals
 , ...
 }:{
-  config = {
-    environment.systemPackages = with pkgs; [
-      obsidian
-    ];
+  environment.systemPackages = with pkgs; [
+    obsidian
+  ];
+
+  environment.persistence."/persist" = {
+    users.${globals.ultra.userName} = {
+      directories = [
+        ".config/obsidian"
+      ];
+    };
   };
 }
