@@ -5,6 +5,11 @@
 , ...
 }:{
   imports = [
+    ./system/drives.nix
+    ./system/impermanence.nix
+    ./system/hardware-configuration.nix
+    ./home/home.nix
+
     ../common/kernel.nix
     ../common/nix-config.nix
     ../common/unfree-pkgs.nix
