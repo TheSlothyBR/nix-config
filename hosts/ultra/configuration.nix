@@ -5,48 +5,8 @@
 , ...
 }:{
   imports = [
-    ./system/drives.nix
-    ./system/impermanence.nix
-    ./system/hardware-configuration.nix
-    ./home/home.nix
-
-    ../common/kernel.nix
-    ../common/nix-config.nix
-    ../common/unfree-pkgs.nix
-    ../common/systemd-boot.nix
-    ../common/sound.nix
-    ../common/battery-optimisation.nix
-    ../common/zswap.nix
-
-    ../common/networking.nix
-    ../common/bluetooth.nix
-    ../common/wifi-adapter.nix
-
-    ../common/ssh.nix
-    ../common/sops.nix
-    ../common/apps/keepassxc.nix
-    ./system/auto-unlock.nix
-    ./system/security.nix
-    
-    ../common/inputs.nix
-    ../common/gestures.nix
-
-    ../common/plymouth.nix
-    ../common/sddm.nix
-    ../common/plasma.nix
-
-    #systemd service fails as flatpak cant seem to access flathub repo uri through proxy, failing the system rebuild on vm
-    #../common/flatpak.nix
-    ../common/apps/brave.nix
-    ../common/apps/obsidian.nix
-    ../common/apps/kate.nix
-
-    ../common/apps/rclone.nix
-    ../common/apps/neovim.nix
-    ../common/apps/git.nix
-    ../common/apps/wezterm.nix
-    ../common/apps/utils.nix
-    #../common/apps/yazi.nix
+   ../common
+   ./system
   ];
   
   time.timeZone = "America/Sao_Paulo";

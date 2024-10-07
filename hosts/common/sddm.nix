@@ -7,7 +7,7 @@
         compositor = "kwin";
       };
       autoNumlock = true;
-      theme = "Breeze";
+      theme = "breeze";
     };
     defaultSession = "plasma";
   };

@@ -19,10 +19,10 @@
     impermanence = {
       url = "github:nix-community/impermanence";
     };
-    #lanzaboote = {
-    #  url = "github:nix-community/lanzaboote";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:pjones/plasma-manager";
       inputs = {
@@ -30,7 +30,9 @@
         home-manager.follows = "home-manager";
       };
     };
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak";
+    };
     sops-nix = {
       url = "github:mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -48,10 +50,10 @@
   in
   rec
   {
-    nixosConfigurations = nixpkgs.lib.genAttrs 
-    (builtins.filter (x: ! (x == "meta")) (nixpkgs.lib.attrNames globals))
+    nixosConfigurations = lib.genAttrs 
+    (lib.custom.getSetValuesList globals [ "hostName" ] "meta")
     (hostName:
-      nixpkgs.lib.nixosSystem {
+      lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs globals lib;
           isConfig = hostName;

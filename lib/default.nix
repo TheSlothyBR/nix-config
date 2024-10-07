@@ -1,20 +1,13 @@
-lib: with lib; {
+lib: with lib; rec {
   custom = {
-    # Recursively constructs an attrset of a given folder, recursing on directories, value of attrs is the file type.
-    getDir = dir: mapAttrs
-      (file: type: if type == "directory" then getDir "${dir}/${file}" else type)
+    getSetValuesList = globals: paths: exclude: map (name: getAttrFromPath (lists.singleton name ++ paths) globals)(attrNames (filterAttrs(n: v: n != exclude) globals));
+
+    readDirRecursive = dir: mapAttrs
+      (file: type: if type == "directory" then custom.readDirRecursive "${dir}/${file}" else type)
       (builtins.readDir dir);
 
-    # Collects all files of a directory as a list of strings of paths
-    files = dir: collect isString (mapAttrsRecursive (path: type: concatStringsSep "/" path) (getDir dir));
+    getFiles = dir: collect isString (mapAttrsRecursive (path: type: concatStringsSep "/" path) (custom.readDirRecursive dir));
 
-    # Returns list of files in directories specified. Value passed in must always be current directory.
-    # Use as imports = listFiles ./.;
-    listFiles = dir: map
-      (file: ./. + "/${file}")
-      (filter
-        (file: hasSuffix ".nix" file && ! hasSuffix "default.nix" file)
-        (files dir)
-      );
+    listFiles = dir: map (file: dir + "/${file}") (filter (file: hasSuffix ".nix" file && file != "default.nix" && file != "disko.nix") (custom.getFiles dir));
   };
 }

@@ -6,7 +6,7 @@
     defaultEditor = true;
     vimAlias = true;
     viAlias = true;
-    #configure = { customRC = ''text''; };
+    configure = { customRC = ''set clipboard+=unnamedplus''; };
     #runtime;
   };
 
