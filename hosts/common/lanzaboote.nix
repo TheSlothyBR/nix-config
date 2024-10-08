@@ -1,17 +1,26 @@
 { inputs
 , nixpkgs
+, config
 , lib
 , ...
 }:{
- # imports = [
- #   inputs.lanzaboote.nixosModules.lanzaboote
- # ];
+  imports = [
+    inputs.lanzaboote.nixosModules.lanzaboote
+  ];
 
- # boot = {
- #   loader.systemd-boot.enable = lib.mkForce false;
- #   lanzaboote = {
- #     enable = true;
- #     pkiBundle = "/etc/secureboot";
- #   };
- # };
+  options = {
+    custom.lanzaboote = {
+      enable = lib.mkEnableOption "Nix-managed SecureBoot";
+    };
+  };
+
+  config = lib.mkIf config.custom.lanzaboote.enable {
+    boot = {
+      loader.systemd-boot.enable = lib.mkForce false;
+      lanzaboote = {
+        enable = true;
+        pkiBundle = "/etc/secureboot";
+      };
+    };
+  };
 }

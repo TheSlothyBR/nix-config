@@ -1,17 +1,26 @@
-{ inputs
+{ config
 , pkgs
-, globals
+, isUser
+, lib
 , ...
 }:{
-  environment.systemPackages = with pkgs; [
-    obsidian
-  ];
+  options = {
+    custom.obsidian = {
+      enable = lib.mkEnableOption "Obsidian.md config";
+    };
+  };
 
-  environment.persistence."/persist" = {
-    users.${globals.ultra.userName} = {
-      directories = [
-        ".config/obsidian"
-      ];
+  config = lib.mkIf config.custom.obsidian.enable {
+    environment.systemPackages = with pkgs; [
+      obsidian
+    ];
+
+    environment.persistence."/persist" = {
+      users.${isUser} = {
+        directories = [
+          ".config/obsidian"
+        ];
+      };
     };
   };
 }

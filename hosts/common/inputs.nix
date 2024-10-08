@@ -1,11 +1,22 @@
-{
-  console = {
-    keyMap = "br-abnt2";
+{ config
+, lib
+, ...
+}:{
+  options = {
+    custom.inputs = {
+      enable = lib.mkEnableOption "Inputs config";
+    };
   };
-  services = { 
-    xserver.xkb = {
-      layout = "br";
-      variant = "nodeadkeys";
+
+  config = lib.mkIf config.custom.inputs.enable {
+    console = {
+      keyMap = "br-abnt2";
+    };
+    services = { 
+      xserver.xkb = {
+        layout = "br";
+        variant = "nodeadkeys";
+      };
     };
   };
 }

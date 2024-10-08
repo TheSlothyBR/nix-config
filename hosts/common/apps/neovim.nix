@@ -1,22 +1,32 @@
 { pkgs
+, config
+, lib
 , ...
 }:{
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    vimAlias = true;
-    viAlias = true;
-    configure = { customRC = ''
-      set clipboard=unnamedplus
-      set number relativenumber
-    ''; };
-    #runtime;
+  options = {
+    custom.neovim = {
+      enable = lib.mkEnableOption "Neovim config";
+    };
   };
 
-  programs.nano.enable = false;
+  config = lib.mkIf config.custom.neovim.enable {
+    programs.neovim = {
+      enable = true;
+      defaultEditor = true;
+      vimAlias = true;
+      viAlias = true;
+      configure = { customRC = ''
+        set clipboard=unnamedplus
+        set number relativenumber
+      ''; };
+      #runtime;
+    };
 
-  environment.sessionVariables = {
-    VISUAL = "nvim";
-    SUDO_EDITOR = "nvim";
+    programs.nano.enable = false;
+
+    environment.sessionVariables = {
+      VISUAL = "nvim";
+      SUDO_EDITOR = "nvim";
+    };
   };
 }

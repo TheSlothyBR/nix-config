@@ -41,7 +41,7 @@
           mkdir -p $sddm/share/sddm/themes
 
 	  cd sddm/6.0
-	  ./install.sh --dest $sddm/share/sddm/themes
+	  ./install.sh
 
           runHook postInstall
 	'';
