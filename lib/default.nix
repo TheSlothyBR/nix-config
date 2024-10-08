@@ -1,6 +1,6 @@
 lib: with lib; rec {
   custom = {
-    getSetValuesList = globals: paths: exclude: map (name: getAttrFromPath (lists.singleton name ++ paths) globals)(attrNames (filterAttrs(n: v: n != exclude) globals));
+    getSetValuesList = globals: paths: exclude: map (name: getAttrFromPath (lists.singleton name ++ paths) globals)(attrNames (filterAttrs(n: v: ! (any (fn: n == fn) exclude)) globals));
 
     readDirRecursive = dir: mapAttrs
       (file: type: if type == "directory" then custom.readDirRecursive "${dir}/${file}" else type)

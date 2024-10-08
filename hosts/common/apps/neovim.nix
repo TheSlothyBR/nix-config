@@ -6,7 +6,10 @@
     defaultEditor = true;
     vimAlias = true;
     viAlias = true;
-    configure = { customRC = ''set clipboard+=unnamedplus''; };
+    configure = { customRC = ''
+      set clipboard=unnamedplus
+      set number relativenumber
+    ''; };
     #runtime;
   };
 

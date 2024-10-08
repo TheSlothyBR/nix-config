@@ -15,6 +15,7 @@
         
 	postPatch = ''
           patchShebangs install.sh
+          patchShebangs sddm/6.0/install.sh
 
 	  substituteInPlace install.sh \
 	    --replace '$HOME/.local' $out \
@@ -38,8 +39,9 @@
 	  ./install.sh --dest $out/share/themes
 
           mkdir -p $sddm/share/sddm/themes
+
 	  cd sddm/6.0
-	  ./install.sh --dest $sddm
+	  ./install.sh --dest $sddm/share/sddm/themes
 
           runHook postInstall
 	'';

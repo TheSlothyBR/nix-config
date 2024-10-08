@@ -1,22 +1,31 @@
 { pkgs
-, globals
+, config
+, isUser
+, lib
 , ...
 }:{
-  environment.systemPackages = with pkgs; [
-    keepassxc
-  ];
-
-  systemd.services."generate-keepassxc-config" = {
-    description = "Generate KeePassXC config";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      User = "${globals.ultra.userName}";
-      Group = "users";
+  options = {
+    custom.keepassxc = {
+      enable = lib.mkEnableOption "KeePassXC config";
     };
-    script = ''
-      mkdir -p ~/.config/keepassxc
-      cat << 'EOF' > ~/.config/keepassxc/keepassxc.ini
+  };
+  
+  config = lib.mkIf config.custom.keepassxc.enable {
+    environment.systemPackages = with pkgs; [
+      keepassxc
+    ];
+
+    systemd.services."generate-keepassxc-config" = {
+      description = "Generate KeePassXC config";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.config/keepassxc
+        cat << 'EOF' > ~/.config/keepassxc/keepassxc.ini
 [General]
 ConfigVersion=2
 
@@ -32,13 +41,14 @@ Enabled=true
 CustomProxyLocation=
 EOF
 
-      mkdir -p ~/.cache/keepassxc
-      cat << 'EOF' > ~/.cache/keepassxc/keepassxc.ini
+        mkdir -p ~/.cache/keepassxc
+        cat << 'EOF' > ~/.cache/keepassxc/keepassxc.ini
 [General]
-LastOpenedDatabases=/home/${globals.ultra.userName}/Drive/Apps/KeePassXC/s.kdbx
-LastDatabases=/home/${globals.ultra.userName}/Drive/Apps/KeePassXC/s.kdbx
-LastActiveDatabase=/home/${globals.ultra.userName}/Drive/Apps/KeePassXC/s.kdbx
+LastOpenedDatabases=/home/${isUser}/Drive/Apps/KeePassXC/s.kdbx
+LastDatabases=/home/${isUser}/Drive/Apps/KeePassXC/s.kdbx
+LastActiveDatabase=/home/${isUser}/Drive/Apps/KeePassXC/s.kdbx
 EOF
-    '';
+      '';
+    };
   };
 }

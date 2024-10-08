@@ -51,12 +51,13 @@
   rec
   {
     nixosConfigurations = lib.genAttrs 
-    (lib.custom.getSetValuesList globals [ "hostName" ] "meta")
+    (lib.custom.getSetValuesList globals [ "hostName" ] [ "meta" ])
     (hostName:
       lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs globals lib;
           isConfig = hostName;
+	  isUser = globals.${hostName}.userName;
 	};
         modules = [
           ./hosts/${hostName}/configuration.nix
