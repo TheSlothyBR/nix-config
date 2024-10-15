@@ -15,6 +15,7 @@
       systemd-boot.enable = true;
     };
     brave.enable = true;
+    flatpak.enable = true;
     gestures.enable = true;
     git.enable = true;
     inputs.enable = true;
