@@ -12,26 +12,42 @@
   };
 
   config = lib.mkIf config.custom.brave.enable {
-   # inputs.home-manager.users.${isUser} = {
-   #   services.flatpak.packages = [
-   #     {
-   #       appId = "com.brave.Browser";
-   #       origin = "flathub";
-   #     }
-   #   ];
-   # };
-    environment.systemPackages = with pkgs; [
-      brave
-    ];
-    
+    home-manager.users.${isUser} = {
+      services.flatpak = {
+        packages = [
+          {
+            appId = "com.brave.Browser";
+            origin = "flathub";
+          }
+        ];
+        overrides = {
+          "com.brave.Browser" = {
+            Context = {
+	      sockets = [
+                "wayland"
+		"x11"
+	      ];
+            };
+            Environment = {
+              GTK_THEME = "Adwaita:dark";
+	    };
+          };
+        };
+      };
+    };
+
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
-          ".config/BraveSoftware/Brave-Browser/Default/Extensions"
-        ];
+          ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Default/Extensions"
+          ".var/app/com.brave.Browser/.ld.so"
+          ".var/app/com.brave.Browser/.local"
+          ".var/app/com.brave.Browser/.pki"
+          ".var/app/com.brave.Browser/data"
+	];
         files = [
-          ".config/BraveSoftware/Brave-Browser/Default/Preferences"
-          ".config/BraveSoftware/Brave-Browser/Local State"
+          ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Default/Preferences"
+          ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Local State"
         ];
       };
     };

@@ -112,21 +112,21 @@
           	  };
           	  items = {
           	    showAll = false;
-                      shown = [
-                        "org.kde.plasma.networkmanagement"
-                        "org.kde.plasma.volume"
-                        "org.kde.plasma.battery"
+                    shown = [
+                      "org.kde.plasma.networkmanagement"
+                      "org.kde.plasma.volume"
+                      "org.kde.plasma.battery"
           	      "org.kde.plasma.systemMonitor"
           	    ];
           	    hidden = [
           	      "org.kde.plasma.bluetooth"
-                        "org.kde.plasma.brightness"
-                        "org.kde.plasma.notifications"
-                        "org.kde.plasma.devicenotifier"
-                        "org.kde.plasma.cameraindicator"
-                        "org.kde.plasma.mediacontroller"
-                        "org.kde.plasma.clipboard"
-                        "org.kde.plasma.kscreen"
+                      "org.kde.plasma.brightness"
+                      "org.kde.plasma.notifications"
+                      "org.kde.plasma.devicenotifier"
+                      "org.kde.plasma.cameraindicator"
+                      "org.kde.plasma.mediacontroller"
+                      "org.kde.plasma.clipboard"
+                      "org.kde.plasma.kscreen"
           	    ];
                       configs = {
                         systemMonitor = {
@@ -207,7 +207,7 @@
           	    "preferred://filemanager"
           	    "applications:org.wezfurlong.wezterm.desktop"
           	    "preferred://browser"
-          	    "applications:obsidian.desktop"
+          	    "applications:md.obsidian.Obsidian.desktop"
           	    "applications:org.keepassxc.KeePassXC.desktop"
           	    "applications:rclone-browser.desktop"
           	  ];

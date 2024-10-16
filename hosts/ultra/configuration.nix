@@ -16,6 +16,7 @@
     };
     brave.enable = true;
     flatpak.enable = true;
+    flatseal.enable = true;
     gestures.enable = true;
     git.enable = true;
     inputs.enable = true;

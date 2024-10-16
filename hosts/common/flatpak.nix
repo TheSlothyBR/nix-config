@@ -16,17 +16,23 @@
   };
 
   config = lib.mkIf config.custom.flatpak.enable {
-    environment.persistence."/persist" = {
-      users.${isUser} = {
-        directories = [
-          ".var"
-        ];
-      };
+    environment.persistence."/persist/system" = {
+      directories = [
+        "/var/lib/flatpak"
+      ];
     };
+
+   # environment.persistence."/persist" = {
+   #   users.${isUser} = {
+   #     directories = [
+   #       ".var"
+   #     ];
+   #   };
+   # };
     
     systemd.services."flatpak-managed-install" = {
       serviceConfig = {
-        ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
+        ExecStartPre = "${pkgs.networkmanager}/bin/nm-online -q -t 90";
       };
     };
 
@@ -61,12 +67,6 @@
           {
             name = "flathub-beta";
             location = "https://flathub.org/beta-repo/flathub-beta.flatpakrepo";
-          }
-        ];
-        packages = [
-          { 
-            appId = "com.github.tchx84.Flatseal";
-            origin = "flathub";
           }
         ];
 	overrides = {

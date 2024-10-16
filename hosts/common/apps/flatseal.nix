@@ -1,20 +1,21 @@
-{ config
+{ inputs
+, config
 , isUser
 , lib
 , ...
 }:{
   options = {
-    custom.obsidian = {
-      enable = lib.mkEnableOption "Obsidian.md config";
+    custom.flatseal = {
+      enable = lib.mkEnableOption "Flatseal config";
     };
   };
 
-  config = lib.mkIf config.custom.obsidian.enable {
+  config = lib.mkIf config.custom.flatseal.enable {
     home-manager.users.${isUser} = {
       services.flatpak = {
         packages = [
           {
-            appId = "md.obsidian.Obsidian";
+            appId = "com.github.tchx84.Flatseal";
 	    origin = "flathub";
 	  }
 	];
@@ -24,8 +25,8 @@
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
-          ".var/app/md.obsidian.Obsidian"
-        ];
+          ".var/app/com.github.tchx84.Flatseal"
+	];
       };
     };
   };
