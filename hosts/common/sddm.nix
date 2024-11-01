@@ -19,6 +19,10 @@
       defaultSession = "plasma";
       sddm = {
         enable = true;
+        package = pkgs.kdePackages.sddm;
+        extraPackages = [
+          pkgs.unstable.sddm-astronaut
+        ];
         wayland = {
           enable = true;
           compositor = "kwin";
