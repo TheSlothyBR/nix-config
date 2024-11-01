@@ -1,5 +1,7 @@
-{ config
+{ inputs
+, config
 , lib
+, pkgs
 , ...
 }:{
   options = {
@@ -9,7 +11,12 @@
   };
 
   config = lib.mkIf config.custom.sddm.enable {
+    environment.systemPackages = [
+      pkgs.unstable.sddm-astronaut #.override { themeConfig = ''text''; };
+    ];
+
     services.displayManager = {
+      defaultSession = "plasma";
       sddm = {
         enable = true;
         wayland = {
@@ -17,9 +24,8 @@
           compositor = "kwin";
         };
         autoNumlock = true;
-        theme = "breeze";
+        theme = "sddm-astronaut-theme";
       };
-      defaultSession = "plasma";
     };
   };
 }

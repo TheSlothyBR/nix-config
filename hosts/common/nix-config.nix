@@ -1,4 +1,5 @@
-{ config
+{ inputs
+, config
 , lib
 , ...
 }:{
@@ -11,6 +12,7 @@
 
   config = lib.mkIf config.custom.nix-config.enable {
     nix = {
+      nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
       settings = {
         auto-optimise-store = true;
         experimental-features = [

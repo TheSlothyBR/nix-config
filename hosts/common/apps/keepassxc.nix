@@ -11,9 +11,25 @@
   };
   
   config = lib.mkIf config.custom.keepassxc.enable {
-    environment.systemPackages = with pkgs; [
-      keepassxc
-    ];
+    home-manager.users.${isUser} = {
+      services.flatpak = {
+        packages = [
+          {
+            appId = "org.keepassxc.KeePassXC";
+      	    origin = "flathub";
+      	  }
+      	];
+        overrides = {
+          "org.keepassxc.KeePassXC" = {
+            Context = {
+              filesystems = [
+                "home/Drive/Apps/KeePassXC/s.kdbx:rw"
+              ];
+            };
+          };
+        };
+      };
+    };
 
     systemd.services."generate-keepassxc-config" = {
       description = "Generate KeePassXC config";
@@ -24,8 +40,8 @@
         Group = "users";
       };
       script = ''
-        mkdir -p ~/.config/keepassxc
-        cat << 'EOF' > ~/.config/keepassxc/keepassxc.ini
+        mkdir -p ~/.var/app/org.keepassxc.KeePassXC/config/keepassxc
+        cat << 'EOF' > ~/.var/app/org.keepassxc.KeePassXC/config/keepassxc/keepassxc.ini
 [General]
 ConfigVersion=2
 
@@ -41,8 +57,8 @@ Enabled=true
 CustomProxyLocation=
 EOF
 
-        mkdir -p ~/.cache/keepassxc
-        cat << 'EOF' > ~/.cache/keepassxc/keepassxc.ini
+        mkdir -p ~/.var/app/org.keepassxc.KeePassXC/cache/keepassxc
+        cat << 'EOF' > ~/.var/app/org.keepassxc.KeePassXC/cache/keepassxc/keepassxc.ini
 [General]
 LastOpenedDatabases=/home/${isUser}/Drive/Apps/KeePassXC/s.kdbx
 LastDatabases=/home/${isUser}/Drive/Apps/KeePassXC/s.kdbx

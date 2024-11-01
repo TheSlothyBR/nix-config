@@ -13,6 +13,7 @@
     environment = {
       systemPackages = with pkgs; [
         wget
+        wl-clipboard
       ] ++ [
         nh
         nix-output-monitor

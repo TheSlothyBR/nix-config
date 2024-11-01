@@ -23,25 +23,29 @@
     kate.enable = true;
     keepassxc.enable = true;
     kernel.enable = true;
+    neovim.enable = true;
     nix-config = {
       enable = true;
       allowUnfree = true;
     };
-    neovim.enable = true;
+    nur.enable = true;
     obsidian.enable = true;
     plasma.enable = true;
     plymouth.enable = true;
     rclone.enable = true;
     sddm.enable = true;
     sops.enable = true;
-    ssh.enable = true;
     sound = {
       enable = true;
       jack.enable = false;
     };
+    ssh.enable = true;
+    stremio.enable = true;
+    #stylix.enable = true;
     utils.enable = true;
     wezterm.enable = true;
     wifi-adapter.enable = true;
+    zellij.enable = true;
     zswap.enable = true;
   };
 }

@@ -16,9 +16,9 @@
         packages = [
           {
             appId = "com.github.tchx84.Flatseal";
-	    origin = "flathub";
-	  }
-	];
+      	    origin = "flathub";
+      	  }
+      	];
       };
     };
 
@@ -26,7 +26,7 @@
       users.${isUser} = {
         directories = [
           ".var/app/com.github.tchx84.Flatseal"
-	];
+	      ];
       };
     };
   };

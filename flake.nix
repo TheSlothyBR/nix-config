@@ -12,6 +12,20 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    stylix = {
+      url = "github:danth/stylix/release-24.05";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
+    nur = {
+      url = "github:nix-community/NUR";
+    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,6 +43,10 @@
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
       };
+    };
+    kwin-effects-forceblur = {
+      url = "github:taj-ny/kwin-effects-forceblur";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak";
@@ -57,11 +75,12 @@
         specialArgs = {
           inherit inputs outputs globals lib;
           isConfig = hostName;
-	  isUser = globals.${hostName}.userName;
-	};
+          isUser = globals.${hostName}.userName;
+	      };
         modules = [
           ./hosts/${hostName}/configuration.nix
-	];
+	        ./overlays/unstable-pkgs-overlay.nix
+	      ];
       }
     );
 
