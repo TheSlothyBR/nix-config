@@ -69,7 +69,7 @@
     qt = {
       enable = true;
       platformTheme = "kde";
-      style = "kvantum";
+      #style = "kvantum";
     };
 
     home-manager = {
@@ -77,27 +77,57 @@
         inputs.plasma-manager.homeManagerModules.plasma-manager
       ];
       users.${isUser} = {
-        xdg.configFile = {
-          "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
+        #xdg.configFile = {
+        #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
+        #};
+
+        home.file = {
+          ".config/krohnkite/toggle-krohnkite.sh" = {
+            text = ''
+CURRENT=`kreadconfig5 --file kwinrc --group plugins --key krohnkiteEnabled`
+
+if [ $CURRENT = "true" ]; then
+  kwriteconfig5 --file kwinrc --group Plugins --key krohnkiteEnabled false
+elif [ $CURRENT = "false" ]; then
+  kwriteconfig5 --file kwinrc --group Plugins --key krohnkiteEnabled true
+fi
+
+qbus org.kde.Kwin /KWin reconfigure
+            '';
+            executable = true;
+          };
+          ".local/share/applications/toggle-krohnkite.sh.desktop" = {
+            text = ''
+[Desktop Entry]
+Exec=/home/${isUser}/.config/krohnkite/krohnkite-toggle.sh
+Name=/home/${isUser}/.config/krohnkite/krohnkite-toggle.sh
+NoDisplay=true
+StartupNotify=false
+Type=Application
+X-KDE-GlobalAccel-CommandShortcut=true
+            '';
+            executable = true;
+          };
         };
 
         programs.plasma = {
           enable = true;
           overrideConfig = true;
           workspace = {
-            theme = "Colloid-dark";
-            colorScheme = "ColloidDark";
-            windowDecorations = {
-              library = "org.kde.kwin.aurorae";
-              theme = "__aurorae__svg__Colloid-dark-round";
-            };
-            splashScreen = {
-              theme = "Colloid-dark";
-            };
-            cursor = {
-              theme = "breeze_cursors";
-            };
-            iconTheme = "YaruPlasma-Dark";
+            #theme = "Colloid-dark";
+            #colorScheme = "ColloidDark";
+            #windowDecorations = {
+            #  library = "org.kde.kwin.aurorae";
+            #  theme = "__aurorae__svg__Colloid-dark-round";
+            #};
+            ##missing them wallpaper type setting for Active blur plugin, not implemented upstream
+            #splashScreen = {
+            #  theme = "Colloid-dark";
+            #};
+            #cursor = {
+            #  theme = "breeze_cursors";
+            #};
+            #iconTheme = "YaruPlasma-Dark";
             soundTheme = "ocean";
             clickItemTo = "select";
           };
@@ -151,13 +181,6 @@
                 #{
                 #  plasmaPanelColorizer = {};
                 #}
-                #{
-                #  name = "org.kde.plasma.pager";
-                #  config.General = {
-                #    displayedText = "Name";
-                #    showWindowsIcons = true;
-                #  };
-                #}
                 {
                   name = "org.dhruv8sh.kara";
                   config = {
@@ -191,8 +214,8 @@
                       ];
                     };
                     windowControlButtons = {
-                      iconSource = "aurorae";
-                      auroraeTheme = "Colloid-dark-round";
+                      #iconSource = "aurorae";
+                      #auroraeTheme = "Colloid-dark-round";
                       buttonsMargin = 2;
                     };
                   };
@@ -388,6 +411,31 @@
                 BorderSize = "None";
                 BorderSizeAuto = false;
               };
+              Plugins = {
+                blurEnabled = false;
+                contrastEnabled = false;
+                forceblurEnabled = true;
+                krohnkiteEnabled = false;
+              };
+              "Effect-ًRound-Corners" = {
+                ActiveOutlineUseCustom = false;
+                ActiveOutlineUsePalette = true;
+                InactiveCornerRadius = 15;
+                InactiveOutlineUseCustom = false;
+                InactiveOutlineUsePalette = true;
+                Size = 15;
+              };
+              "Effect-blurplus" = {
+                BlurMatching = false;
+                BlurMenus = true;
+                BlurNonMatching = true;
+                BottomCornerRadius = 1;
+                DockCornerRadius = 1;
+                MenuCornerRadius = 1;
+                NoiseStrength = 13;
+                RoundedCornersAntialiasing = 0;
+                TopCornerRadius = 1;
+              };
             };
             "powerdevilrc" = {
               "AC/Display" = {
@@ -455,6 +503,7 @@
             };
           };
           shortcuts = {
+            "services/toggle-krohnkite.sh.desktop"."_launch" = "Meta+Ctrl+T";
             "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
             "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
           };
