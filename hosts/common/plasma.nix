@@ -7,7 +7,7 @@
 }:{
   imports = [
     ../../overlays/colloid-kde-overlay.nix
-    ../../overlays/kde-material-you-colors-overlay.nix
+    #../../overlays/kde-material-you-colors-overlay.nix
   ];
 
   options = {
@@ -24,9 +24,9 @@
       (final: prev: {
         application-title-bar = (import inputs.nixpkgs-unstable { system = final.system; }).application-title-bar;
       })
-      (final: prev: {
-        plasma-panel-colorizer = (import inputs.nixpkgs-unstable { system = final.system; }).plasma-panel-colorizer;
-      })
+      #(final: prev: {
+      #  plasma-panel-colorizer = (import inputs.nixpkgs-unstable { system = final.system; }).plasma-panel-colorizer;
+      #})
       (final: prev: {
         kara = (import inputs.nixpkgs-unstable { system = final.system; }).kara;
       })
@@ -56,8 +56,8 @@
         unstable = with pkgs.unstable; [
           application-title-bar
           kara
-          plasma-panel-colorizer
-          python312Packages.kde-material-you-colors
+          #plasma-panel-colorizer
+          #python312Packages.kde-material-you-colors
           plasma-plugin-blurredwallpaper
           inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
           kdePackages.krohnkite
