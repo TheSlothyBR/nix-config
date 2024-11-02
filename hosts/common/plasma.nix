@@ -410,6 +410,7 @@
                 ShowViewMode = false;
               };
               "DetailsMode" = {
+                ExpandableFolders = false;
                 IconSize = 32;
                 PreviewSize = 32;
               };
@@ -438,17 +439,17 @@
               PreviewSettings = {
                 Plugins = "appimagethumbnail,audiothumbnail,blenderthumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,mobithumbnail,opendocumentthumbnail,gsthumbnail,rawthumbnail,svgthumbnail,ffmpegthumbs";
               };
+              "Toolbar mainToolBar" = {
+                ToolButtonStyle = "IconOnly";
+              };
             };
           };
           dataFile = {
             "dolphin/view_properties/global/.directory" = {
               Dolphin = {
-                HeaderColumnWidths = "286,70,133";
                 SortRole = "size";
-                Timestamp = "2024,10,31,16,3,36.512";
-                Version = 4;
                 ViewMode = 1;
-                VisibleRoles = "Icons_text,Icons_size,Icons_type";
+                VisibleRoles = "Icons_text,Icons_size,Icons_type,CustomizedDetails,Details_text,Details_type,Details_size,Details_permissions,Details_modificationtime,Details_destination,Details_artist,Details_album,Details_duration,Details_dimensions,Details_pageCount";
               };
               Settings.HiddenFilesShown = true;
             };
