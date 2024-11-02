@@ -77,27 +77,27 @@
         inputs.plasma-manager.homeManagerModules.plasma-manager
       ];
       users.${isUser} = {
-        #xdg.configFile = {
-        #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
-        #};
+        xdg.configFile = {
+          "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
+        };
 
         programs.plasma = {
           enable = true;
           overrideConfig = true;
           workspace = {
-            #theme = "Colloid-dark";
-            #colorScheme = "ColloidDark";
-            #windowDecorations = {
-            #  library = "org.kde.kwin.aurorae";
-            #  theme = "__aurorae__svg__Colloid-dark-round";
-            #};
-            #splashScreen = {
-            #  theme = "Colloid-dark";
-            #};
-            #cursor = {
-            #  theme = "breeze_cursors";
-            #};
-            #iconTheme = "YaruPlasma-Dark";
+            theme = "Colloid-dark";
+            colorScheme = "ColloidDark";
+            windowDecorations = {
+              library = "org.kde.kwin.aurorae";
+              theme = "__aurorae__svg__Colloid-dark-round";
+            };
+            splashScreen = {
+              theme = "Colloid-dark";
+            };
+            cursor = {
+              theme = "breeze_cursors";
+            };
+            iconTheme = "YaruPlasma-Dark";
             soundTheme = "ocean";
             clickItemTo = "select";
           };
@@ -191,8 +191,8 @@
                       ];
                     };
                     windowControlButtons = {
-                      #iconSource = "aurorae";
-                      #auroraeTheme = "Colloid-dark-round";
+                      iconSource = "aurorae";
+                      auroraeTheme = "Colloid-dark-round";
                       buttonsMargin = 2;
                     };
                   };
@@ -442,6 +442,14 @@
           };
           dataFile = {
             "dolphin/view_properties/global/.directory" = {
+              Dolphin = {
+                HeaderColumnWidths = "286,70,133";
+                SortRole = "size";
+                Timestamp = "2024,10,31,16,3,36.512";
+                Version = 4;
+                ViewMode = 1;
+                VisibleRoles = "Icons_text,Icons_size,Icons_type";
+              };
               Settings.HiddenFilesShown = true;
             };
           };
