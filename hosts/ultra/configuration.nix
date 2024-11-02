@@ -28,7 +28,7 @@
       enable = true;
       allowUnfree = true;
     };
-    nur.enable = true;
+    #nur.enable = true;
     obsidian.enable = true;
     plasma.enable = true;
     plymouth.enable = true;
@@ -41,7 +41,7 @@
     };
     ssh.enable = true;
     stremio.enable = true;
-    #stylix.enable = true;
+    stylix.enable = true;
     utils.enable = true;
     wezterm.enable = true;
     wifi-adapter.enable = true;

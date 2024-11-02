@@ -11,24 +11,24 @@
   };
 
   config = lib.mkIf config.custom.sddm.enable {
-    environment.systemPackages = [
-      pkgs.unstable.sddm-astronaut #.override { themeConfig = ''text''; };
-    ];
+    #environment.systemPackages = [
+    #  pkgs.unstable.sddm-astronaut #.override { themeConfig = ''text''; };
+    #];
 
     services.displayManager = {
       defaultSession = "plasma";
       sddm = {
         enable = true;
-        package = pkgs.kdePackages.sddm;
-        extraPackages = [
-          pkgs.unstable.sddm-astronaut
-        ];
+        #package = lib.mkForce pkgs.kdePackages.sddm;
+        #extraPackages = [
+        #  pkgs.unstable.sddm-astronaut
+        #];
         wayland = {
           enable = true;
           compositor = "kwin";
         };
         autoNumlock = true;
-        theme = "sddm-astronaut-theme";
+        #theme = "sddm-astronaut-theme";
       };
     };
   };

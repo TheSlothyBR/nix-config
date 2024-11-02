@@ -51,6 +51,7 @@
           colloid-kde
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
           (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
+          kde-rounded-corners
         ];
         unstable = with pkgs.unstable; [
           application-title-bar
@@ -76,9 +77,9 @@
         inputs.plasma-manager.homeManagerModules.plasma-manager
       ];
       users.${isUser} = {
-        xdg.configFile = {
-          "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
-        };
+        #xdg.configFile = {
+        #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
+        #};
 
         programs.plasma = {
           enable = true;
