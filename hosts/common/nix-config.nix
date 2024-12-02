@@ -18,7 +18,7 @@
         experimental-features = [
           "nix-command"
           "flakes"
-          "repl-flake"
+          "pipe-operators"
         ];
         trusted-users = [
           "root"

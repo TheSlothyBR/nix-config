@@ -41,14 +41,28 @@
       };
       plugins = {
         lualine.enable = true;
+        lsp = {
+          servers = {
+           nixd = {
+             enable = true;
+           };
+          };
+        };
       };
     };
 
     programs.nano.enable = false;
 
-    environment.sessionVariables = {
-      VISUAL = "nvim";
-      SUDO_EDITOR = "nvim";
+    environment = {
+      sessionVariables = {
+        VISUAL = "nvim";
+        SUDO_EDITOR = "nvim";
+        MANPAGER = "nvim +Man!";
+      };
+      systemPackages = with pkgs; [
+        nixfmt-rfc-style
+        nixd
+      ];
     };
   };
 }

@@ -28,7 +28,7 @@
       enable = true;
       allowUnfree = true;
     };
-    #nur.enable = true;
+    nur.enable = true;
     obsidian.enable = true;
     plasma.enable = true;
     plymouth.enable = true;

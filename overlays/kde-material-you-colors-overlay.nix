@@ -3,8 +3,8 @@
 }:{
   nixpkgs.overlays = [
     (final: prev: {
-      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-        (nfinal: nprev: {
+      python = prev.python.override {
+        packageOverrides = (nfinal: nprev: {
           kde-material-you-colors = nprev.kde-material-you-colors.overrideAttrs (mfinal: mprev: {
             passthru.widget = pkgs.callPackage ../pkgs/kde-material-you-colors-widget.nix { 
               pname = mprev.pname; 
@@ -12,8 +12,8 @@
               src = mprev.src; 
             };
           });
-        })
-      ];
+        });
+      };
     })
   ];
 }

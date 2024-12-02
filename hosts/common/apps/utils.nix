@@ -14,6 +14,7 @@
       systemPackages = with pkgs; [
         wget
         wl-clipboard
+        tealdeer
       ] ++ [
         nh
         nix-output-monitor

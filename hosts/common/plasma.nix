@@ -7,35 +7,50 @@
 }:{
   imports = [
     ../../overlays/colloid-kde-overlay.nix
-    #../../overlays/kde-material-you-colors-overlay.nix
+    ../../overlays/kde-material-you-colors-overlay.nix
   ];
 
   options = {
     custom.plasma = {
       enable = lib.mkEnableOption "Plasma Desktop config";
     };
+    #home-manager.programs.plasma.workspace = {
+    #  wallpaperActiveBlur = {
+    #    enable = {
+    #      type = lib.types.str;
+    #      default = "false";
+    #      example = "true";
+    #      description = ''
+    #        Active Blur plugin.
+    #      '';
+    #    };
+    #    positioning = {
+    #      type = lib.types.str;
+    #      default = "1";
+    #      example = "2";
+    #      description = ''
+    #        Wallpaper positioning method.
+    #      '';
+    #    };
+    #    blur = {
+    #      type = lib.types.str;
+    #      default = "true";
+    #      example = "false";
+    #      description = ''
+    #        Activates blur.
+    #      '';
+    #    };
+    #  };
+    #};
   };
 
   config = lib.mkIf config.custom.plasma.enable {
     services.desktopManager.plasma6.enable = true;
 
-    # only needed because before 24.11, plasma-manager did not offer a separate stable and unstable branch
-    nixpkgs.overlays = [
-      (final: prev: {
-        application-title-bar = (import inputs.nixpkgs-unstable { system = final.system; }).application-title-bar;
-      })
-      #(final: prev: {
-      #  plasma-panel-colorizer = (import inputs.nixpkgs-unstable { system = final.system; }).plasma-panel-colorizer;
-      #})
-      (final: prev: {
-        kara = (import inputs.nixpkgs-unstable { system = final.system; }).kara;
-      })
-
-    ];
-
     environment = {
       plasma6.excludePackages = with pkgs.kdePackages; [
         ark
+        discover
         elisa
         gwenview
         kate
@@ -52,15 +67,16 @@
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
           (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
           kde-rounded-corners
-        ];
-        unstable = with pkgs.unstable; [
-          application-title-bar
           kara
-          #plasma-panel-colorizer
-          #python312Packages.kde-material-you-colors
+          application-title-bar
+          plasma-panel-colorizer
+          python312Packages.kde-material-you-colors
           plasma-plugin-blurredwallpaper
           inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
           kdePackages.krohnkite
+        ];
+        unstable = with pkgs.unstable; [
+        
         ];
       in
         stable ++ unstable;
@@ -120,7 +136,6 @@ X-KDE-GlobalAccel-CommandShortcut=true
             #  library = "org.kde.kwin.aurorae";
             #  theme = "__aurorae__svg__Colloid-dark-round";
             #};
-            ##missing them wallpaper type setting for Active blur plugin, not implemented upstream
             #splashScreen = {
             #  theme = "Colloid-dark";
             #};
@@ -130,7 +145,25 @@ X-KDE-GlobalAccel-CommandShortcut=true
             #iconTheme = "YaruPlasma-Dark";
             soundTheme = "ocean";
             clickItemTo = "select";
+            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/wallpapers/ScarletTree/contents/images/5120x2880.png";
+            #wallpaperActiveBlur.enable = true;
           };
+          #startup = {
+          #  desktopScript."wallpaper_activeBlur" = (
+          #    lib.mkIf (config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.enable) {
+          #      text = ''
+          #        // Wallpaper Active Blur
+          #        let allDesktops = desktops();
+          #        for (const desktop of allDesktops) {
+          #          desktop.wallpaperPlugin = "a2n.blur";
+          #          desktop.currentConfigGroup = ["Wallpaper", "a2n.blur", "General"];
+          #          desktop.writeConfig("FillMode","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.positioning}");
+          #          desktop.writeConfig("Blur","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.blur}");
+          #      '';
+          #      priority = 3;
+          #    }
+          #  );
+          #};
           kwin = {
             titlebarButtons = {
               right = [  ];
@@ -178,9 +211,6 @@ X-KDE-GlobalAccel-CommandShortcut=true
                     sidebarPosition = "left";
                   };
                 }
-                #{
-                #  plasmaPanelColorizer = {};
-                #}
                 {
                   name = "org.dhruv8sh.kara";
                   config = {
@@ -197,6 +227,7 @@ X-KDE-GlobalAccel-CommandShortcut=true
                     type1.t1activeWidth = 30;
                   };
                 }
+                "luisbocanegra.panel.colorizer"
                 "org.kde.plasma.appmenu" 
                 "org.kde.plasma.panelspacer" 
                 "org.kde.plasma.mediacontroller"
@@ -361,6 +392,7 @@ X-KDE-GlobalAccel-CommandShortcut=true
                     };
                   };
                 }
+                "luisbocanegra.panel.colorizer"
               ];
             }
           ];
@@ -405,6 +437,13 @@ X-KDE-GlobalAccel-CommandShortcut=true
               whenSleepingEnter = "standbyThenHibernate";
             };
           };
+          input = {
+            keyboard = {
+              options = [
+                "compose:ctrl"
+              ];
+            };
+          };
           configFile = {
             "kwinc" = {
               "org.kde.kdecoration2" = {
@@ -417,24 +456,16 @@ X-KDE-GlobalAccel-CommandShortcut=true
                 forceblurEnabled = true;
                 krohnkiteEnabled = false;
               };
-              "Effect-ًRound-Corners" = {
-                ActiveOutlineUseCustom = false;
-                ActiveOutlineUsePalette = true;
+              "Round-Corners" = {
                 InactiveCornerRadius = 15;
-                InactiveOutlineUseCustom = false;
-                InactiveOutlineUsePalette = true;
                 Size = 15;
               };
               "Effect-blurplus" = {
                 BlurMatching = false;
-                BlurMenus = true;
                 BlurNonMatching = true;
-                BottomCornerRadius = 1;
-                DockCornerRadius = 1;
-                MenuCornerRadius = 1;
-                NoiseStrength = 13;
-                RoundedCornersAntialiasing = 0;
-                TopCornerRadius = 1;
+                BlurStrength = 3;
+                NoiseStrength = 7;
+                TransparentBlur = false;
               };
             };
             "powerdevilrc" = {
