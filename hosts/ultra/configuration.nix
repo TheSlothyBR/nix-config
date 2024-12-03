@@ -40,6 +40,7 @@
       jack.enable = false;
     };
     ssh.enable = true;
+    steam.enable = true;
     stremio.enable = true;
     stylix.enable = true;
     utils.enable = true;
