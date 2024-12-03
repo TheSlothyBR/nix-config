@@ -31,7 +31,7 @@ local config = {}
 
 config.front_end = "WebGpu"
 
-return {}
+return config
 EOF
       '';
     };
