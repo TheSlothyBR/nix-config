@@ -145,7 +145,7 @@ X-KDE-GlobalAccel-CommandShortcut=true
             #iconTheme = "YaruPlasma-Dark";
             soundTheme = "ocean";
             clickItemTo = "select";
-            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/wallpapers/ScarletTree/contents/images/5120x2880.png";
+            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/wallpapers/ScarletTree";
             #wallpaperActiveBlur.enable = true;
           };
           #startup = {
