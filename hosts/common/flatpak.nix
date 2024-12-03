@@ -21,14 +21,6 @@
         "/var/lib/flatpak"
       ];
     };
-
-   # environment.persistence."/persist" = {
-   #   users.${isUser} = {
-   #     directories = [
-   #       ".var"
-   #     ];
-   #   };
-   # };
     
     systemd.services."flatpak-managed-install" = {
       serviceConfig = {
