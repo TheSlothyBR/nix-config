@@ -19,7 +19,7 @@
           CPU_BOOST_ON_BAT = 0;
           CPU_SCALING_GOVERNOR_ON_AC = "performance";
           CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-          DEVICES_TO_DISABLE_ON_STARTUP = "bluetooth, nfc, wifi, wwan";
+          DEVICES_TO_DISABLE_ON_STARTUP = "bluetooth nfc wifi wwan";
         };
       };
 
