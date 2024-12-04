@@ -14,40 +14,43 @@
     custom.plasma = {
       enable = lib.mkEnableOption "Plasma Desktop config";
     };
-    home-manager.programs.plasma.workspace = {
-      wallpaperActiveBlur = {
-        enable = lib.mkOption {
-          type = lib.types.str;
-          default = "false";
-          example = "true";
-          description = ''
-            Active Blur plugin.
-          '';
-        };
-        positioning = lib.mkOption {
-          type = lib.types.str;
-          default = "1";
-          example = "2";
-          description = ''
-            Wallpaper positioning method.
-          '';
-        };
-        blur = lib.mkOption {
-          type = lib.types.str;
-          default = "true";
-          example = "false";
-          description = ''
-            Activates blur.
-          '';
-        };
-      };
-    };
+   #home-manager.users.${isUser}.programs.plasma.workspace = {
+   #  wallpaperActiveBlur = {
+   #    enable = lib.mkOption {
+   #      type = lib.types.str;
+   #      default = "false";
+   #      example = "true";
+   #      description = ''
+   #        Active Blur plugin.
+   #      '';
+   #    };
+   #    positioning = lib.mkOption {
+   #      type = lib.types.str;
+   #      default = "1";
+   #      example = "2";
+   #      description = ''
+   #        Wallpaper positioning method.
+   #      '';
+   #    };
+   #    blur = lib.mkOption {
+   #      type = lib.types.str;
+   #      default = "true";
+   #      example = "false";
+   #      description = ''
+   #        Activates blur.
+   #      '';
+   #    };
+   #  };
+   #};
   };
 
   config = lib.mkIf config.custom.plasma.enable {
     services.desktopManager.plasma6.enable = true;
 
     environment = {
+      sessionVariables = {
+        GTK_USE_PORTAL = 1;
+      };
       plasma6.excludePackages = with pkgs.kdePackages; [
         ark
         discover
@@ -154,19 +157,19 @@ X-KDE-GlobalAccel-CommandShortcut=true
             soundTheme = "ocean";
             clickItemTo = "select";
             wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/wallpapers/ScarletTree";
-            wallpaperActiveBlur.enable = true;
+            #wallpaperActiveBlur.enable = true;
           };
           startup = {
             desktopScript."wallpaper_activeBlur" = (
-              lib.mkIf (config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.enable) {
-                text = ''
+              #lib.mkIf (config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.enable) {
+                {text = ''
                   // Wallpaper Active Blur
                   let allDesktops = desktops();
                   for (const desktop of allDesktops) {
                     desktop.wallpaperPlugin = "a2n.blur";
                     desktop.currentConfigGroup = ["Wallpaper", "a2n.blur", "General"];
-                    desktop.writeConfig("FillMode","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.positioning}");
-                    desktop.writeConfig("Blur","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.blur}");
+                    desktop.writeConfig("FillMode","1"); // number should be an option
+                    desktop.writeConfig("Blur","true");  // bool should be an option
                 '';
                 priority = 3;
               }

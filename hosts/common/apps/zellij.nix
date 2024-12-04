@@ -24,7 +24,7 @@
       Group = "users";
     };
     script = ''
-      mkdir -p ~/.config/zellij/config.kdl
+      mkdir -p ~/.config/zellij
       cat << 'EOF' > ~/.config/zellij/config.kdl
 keybinds clear-defaults=true {
     locked {
