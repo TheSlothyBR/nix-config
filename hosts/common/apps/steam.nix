@@ -18,6 +18,16 @@
             origin = "flathub";
           }
         ];
+        overrides = {
+          "com.valvesoftware.Steam" = {
+            Context = {
+              sockets = [
+                "wayland"
+                "x11"
+              ];
+            };
+          };
+        };
       };
     };
 

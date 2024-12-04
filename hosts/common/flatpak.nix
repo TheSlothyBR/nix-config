@@ -71,7 +71,7 @@
             Environment = {
               XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
               GTK_USE_PORTAL = "1";
-              #GTK_THEME = "Adwaita:dark";
+              GTK_THEME = "Adwaita:dark";
             };
           };
         };   

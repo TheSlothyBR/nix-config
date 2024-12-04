@@ -32,9 +32,6 @@
                 "xdg-run/app/org.keepassxc.KeePassXC:create"
               ];
             };
-            Environment = {
-              GTK_THEME = "Adwaita:dark";
-	          };
           };
         };
       };
@@ -50,7 +47,7 @@
       };
       script = ''
         cat << 'EOF' > ~/.var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/keepassxc-proxy-wrapper.sh
-#!${pkgs.runtimeShell}
+#!/bin/bash
 
 APP_REF="org.keepassxc.KeePassXC/x86_64/stable"
 for inst in "$HOME/.local/share/flatpak" "/var/lib/flatpak"; do

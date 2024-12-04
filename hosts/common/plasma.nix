@@ -99,7 +99,7 @@
       users.${isUser} = {
         qt.kvlibadwaita = {
           enable = true;
-          auto = true;
+          auto = false;
           #theme = "custom";
           #base16-scheme-path = "./path/to/base16.json";
         };
@@ -119,7 +119,7 @@ elif [ $CURRENT = "false" ]; then
   kwriteconfig5 --file kwinrc --group Plugins --key krohnkiteEnabled true
 fi
 
-qbus org.kde.Kwin /KWin reconfigure
+qdbus org.kde.Kwin /KWin reconfigure
             '';
             executable = true;
           };
