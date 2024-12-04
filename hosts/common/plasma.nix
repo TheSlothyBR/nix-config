@@ -543,11 +543,17 @@ X-KDE-GlobalAccel-CommandShortcut=true
           dataFile = {
             "dolphin/view_properties/global/.directory" = {
               Dolphin = {
-                SortRole = "size";
                 ViewMode = 1;
                 VisibleRoles = "Icons_text,Icons_size,Icons_type,CustomizedDetails,Details_text,Details_type,Details_size,Details_permissions,Details_modificationtime,Details_destination,Details_artist,Details_album,Details_duration,Details_dimensions,Details_pageCount";
               };
               Settings.HiddenFilesShown = true;
+            };
+          };
+          file = {
+            ".local/state/dolphinstaterc" = {
+              State = {
+                State = "AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACwvwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawEAAAAAAAABVwAAAGoA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAFYAAABagAAAHQA////AAAAAQAAAMAAAAIA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAAAAAIAAAABIQD///8AAAADAAACiAAAAED8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAACiAAAAogAB///AAABzwAAAsIAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAABAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAA=";
+              };
             };
           };
           shortcuts = {
