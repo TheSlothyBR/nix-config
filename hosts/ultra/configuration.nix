@@ -15,6 +15,7 @@
       systemd-boot.enable = true;
     };
     brave.enable = true;
+    calculator.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
     gestures.enable = true;
