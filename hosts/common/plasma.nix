@@ -14,34 +14,34 @@
     custom.plasma = {
       enable = lib.mkEnableOption "Plasma Desktop config";
     };
-    #home-manager.programs.plasma.workspace = {
-    #  wallpaperActiveBlur = {
-    #    enable = {
-    #      type = lib.types.str;
-    #      default = "false";
-    #      example = "true";
-    #      description = ''
-    #        Active Blur plugin.
-    #      '';
-    #    };
-    #    positioning = {
-    #      type = lib.types.str;
-    #      default = "1";
-    #      example = "2";
-    #      description = ''
-    #        Wallpaper positioning method.
-    #      '';
-    #    };
-    #    blur = {
-    #      type = lib.types.str;
-    #      default = "true";
-    #      example = "false";
-    #      description = ''
-    #        Activates blur.
-    #      '';
-    #    };
-    #  };
-    #};
+    home-manager.programs.plasma.workspace = {
+      wallpaperActiveBlur = {
+        enable = lib.mkOption {
+          type = lib.types.str;
+          default = "false";
+          example = "true";
+          description = ''
+            Active Blur plugin.
+          '';
+        };
+        positioning = lib.mkOption {
+          type = lib.types.str;
+          default = "1";
+          example = "2";
+          description = ''
+            Wallpaper positioning method.
+          '';
+        };
+        blur = lib.mkOption {
+          type = lib.types.str;
+          default = "true";
+          example = "false";
+          description = ''
+            Activates blur.
+          '';
+        };
+      };
+    };
   };
 
   config = lib.mkIf config.custom.plasma.enable {
@@ -85,14 +85,22 @@
     qt = {
       enable = true;
       platformTheme = "kde";
-      #style = "kvantum";
+      style = "kvantum";
     };
 
     home-manager = {
       sharedModules  = [
         inputs.plasma-manager.homeManagerModules.plasma-manager
+        inputs.kvlibadwaita.homeManagerModule
       ];
       users.${isUser} = {
+        qt.kvlibadwaita = {
+          enable = true;
+          auto = true;
+          #theme = "custom";
+          #base16-scheme-path = "./path/to/base16.json";
+        };
+
         #xdg.configFile = {
         #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
         #};
@@ -115,8 +123,8 @@ qbus org.kde.Kwin /KWin reconfigure
           ".local/share/applications/toggle-krohnkite.sh.desktop" = {
             text = ''
 [Desktop Entry]
-Exec=/home/${isUser}/.config/krohnkite/krohnkite-toggle.sh
-Name=/home/${isUser}/.config/krohnkite/krohnkite-toggle.sh
+Exec=/home/${isUser}/.config/krohnkite/toggle-krohnkite.sh
+Name=/home/${isUser}/.config/krohnkite/toggle-krohnkite.sh
 NoDisplay=true
 StartupNotify=false
 Type=Application
@@ -146,24 +154,24 @@ X-KDE-GlobalAccel-CommandShortcut=true
             soundTheme = "ocean";
             clickItemTo = "select";
             wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/wallpapers/ScarletTree";
-            #wallpaperActiveBlur.enable = true;
+            wallpaperActiveBlur.enable = true;
           };
-          #startup = {
-          #  desktopScript."wallpaper_activeBlur" = (
-          #    lib.mkIf (config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.enable) {
-          #      text = ''
-          #        // Wallpaper Active Blur
-          #        let allDesktops = desktops();
-          #        for (const desktop of allDesktops) {
-          #          desktop.wallpaperPlugin = "a2n.blur";
-          #          desktop.currentConfigGroup = ["Wallpaper", "a2n.blur", "General"];
-          #          desktop.writeConfig("FillMode","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.positioning}");
-          #          desktop.writeConfig("Blur","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.blur}");
-          #      '';
-          #      priority = 3;
-          #    }
-          #  );
-          #};
+          startup = {
+            desktopScript."wallpaper_activeBlur" = (
+              lib.mkIf (config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.enable) {
+                text = ''
+                  // Wallpaper Active Blur
+                  let allDesktops = desktops();
+                  for (const desktop of allDesktops) {
+                    desktop.wallpaperPlugin = "a2n.blur";
+                    desktop.currentConfigGroup = ["Wallpaper", "a2n.blur", "General"];
+                    desktop.writeConfig("FillMode","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.positioning}");
+                    desktop.writeConfig("Blur","${config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.blur}");
+                '';
+                priority = 3;
+              }
+            );
+          };
           kwin = {
             titlebarButtons = {
               right = [  ];
@@ -445,6 +453,12 @@ X-KDE-GlobalAccel-CommandShortcut=true
             };
           };
           configFile = {
+            "kdeglobals" = {
+              "General" = {
+               TerminalApplication = "wezterm";
+               TerminalService = "org.wezfurlong.wezterm.desktop";
+              };
+            };
             "kwinc" = {
               "org.kde.kdecoration2" = {
                 BorderSize = "None";

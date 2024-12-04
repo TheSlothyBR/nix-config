@@ -17,7 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      url = "github:danth/stylix/release-24.05";
+      url = "github:danth/stylix/release-24.11";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
@@ -48,6 +48,10 @@
       url = "github:taj-ny/kwin-effects-forceblur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    kvlibadwaita = {
+      url = "github:MOIS3Y/KvLibadwaita";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak";
     };
@@ -76,11 +80,11 @@
           inherit inputs outputs globals lib;
           isConfig = hostName;
           isUser = globals.${hostName}.userName;
-	      };
+        };
         modules = [
           ./hosts/${hostName}/configuration.nix
-	        ./overlays/unstable-pkgs-overlay.nix
-	      ];
+          ./overlays/unstable-pkgs-overlay.nix
+        ];
       }
     );
 
