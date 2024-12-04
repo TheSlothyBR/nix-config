@@ -111,12 +111,12 @@
         home.file = {
           ".config/krohnkite/toggle-krohnkite.sh" = {
             text = ''
-CURRENT=`kreadconfig5 --file kwinrc --group plugins --key krohnkiteEnabled`
+CURRENT=`kreadconfig5 --file kwinc --group plugins --key krohnkiteEnabled`
 
 if [ $CURRENT = "true" ]; then
-  kwriteconfig5 --file kwinrc --group Plugins --key krohnkiteEnabled false
+  kwriteconfig5 --file kwinc --group Plugins --key krohnkiteEnabled false
 elif [ $CURRENT = "false" ]; then
-  kwriteconfig5 --file kwinrc --group Plugins --key krohnkiteEnabled true
+  kwriteconfig5 --file kwinc --group Plugins --key krohnkiteEnabled true
 fi
 
 qdbus org.kde.Kwin /KWin reconfigure
