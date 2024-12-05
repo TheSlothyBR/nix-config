@@ -67,6 +67,7 @@
           kdePackages.qtstyleplugin-kvantum
           kdePackages.sddm-kcm
           colloid-kde
+          inputs.kvlibadwaita.packages.${pkgs.system}.default
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
           (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
           kde-rounded-corners
@@ -94,32 +95,24 @@
     home-manager = {
       sharedModules  = [
         inputs.plasma-manager.homeManagerModules.plasma-manager
-        inputs.kvlibadwaita.homeManagerModule
       ];
       users.${isUser} = {
-        qt.kvlibadwaita = {
-          enable = true;
-          auto = false;
-          #theme = "custom";
-          #base16-scheme-path = "./path/to/base16.json";
+        xdg.configFile = {
+          "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark
         };
-
-        #xdg.configFile = {
-        #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ColloidDark";
-        #};
 
         home.file = {
           ".config/krohnkite/toggle-krohnkite.sh" = {
             text = ''
-CURRENT=`kreadconfig5 --file kwinc --group plugins --key krohnkiteEnabled`
+CURRENT=`kreadconfig6 --file kwinc --group Plugins --key krohnkiteEnabled`
 
 if [ $CURRENT = "true" ]; then
-  kwriteconfig5 --file kwinc --group Plugins --key krohnkiteEnabled false
+  kwriteconfig6 --file kwinc --group Plugins --key krohnkiteEnabled false
 elif [ $CURRENT = "false" ]; then
-  kwriteconfig5 --file kwinc --group Plugins --key krohnkiteEnabled true
+  kwriteconfig6 --file kwinc --group Plugins --key krohnkiteEnabled true
 fi
 
-qdbus org.kde.Kwin /KWin reconfigure
+qdbus org.kde.KWin /KWin reconfigure
             '';
             executable = true;
           };
@@ -552,7 +545,7 @@ X-KDE-GlobalAccel-CommandShortcut=true
           file = {
             ".local/state/dolphinstaterc" = {
               State = {
-                State = "AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACwvwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawEAAAAAAAABVwAAAGoA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAFYAAABagAAAHQA////AAAAAQAAAMAAAAIA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAAAAAIAAAABIQD///8AAAADAAACiAAAAED8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAACiAAAAogAB///AAABzwAAAsIAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAABAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAA=";
+                State = "AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACAPwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAAAAAA+QAAAAAA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAAAAACAAAAAFwA////AAAAAQAAAMAAAAIA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAAAAAIAAAAAAAD///8AAAADAAACiAAAAED8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAACiAAAAAAA////AAACAAAAAgAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAABAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAA=";
               };
             };
           };
