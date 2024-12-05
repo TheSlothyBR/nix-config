@@ -14,34 +14,6 @@
     custom.plasma = {
       enable = lib.mkEnableOption "Plasma Desktop config";
     };
-   #home-manager.users.${isUser}.programs.plasma.workspace = {
-   #  wallpaperActiveBlur = {
-   #    enable = lib.mkOption {
-   #      type = lib.types.str;
-   #      default = "false";
-   #      example = "true";
-   #      description = ''
-   #        Active Blur plugin.
-   #      '';
-   #    };
-   #    positioning = lib.mkOption {
-   #      type = lib.types.str;
-   #      default = "1";
-   #      example = "2";
-   #      description = ''
-   #        Wallpaper positioning method.
-   #      '';
-   #    };
-   #    blur = lib.mkOption {
-   #      type = lib.types.str;
-   #      default = "true";
-   #      example = "false";
-   #      description = ''
-   #        Activates blur.
-   #      '';
-   #    };
-   #  };
-   #};
   };
 
   config = lib.mkIf config.custom.plasma.enable {
@@ -101,35 +73,6 @@
           "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark
         };
 
-        home.file = {
-          ".config/krohnkite/toggle-krohnkite.sh" = {
-            text = ''
-CURRENT=`kreadconfig6 --file kwinc --group Plugins --key krohnkiteEnabled`
-
-if [ $CURRENT = "true" ]; then
-  kwriteconfig6 --file kwinc --group Plugins --key krohnkiteEnabled false
-elif [ $CURRENT = "false" ]; then
-  kwriteconfig6 --file kwinc --group Plugins --key krohnkiteEnabled true
-fi
-
-qdbus org.kde.KWin /KWin reconfigure
-            '';
-            executable = true;
-          };
-          ".local/share/applications/toggle-krohnkite.sh.desktop" = {
-            text = ''
-[Desktop Entry]
-Exec=/home/${isUser}/.config/krohnkite/toggle-krohnkite.sh
-Name=/home/${isUser}/.config/krohnkite/toggle-krohnkite.sh
-NoDisplay=true
-StartupNotify=false
-Type=Application
-X-KDE-GlobalAccel-CommandShortcut=true
-            '';
-            executable = true;
-          };
-        };
-
         programs.plasma = {
           enable = true;
           overrideConfig = true;
@@ -150,23 +93,6 @@ X-KDE-GlobalAccel-CommandShortcut=true
             soundTheme = "ocean";
             clickItemTo = "select";
             wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/wallpapers/ScarletTree";
-            #wallpaperActiveBlur.enable = true;
-          };
-          startup = {
-            desktopScript."wallpaper_activeBlur" = (
-              #lib.mkIf (config.home-manager.programs.plasma.workspace.wallpaperActiveBlur.enable) {
-                {text = ''
-                  // Wallpaper Active Blur
-                  let allDesktops = desktops();
-                  for (const desktop of allDesktops) {
-                    desktop.wallpaperPlugin = "a2n.blur";
-                    desktop.currentConfigGroup = ["Wallpaper", "a2n.blur", "General"];
-                    desktop.writeConfig("FillMode","1"); // number should be an option
-                    desktop.writeConfig("Blur","true");  // bool should be an option
-                '';
-                priority = 3;
-              }
-            );
           };
           kwin = {
             titlebarButtons = {
@@ -174,6 +100,9 @@ X-KDE-GlobalAccel-CommandShortcut=true
               left = [  ];
             };
             borderlessMaximizedWindows = true;
+            effects = {
+              blur.enable = false;
+            };
             virtualDesktops = {
               number = 3;
               rows = 1;
@@ -455,6 +384,16 @@ X-KDE-GlobalAccel-CommandShortcut=true
                TerminalService = "org.wezfurlong.wezterm.desktop";
               };
             };
+            "kwinrc" = {
+              Plugins = {
+                contrastEnabled = false;
+                forceblurEnabled = true;
+                krohnkiteEnabled = true;
+              };
+              "Script-krohnkite" = {
+                ignoreVDesktop = "Leisure, Gaming";
+              };
+            };
             "kwinc" = {
               "org.kde.kdecoration2" = {
                 BorderSize = "None";
@@ -550,7 +489,6 @@ X-KDE-GlobalAccel-CommandShortcut=true
             };
           };
           shortcuts = {
-            "services/toggle-krohnkite.sh.desktop"."_launch" = "Meta+Ctrl+T";
             "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
             "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
           };
