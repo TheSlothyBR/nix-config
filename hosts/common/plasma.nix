@@ -6,8 +6,8 @@
 , ...
 }:{
   imports = [
-    ../../overlays/colloid-kde-overlay.nix
-    ../../overlays/kde-material-you-colors-overlay.nix
+    #../../overlays/colloid-kde-overlay.nix
+    #../../overlays/kde-material-you-colors-overlay.nix
   ];
 
   options = {
@@ -38,8 +38,11 @@
         stable = with pkgs; [
           kdePackages.qtstyleplugin-kvantum
           kdePackages.sddm-kcm
-          colloid-kde
+          #colloid-kde
           inputs.kvlibadwaita.packages.${pkgs.system}.default
+          (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
+          (callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {})
+          (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix {})
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
           (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
           kde-rounded-corners
@@ -47,7 +50,7 @@
           application-title-bar
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
-          plasma-plugin-blurredwallpaper
+          #plasma-plugin-blurredwallpaper
           inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
           kdePackages.krohnkite
         ];
@@ -61,7 +64,7 @@
     qt = {
       enable = true;
       platformTheme = "kde";
-      style = "kvantum";
+      #style = "kvantum";
     };
 
     home-manager = {
@@ -69,9 +72,9 @@
         inputs.plasma-manager.homeManagerModules.plasma-manager
       ];
       users.${isUser} = {
-        xdg.configFile = {
-          "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark
-        };
+        #xdg.configFile = {
+        #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark, this implementation creates reaad-only symlink
+        #};
 
         programs.plasma = {
           enable = true;
@@ -92,7 +95,7 @@
             #iconTheme = "YaruPlasma-Dark";
             soundTheme = "ocean";
             clickItemTo = "select";
-            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/wallpapers/ScarletTree";
+            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/ScarletTree/contents/images_dark/5120x2880.png";
           };
           kwin = {
             titlebarButtons = {
@@ -393,28 +396,30 @@
               "Script-krohnkite" = {
                 ignoreVDesktop = "Leisure, Gaming";
               };
-            };
-            "kwinc" = {
-              "org.kde.kdecoration2" = {
-                BorderSize = "None";
-                BorderSizeAuto = false;
-              };
-              Plugins = {
-                blurEnabled = false;
-                contrastEnabled = false;
-                forceblurEnabled = true;
-                krohnkiteEnabled = false;
-              };
-              "Round-Corners" = {
-                InactiveCornerRadius = 15;
-                Size = 15;
-              };
               "Effect-blurplus" = {
                 BlurMatching = false;
                 BlurNonMatching = true;
                 BlurStrength = 3;
                 NoiseStrength = 7;
                 TransparentBlur = false;
+              };
+              "Round-Corners" = {
+                InactiveCornerRadius=15;
+                Size=15;
+              };
+              "PrimaryOutline" = {
+                ActiveOutlineUseCustom = false;
+                ActiveOutlineUsePalette = true;
+                InactiveOutlineThickness = "1.5";
+                InactiveOutlineUseCustom = false;
+                InactiveOutlineUsePalette = true;
+                OutlineThickness = "1.5";
+              };
+              "SecondOutline" = {
+                ActiveSecondOutlineUseCustom = false;
+                ActiveSecondOutlineUsePalette = true;
+                InactiveSecondOutlineUseCustom = false;
+                InactiveSecondOutlineUsePalette = true;
               };
             };
             "powerdevilrc" = {
