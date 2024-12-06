@@ -20,6 +20,12 @@
       directories = [
         "/var/lib/flatpak"
       ];
+    environment.persistence."/persist" = {
+      users.${isUser} = {
+        directories = [
+          ".local/share/flatpak"
+        ];
+      };
     };
     
     systemd.services."flatpak-managed-install" = {

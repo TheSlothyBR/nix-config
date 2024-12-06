@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGithub
+, fetchFromGitHub
 , nix-update-script
 }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   pname = "kde-material-you-colors-widget";
   version = "1.9.3";
 
-  src = fetchFromGithub {
+  src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kde-material-you-colors";
     rev = "refs/tags/v${version}";
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = nix-update-script { };
-};
+}

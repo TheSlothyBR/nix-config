@@ -63,7 +63,7 @@
     users.${globals.ultra.userName} = {
       directories = [
         ".local/share"
-	"Desktop"
+        "Desktop"
         "Documents"
         "Downloads"
         "Drive"
@@ -71,8 +71,8 @@
         "Music"
         "Pictures"
         "Public"
-	"Templates"
-	"Videos"
+        "Templates"
+        "Videos"
       ];
     };
   };

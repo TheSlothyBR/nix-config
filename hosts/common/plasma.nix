@@ -6,8 +6,7 @@
 , ...
 }:{
   imports = [
-    #../../overlays/colloid-kde-overlay.nix
-    #../../overlays/kde-material-you-colors-overlay.nix
+    
   ];
 
   options = {
@@ -18,6 +17,14 @@
 
   config = lib.mkIf config.custom.plasma.enable {
     services.desktopManager.plasma6.enable = true;
+
+    environment.persistence."/persist" = {
+      users.${isUser} = {
+        directories = [
+          ".local/share/icons"
+        ];
+      };
+    };
 
     environment = {
       sessionVariables = {
@@ -38,7 +45,6 @@
         stable = with pkgs; [
           kdePackages.qtstyleplugin-kvantum
           kdePackages.sddm-kcm
-          #colloid-kde
           inputs.kvlibadwaita.packages.${pkgs.system}.default
           (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
           (callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {})
@@ -51,7 +57,6 @@
           application-title-bar
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
-          #plasma-plugin-blurredwallpaper
           inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
           kdePackages.krohnkite
         ];
@@ -128,6 +133,18 @@
           #    };
           #  }
           #];
+          desktop = {
+            widgets = [
+              {
+                name = "luisbocanegra.desktop.wallpaper.effects";
+                config = {
+                  General = {
+                    hideWidget = true;
+                  };
+                };
+              }
+            ];
+          };
           panels = [
             {
               location = "top";
@@ -155,6 +172,9 @@
                       defaultAltTextColors = false;
                       plasmaTxtColors = true;
                     };
+                    mouseActions = {
+                      tooltipOnHover = true;
+                    };
                     general = {
                       animationDuration = 40;
                       highlightOpacityFull = false;
@@ -166,7 +186,7 @@
                 }
                 "luisbocanegra.panel.colorizer"
                 "org.kde.plasma.appmenu" 
-                "org.kde.plasma.panelspacer" 
+                "luisbocanegra.panelspacer.extended"
                 "org.kde.plasma.mediacontroller"
                 {
                   applicationTitleBar = {
@@ -206,6 +226,7 @@
                       hidden = [
                         "org.kde.plasma.bluetooth"
                         "org.kde.plasma.brightness"
+                        "luisbocanegra.kdematerialyou.colors"
                         "org.kde.plasma.notifications"
                         "org.kde.plasma.devicenotifier"
                         "org.kde.plasma.cameraindicator"
@@ -382,6 +403,58 @@
             };
           };
           configFile = {
+            "autostart/kde-material-you-colors.desktop".text = ''
+[Desktop Entry]
+Exec=kde-material-you-colors
+Icon=color-management
+Name=KDE Material You Colors
+Comment=Starts/Restarts background process
+Type=Application
+X-KDE-AutostartScript=true
+            '';
+            "kde-material-you-colors/config.conf".text = ''
+[CUSTOM]
+chroma_multiplier=1
+color=
+color_last=#d0265c
+custom_colors_list=
+custom_colors_list_last=#d0265c #74e448 #eece4f #66a3ef #532066 #297d81 #ccc1c1
+dark_brightness_multiplier=1
+dark_saturation_multiplier=1
+darker_window_list=
+disable_konsole=false
+gui_custom_exec_location=
+iconsdark=
+iconslight=
+klassy_windeco_outline=false
+konsole_opacity=100
+konsole_opacity_dark=100
+light=false
+light_brightness_multiplier=1
+light_saturation_multiplier=1
+main_loop_delay=1
+monitor=0
+ncolor=0
+on_change_hook=
+once_after_change=false
+pause_mode=false
+plasma_follows_scheme=false
+pywal=false
+pywal_follows_scheme=false
+pywal_light=false
+qdbus_executable=
+scheme_variant=5
+screenshot_delay=900
+screenshot_only_mode=false
+sierra_breeze_buttons_color=false
+startup_delay=0
+titlebar_opacity=100
+titlebar_opacity_dark=100
+tone_multiplier=1
+toolbar_opacity=100
+toolbar_opacity_dark=100
+use_startup_delay=false
+            '';
             "kdeglobals" = {
               "General" = {
                TerminalApplication = "wezterm";
@@ -486,6 +559,187 @@
               };
               Settings.HiddenFilesShown = true;
             };
+            "user-places.xbel".text = ''
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xbel>
+<xbel xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" xmlns:kdepriv="http://www.kde.org/kdepriv" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
+ <info>
+  <metadata owner="http://www.kde.org">
+   <kde_places_version>4</kde_places_version>
+   <GroupState-Places-IsHidden>false</GroupState-Places-IsHidden>
+   <GroupState-Remote-IsHidden>false</GroupState-Remote-IsHidden>
+   <GroupState-Devices-IsHidden>false</GroupState-Devices-IsHidden>
+   <GroupState-RemovableDevices-IsHidden>false</GroupState-RemovableDevices-IsHidden>
+   <GroupState-Tags-IsHidden>false</GroupState-Tags-IsHidden>
+   <withRecentlyUsed>true</withRecentlyUsed>
+   <GroupState-RecentlySaved-IsHidden>false</GroupState-RecentlySaved-IsHidden>
+   <withBaloo>true</withBaloo>
+   <GroupState-SearchFor-IsHidden>false</GroupState-SearchFor-IsHidden>
+  </metadata>
+ </info>
+ <bookmark href="file:///home/ultra">
+  <title>Home</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="user-home"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/0</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///etc/nixos/dotfiles">
+  <title>dotfiles</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="inode-directory"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1733457163/0</ID>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Desktop">
+  <title>Desktop</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="user-desktop"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/1</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Documents">
+  <title>Documents</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-documents"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/2</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Downloads">
+  <title>Downloads</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-downloads"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/3</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Music">
+  <title>Music</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-music"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/6</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Pictures">
+  <title>Pictures</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-pictures"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/7</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Videos">
+  <title>Videos</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-videos"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/8</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="remote:/">
+  <title>Network</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-network"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/4</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="trash:/">
+  <title>Trash</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="user-trash"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/5</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="recentlyused:/files">
+  <title>Recent Files</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="document-open-recent"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/9</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="recentlyused:/locations">
+  <title>Recent Locations</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="folder-open-recent"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1727233989/10</ID>
+    <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sda2</UDI>
+    <isSystemItem>true</isSystemItem>
+    <uuid>88649295-f767-4828-b107-695d28c4c52b</uuid>
+   </metadata>
+  </info>
+ </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/dm_2d1</UDI>
+    <isSystemItem>true</isSystemItem>
+    <uuid>3126df7f-fa2c-4e1b-887d-3d22ab77af06</uuid>
+   </metadata>
+  </info>
+ </separator>
+</xbel>
+            '';
           };
           file = {
             ".local/state/dolphinstaterc" = {
