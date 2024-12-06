@@ -20,6 +20,7 @@
       directories = [
         "/var/lib/flatpak"
       ];
+    };
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [

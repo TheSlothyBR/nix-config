@@ -62,7 +62,7 @@
     hideMounts = true;
     users.${globals.ultra.userName} = {
       directories = [
-        ".local/share"
+        #".local/share"
         "Desktop"
         "Documents"
         "Downloads"
@@ -78,8 +78,8 @@
   };
 
   environment.sessionVariables = {
-    DRIVE = "$HOME/Drive";
-    GAMES = "$HOME/Games";
+    DRIVE = "/home/${globals.ultra.userName}/Drive";
+    GAMES = "/home/${globals.ultra.userName}/Games";
   };
 
   programs.fuse.userAllowOther = true;

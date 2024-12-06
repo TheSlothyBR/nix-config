@@ -21,7 +21,7 @@
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
-          ".local/share/icons"
+          ".local/share/icons" #only klassy needs this, probably can be changed
         ];
       };
     };
@@ -142,6 +142,14 @@
                     hideWidget = true;
                   };
                 };
+                position = {
+                  horizontal = 1200;
+                  vertical = 700;
+                };
+                size = {
+                  width = 60;
+                  height = 60;
+                };
               }
             ];
           };
@@ -227,6 +235,7 @@
                         "org.kde.plasma.bluetooth"
                         "org.kde.plasma.brightness"
                         "luisbocanegra.kdematerialyou.colors"
+                        "org.kandomenu.kando"
                         "org.kde.plasma.notifications"
                         "org.kde.plasma.devicenotifier"
                         "org.kde.plasma.cameraindicator"
@@ -403,58 +412,6 @@
             };
           };
           configFile = {
-            "autostart/kde-material-you-colors.desktop".text = ''
-[Desktop Entry]
-Exec=kde-material-you-colors
-Icon=color-management
-Name=KDE Material You Colors
-Comment=Starts/Restarts background process
-Type=Application
-X-KDE-AutostartScript=true
-            '';
-            "kde-material-you-colors/config.conf".text = ''
-[CUSTOM]
-chroma_multiplier=1
-color=
-color_last=#d0265c
-custom_colors_list=
-custom_colors_list_last=#d0265c #74e448 #eece4f #66a3ef #532066 #297d81 #ccc1c1
-dark_brightness_multiplier=1
-dark_saturation_multiplier=1
-darker_window_list=
-disable_konsole=false
-gui_custom_exec_location=
-iconsdark=
-iconslight=
-klassy_windeco_outline=false
-konsole_opacity=100
-konsole_opacity_dark=100
-light=false
-light_brightness_multiplier=1
-light_saturation_multiplier=1
-main_loop_delay=1
-monitor=0
-ncolor=0
-on_change_hook=
-once_after_change=false
-pause_mode=false
-plasma_follows_scheme=false
-pywal=false
-pywal_follows_scheme=false
-pywal_light=false
-qdbus_executable=
-scheme_variant=5
-screenshot_delay=900
-screenshot_only_mode=false
-sierra_breeze_buttons_color=false
-startup_delay=0
-titlebar_opacity=100
-titlebar_opacity_dark=100
-tone_multiplier=1
-toolbar_opacity=100
-toolbar_opacity_dark=100
-use_startup_delay=false
-            '';
             "kdeglobals" = {
               "General" = {
                TerminalApplication = "wezterm";
@@ -560,10 +517,137 @@ use_startup_delay=false
               };
               Settings.HiddenFilesShown = true;
             };
-            "user-places.xbel".text = ''
+          };
+          file = {
+            ".local/state/dolphinstaterc" = {
+              State = {
+                State = "AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACAPwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAAAAAA+QAAAAAA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAAAAACAAAAAFwA////AAAAAQAAAMAAAAIA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAAAAAIAAAAAAAD///8AAAADAAACiAAAAED8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAACiAAAAAAA////AAACAAAAAgAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAABAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAA=";
+              };
+            };
+          };
+          shortcuts = {
+            "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
+            "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
+          };
+        };
+      };
+    };
+
+    systemd.services."generate-kando-autostart" = {
+      description = "Generate Kando Autostert";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/kando.desktop
+[Desktop Entry]
+Categories=Utility
+Comment=The Cross-Platform Pie Menu
+Exec=kando %U
+GenericName=Pie Menu
+Icon=kando
+Name=Kando
+Type=Application
+Version=1.4
+EOF
+      '';
+    };
+
+    systemd.services."generate-material-you-autostart" = {
+      description = "Generate Material You Widget Autostert";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/kde-material-you-colors.desktop
+[Desktop Entry]
+Exec=kde-material-you-colors
+Icon=color-management
+Name=KDE Material You Colors
+Comment=Starts/Restarts background process
+Type=Application
+X-KDE-AutostartScript=true
+EOF
+      '';
+    };
+
+    systemd.services."generate-material-you-colors-config" = {
+      description = "Generate Material You colors Config";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.config/kde-material-you-colors
+        cat << 'EOF' > ~/.config//config.conf
+[CUSTOM]
+chroma_multiplier=1
+color=
+color_last=#d0265c
+custom_colors_list=
+custom_colors_list_last=#d0265c #74e448 #eece4f #66a3ef #532066 #297d81 #ccc1c1
+dark_brightness_multiplier=1
+dark_saturation_multiplier=1
+darker_window_list=
+disable_konsole=true
+gui_custom_exec_location=
+iconsdark=
+iconslight=
+klassy_windeco_outline=false
+konsole_opacity=100
+konsole_opacity_dark=100
+light=false
+light_brightness_multiplier=1
+light_saturation_multiplier=1
+main_loop_delay=1
+monitor=0
+ncolor=0
+on_change_hook=
+once_after_change=false
+pause_mode=false
+plasma_follows_scheme=false
+pywal=false
+pywal_follows_scheme=false
+pywal_light=false
+qdbus_executable=
+scheme_variant=5
+screenshot_delay=900
+screenshot_only_mode=false
+sierra_breeze_buttons_color=false
+startup_delay=0
+titlebar_opacity=100
+titlebar_opacity_dark=100
+tone_multiplier=1
+toolbar_opacity=100
+toolbar_opacity_dark=100
+use_startup_delay=false
+EOF
+      '';
+    };
+
+    systemd.services."generate-dolphin-user-places" = {
+      description = "Generate User Places Dolphin file";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.local/share
+        cat << 'EOF' > ~/.local/share/user-places.xbel
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xbel>
-<xbel xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks" xmlns:kdepriv="http://www.kde.org/kdepriv" xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
+<xbel>
  <info>
   <metadata owner="http://www.kde.org">
    <kde_places_version>4</kde_places_version>
@@ -585,7 +669,7 @@ use_startup_delay=false
     <bookmark:icon name="user-home"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/0</ID>
+    <ID>1733523249/0</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -597,7 +681,7 @@ use_startup_delay=false
     <bookmark:icon name="inode-directory"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1733457163/0</ID>
+    <ID>1733524838/0</ID>
    </metadata>
   </info>
  </bookmark>
@@ -608,7 +692,7 @@ use_startup_delay=false
     <bookmark:icon name="user-desktop"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/1</ID>
+    <ID>1733523249/1</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -620,7 +704,7 @@ use_startup_delay=false
     <bookmark:icon name="folder-documents"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/2</ID>
+    <ID>1733523249/2</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -632,7 +716,7 @@ use_startup_delay=false
     <bookmark:icon name="folder-downloads"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/3</ID>
+    <ID>1733523249/3</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -644,7 +728,7 @@ use_startup_delay=false
     <bookmark:icon name="folder-music"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/6</ID>
+    <ID>1733523249/6</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -656,7 +740,7 @@ use_startup_delay=false
     <bookmark:icon name="folder-pictures"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/7</ID>
+    <ID>1733523249/7</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -668,7 +752,7 @@ use_startup_delay=false
     <bookmark:icon name="folder-videos"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/8</ID>
+    <ID>1733523249/8</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -680,7 +764,7 @@ use_startup_delay=false
     <bookmark:icon name="folder-network"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/4</ID>
+    <ID>1733523249/4</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -692,7 +776,7 @@ use_startup_delay=false
     <bookmark:icon name="user-trash"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/5</ID>
+    <ID>1733523249/5</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -704,7 +788,7 @@ use_startup_delay=false
     <bookmark:icon name="document-open-recent"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/9</ID>
+    <ID>1733523249/9</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -716,7 +800,7 @@ use_startup_delay=false
     <bookmark:icon name="folder-open-recent"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1727233989/10</ID>
+    <ID>1733523249/10</ID>
     <isSystemItem>true</isSystemItem>
    </metadata>
   </info>
@@ -740,21 +824,7 @@ use_startup_delay=false
   </info>
  </separator>
 </xbel>
-            '';
-          };
-          file = {
-            ".local/state/dolphinstaterc" = {
-              State = {
-                State = "AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACAPwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAAAAAA+QAAAAAA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAAAAACAAAAAFwA////AAAAAQAAAMAAAAIA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAAAAAIAAAAAAAD///8AAAADAAACiAAAAED8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAACiAAAAAAA////AAACAAAAAgAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAABAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAA=";
-              };
-            };
-          };
-          shortcuts = {
-            "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
-            "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
-          };
-        };
-      };
+      '';
     };
   };
 }
