@@ -469,6 +469,7 @@ use_startup_delay=false
               };
               "Script-krohnkite" = {
                 ignoreVDesktop = "Leisure, Gaming";
+                keepFloatAbove = false;
               };
               "Effect-blurplus" = {
                 BlurMatching = false;
