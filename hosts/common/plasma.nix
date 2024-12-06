@@ -47,6 +47,7 @@
           (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
           kde-rounded-corners
           kara
+          kando
           application-title-bar
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
@@ -95,7 +96,7 @@
             #iconTheme = "YaruPlasma-Dark";
             soundTheme = "ocean";
             clickItemTo = "select";
-            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/ScarletTree/contents/images_dark/5120x2880.png";
+            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/ScarletTree/contents/images/5120x2880.png";
           };
           kwin = {
             titlebarButtons = {
