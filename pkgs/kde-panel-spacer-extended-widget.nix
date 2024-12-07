@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-3ediynClboG6/dBQTih6jJPGjsTBZhZKOPQAjGLRNmk=";
   };
 
-  propagatedBuildInputs = [
+  propagatedUserEnvPkgs = [
     glib
   ];
 
