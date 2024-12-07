@@ -62,7 +62,6 @@
     hideMounts = true;
     users.${globals.ultra.userName} = {
       directories = [
-        #".local/share"
         "Desktop"
         "Documents"
         "Downloads"

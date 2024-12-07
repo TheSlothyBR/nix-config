@@ -43,22 +43,22 @@
       ];
       systemPackages = let
         stable = with pkgs; [
-          kdePackages.qtstyleplugin-kvantum
-          kdePackages.sddm-kcm
-          inputs.kvlibadwaita.packages.${pkgs.system}.default
+          (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
           (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
           (callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {})
           (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix {})
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
-          (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
-          kde-rounded-corners
-          kara
-          kando
           application-title-bar
+          kando
+          kara
+          kdePackages.krohnkite
+          kdePackages.qtstyleplugin-kvantum
+          kdePackages.sddm-kcm
+          inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+          inputs.kvlibadwaita.packages.${pkgs.system}.default
+          kde-rounded-corners
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
-          inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
-          kdePackages.krohnkite
         ];
         unstable = with pkgs.unstable; [
         
@@ -521,7 +521,7 @@
           file = {
             ".local/state/dolphinstaterc" = {
               State = {
-                State = "AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACAPwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAAAAAA+QAAAAAA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAAAAACAAAAAFwA////AAAAAQAAAMAAAAIA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAAAAAIAAAAAAAD///8AAAADAAACiAAAAED8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAACiAAAAAAA////AAACAAAAAgAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAABAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAA=";
+                State = "AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACAPwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAAAAAA+QAAAAAA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAAAAACAAAAAFMA////AAAAAQAAAMAAAAIA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAAAAAIAAAAAAAD///8AAAADAAACiAAAAED8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAACiAAAAAAA////AAACEQAAAgAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAABAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAA=";
               };
             };
           };
@@ -635,6 +635,208 @@ EOF
       '';
     };
 
+    systemd.services."generate-dolphin-toolbar" = {
+      description = "Generate Dolphin Toolbar file";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.local/share/kxmlgui5/dolphin
+        cat << 'EOF' > ~/.local/share/kxmlgui5/dolphin/dolphinui.rc
+<!DOCTYPE gui>
+<gui name="dolphin" translationDomain="kxmlgui6" version="40">
+ <MenuBar alreadyVisited="1">
+  <Menu alreadyVisited="1" name="file" noMerge="1">
+   <text translationDomain="kxmlgui6">&amp;File</text>
+   <Action name="file_new"/>
+   <Separator weakSeparator="1"/>
+   <Action name="new_menu"/>
+   <Action name="file_new"/>
+   <Action name="new_tab"/>
+   <Action name="file_close"/>
+   <Action name="undo_close_tab"/>
+   <Separator/>
+   <Action name="add_to_places"/>
+   <Separator/>
+   <Action name="renamefile"/>
+   <Action name="duplicate"/>
+   <Action name="movetotrash"/>
+   <Action name="deletefile"/>
+   <Separator/>
+   <Action name="show_target"/>
+   <Separator/>
+   <Action name="properties"/>
+   <Separator weakSeparator="1"/>
+   <Action name="file_close"/>
+   <Separator weakSeparator="1"/>
+   <Action name="file_quit"/>
+  </Menu>
+  <Menu alreadyVisited="1" name="edit" noMerge="1">
+   <text translationDomain="kxmlgui6">&amp;Edit</text>
+   <Action name="edit_undo"/>
+   <Separator weakSeparator="1"/>
+   <Action name="edit_cut"/>
+   <Action name="edit_copy"/>
+   <Action name="edit_paste"/>
+   <Separator weakSeparator="1"/>
+   <Action name="edit_select_all"/>
+   <Separator weakSeparator="1"/>
+   <Action name="edit_find"/>
+   <Separator weakSeparator="1"/>
+   <Action name="edit_undo"/>
+   <Separator/>
+   <Action name="edit_cut"/>
+   <Action name="edit_copy"/>
+   <Action name="copy_location"/>
+   <Action name="edit_paste"/>
+   <Separator/>
+   <Action name="show_filter_bar"/>
+   <Action name="edit_find"/>
+   <Separator/>
+   <Action name="toggle_selection_mode"/>
+   <Action name="copy_to_inactive_split_view"/>
+   <Action name="move_to_inactive_split_view"/>
+   <Action name="edit_select_all"/>
+   <Action name="invert_selection"/>
+  </Menu>
+  <Menu alreadyVisited="1" name="view" noMerge="1">
+   <text translationDomain="kxmlgui6">&amp;View</text>
+   <Action name="view_zoom_in"/>
+   <Action name="view_zoom_out"/>
+   <Separator weakSeparator="1"/>
+   <Action name="view_redisplay"/>
+   <Separator weakSeparator="1"/>
+   <Action name="view_zoom_in"/>
+   <Action name="view_zoom_reset"/>
+   <Action name="view_zoom_out"/>
+   <Separator/>
+   <Action name="sort"/>
+   <Action name="view_mode"/>
+   <Action name="additional_info"/>
+   <Action name="show_preview"/>
+   <Action name="show_in_groups"/>
+   <Action name="show_hidden_files"/>
+   <Action name="act_as_admin"/>
+   <Separator/>
+   <Action name="split_view_menu"/>
+   <Action name="popout_split_view"/>
+   <Action name="split_stash"/>
+   <Action name="redisplay"/>
+   <Action name="stop"/>
+   <Separator/>
+   <Action name="panels"/>
+   <Menu icon="edit-select-text" name="location_bar" noMerge="1">
+    <text context="@title:menu" translationDomain="dolphin">Location Bar</text>
+    <Action name="editable_location"/>
+    <Action name="replace_location"/>
+   </Menu>
+   <Separator/>
+   <Action name="view_properties"/>
+  </Menu>
+  <Menu alreadyVisited="1" name="go" noMerge="1">
+   <text translationDomain="kxmlgui6">&amp;Go</text>
+   <Action name="go_up"/>
+   <Action name="go_back"/>
+   <Action name="go_forward"/>
+   <Action name="go_home"/>
+   <Separator weakSeparator="1"/>
+   <Action name="bookmarks"/>
+   <Action name="closed_tabs"/>
+  </Menu>
+  <Menu alreadyVisited="1" name="tools" noMerge="1">
+   <text translationDomain="kxmlgui6">&amp;Tools</text>
+   <Action name="open_preferred_search_tool"/>
+   <Action name="open_terminal"/>
+   <Action name="open_terminal_here"/>
+   <Action name="focus_terminal_panel"/>
+   <Action name="compare_files"/>
+   <Action name="change_remote_encoding"/>
+  </Menu>
+  <Menu name="settings" noMerge="1">
+   <text translationDomain="kxmlgui6">&amp;Settings</text>
+   <Action name="options_show_menubar"/>
+   <Merge name="StandardToolBarMenuHandler"/>
+   <Merge name="KMDIViewActions"/>
+   <Action name="options_show_statusbar"/>
+   <Separator weakSeparator="1"/>
+   <Action name="switch_application_language"/>
+   <Action name="options_configure_keybinding"/>
+   <Action name="options_configure_toolbars"/>
+   <Action name="options_configure"/>
+  </Menu>
+  <Separator weakSeparator="1"/>
+  <Menu name="help" noMerge="1">
+   <text translationDomain="kxmlgui6">&amp;Help</text>
+   <Action name="help_contents"/>
+   <Action name="help_whats_this"/>
+   <Action name="open_kcommand_bar"/>
+   <Separator weakSeparator="1"/>
+   <Action name="help_report_bug"/>
+   <Separator weakSeparator="1"/>
+   <Action name="help_donate"/>
+   <Separator weakSeparator="1"/>
+   <Action name="help_about_app"/>
+   <Action name="help_about_kde"/>
+  </Menu>
+ </MenuBar>
+ <ToolBar alreadyVisited="1" name="mainToolBar" noMerge="1">
+  <Action name="hamburger_menu"/>
+  <text context="@title:menu" translationDomain="dolphin">Main Toolbar</text>
+  <Action name="go_back"/>
+  <Action name="go_forward"/>
+  <Action name="toggle_search"/>
+  <Spacer name="spacer_0"/>
+ </ToolBar>
+ <State name="new_file">
+  <disable>
+   <Action name="edit_undo"/>
+   <Action name="edit_redo"/>
+   <Action name="edit_cut"/>
+   <Action name="renamefile"/>
+   <Action name="movetotrash"/>
+   <Action name="deletefile"/>
+   <Action name="invert_selection"/>
+   <Separator/>
+   <Action name="go_back"/>
+   <Action name="go_forward"/>
+  </disable>
+ </State>
+ <State name="has_selection">
+  <enable>
+   <Action name="invert_selection"/>
+  </enable>
+ </State>
+ <State name="has_no_selection">
+  <disable>
+   <Action name="delete_shortcut"/>
+   <Action name="invert_selection"/>
+  </disable>
+ </State>
+ <ActionProperties scheme="Default">
+  <Action name="go_back" priority="0"/>
+  <Action name="go_forward" priority="0"/>
+  <Action name="go_up" priority="0"/>
+  <Action name="go_home" priority="0"/>
+  <Action name="stop" priority="0"/>
+  <Action name="icons" priority="0"/>
+  <Action name="compact" priority="0"/>
+  <Action name="details" priority="0"/>
+  <Action name="view_zoom_in" priority="0"/>
+  <Action name="view_zoom_reset" priority="0"/>
+  <Action name="view_zoom_out" priority="0"/>
+  <Action name="edit_cut" priority="0"/>
+  <Action name="edit_copy" priority="0"/>
+  <Action name="edit_paste" priority="0"/>
+  <Action name="toggle_search" priority="0"/>
+  <Action name="toggle_filter" priority="0"/>
+ </ActionProperties>
+</gui>
+      '';
+    };
+
     systemd.services."generate-dolphin-user-places" = {
       description = "Generate User Places Dolphin file";
       wantedBy = [ "multi-user.target" ];
@@ -652,12 +854,12 @@ EOF
   <metadata owner="http://www.kde.org">
    <kde_places_version>4</kde_places_version>
    <GroupState-Places-IsHidden>false</GroupState-Places-IsHidden>
-   <GroupState-Remote-IsHidden>false</GroupState-Remote-IsHidden>
+   <GroupState-Remote-IsHidden>true</GroupState-Remote-IsHidden>
    <GroupState-Devices-IsHidden>false</GroupState-Devices-IsHidden>
    <GroupState-RemovableDevices-IsHidden>false</GroupState-RemovableDevices-IsHidden>
    <GroupState-Tags-IsHidden>false</GroupState-Tags-IsHidden>
    <withRecentlyUsed>true</withRecentlyUsed>
-   <GroupState-RecentlySaved-IsHidden>false</GroupState-RecentlySaved-IsHidden>
+   <GroupState-RecentlySaved-IsHidden>true</GroupState-RecentlySaved-IsHidden>
    <withBaloo>true</withBaloo>
    <GroupState-SearchFor-IsHidden>false</GroupState-SearchFor-IsHidden>
   </metadata>
@@ -805,24 +1007,6 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <separator>
-  <info>
-   <metadata owner="http://www.kde.org">
-    <UDI>/org/freedesktop/UDisks2/block_devices/sda2</UDI>
-    <isSystemItem>true</isSystemItem>
-    <uuid>88649295-f767-4828-b107-695d28c4c52b</uuid>
-   </metadata>
-  </info>
- </separator>
- <separator>
-  <info>
-   <metadata owner="http://www.kde.org">
-    <UDI>/org/freedesktop/UDisks2/block_devices/dm_2d1</UDI>
-    <isSystemItem>true</isSystemItem>
-    <uuid>3126df7f-fa2c-4e1b-887d-3d22ab77af06</uuid>
-   </metadata>
-  </info>
- </separator>
 </xbel>
       '';
     };
