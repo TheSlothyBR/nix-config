@@ -418,6 +418,16 @@
                TerminalService = "org.wezfurlong.wezterm.desktop";
               };
             };
+            "breezerc" = {
+              "Windeco Exception 0" = {
+                BorderSize = 0;
+                Enabled = true;
+                ExceptionPattern = ".*";
+                ExceptionType = 0;
+                HideTitleBar = true;
+                Mask = 0;
+              };
+            };
             "kwinrc" = {
               Plugins = {
                 contrastEnabled = false;
