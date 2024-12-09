@@ -23,12 +23,15 @@
         overrides = {
           "com.brave.Browser" = {
             Context = {
-	            sockets = [
+              sockets = [
                 "wayland"
-		            "x11"
-	            ];
+                "x11"
+              ];
               filesystems = [
-                "{/var/lib,xdg-data}/flatpak/{app/org.keepassxc.KeePassXC,runtime/org.kde.Platform}:ro"
+                "/var/lib/flatpak/app/org.keepassxc.KeePassXC:ro"
+                "/var/lib/flatpak/runtime/org.kde.Platform:ro"
+                "xdg-data/flatpak/app/org.keepassxc.KeePassXC:ro"
+                "xdg-data/flatpak/runtime/org.kde.Platform:ro"
                 "xdg-run/app/org.keepassxc.KeePassXC:create"
               ];
             };
@@ -97,8 +100,8 @@ EOF
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
-	        ".var/app/com.brave.Browser"
-	      ];
+          ".var/app/com.brave.Browser"
+        ];
       };
     };
   };

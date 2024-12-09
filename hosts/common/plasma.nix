@@ -23,6 +23,11 @@
         directories = [
           ".local/share/icons" #only klassy needs this, probably can be changed
         ];
+        files = [
+          ".config/kando/config.json"
+          ".config/kando/menus.json"
+          ".config/fusuma/config.yml"
+        ];
       };
     };
 
@@ -43,7 +48,7 @@
       ];
       systemPackages = let
         stable = with pkgs; [
-          (callPackage ../../pkgs/flatpak-xdg-utils.nix {})
+          #(callPackage ../../pkgs/flatpak-xdg-utils.nix {})
           (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
           (callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {})
           (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix {})
@@ -54,9 +59,10 @@
           kdePackages.krohnkite
           kdePackages.qtstyleplugin-kvantum
           kdePackages.sddm-kcm
+          kde-rounded-corners
           inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
           inputs.kvlibadwaita.packages.${pkgs.system}.default
-          kde-rounded-corners
+          fusuma #wont be needed when KDE allows rebinding of gestures
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
         ];
@@ -543,6 +549,34 @@
       };
     };
 
+    systemd.services."plasma-random-wallpaper" = {
+      description = "Plasma Set Random Wallpaper On Boot";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+WALLPAPER=$(find $DRIVE/Wallpapers -type f | shuf -n 1)
+SCRIPT=$(cat <<EOF
+var allDesktops = desktops();
+for (i=0;i<allDesktops.length;i++)
+{
+    d = allDesktops[i];
+    d.wallpaperPlugin = "org.kde.image";
+    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");
+    d.writeConfig("Image", "file://''${WALLPAPER}")
+}
+EOF)
+if [ -f "$WALLPAPER" ]; then
+  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$SCRIPT"
+else
+  exit 1
+fi
+      '';
+    };
+
     systemd.services."generate-kando-autostart" = {
       description = "Generate Kando Autostert";
       wantedBy = [ "multi-user.target" ];
@@ -886,17 +920,6 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///etc/nixos/dotfiles">
-  <title>dotfiles</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="inode-directory"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733524838/0</ID>
-   </metadata>
-  </info>
- </bookmark>
  <bookmark href="file:///home/ultra/Desktop">
   <title>Desktop</title>
   <info>
@@ -921,6 +944,17 @@ EOF
    </metadata>
   </info>
  </bookmark>
+ <bookmark href="file:///etc/nixos/dotfiles">
+  <title>dotfiles</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="inode-directory"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1733524838/0</ID>
+   </metadata>
+  </info>
+ </bookmark>
  <bookmark href="file:///home/ultra/Downloads">
   <title>Downloads</title>
   <info>
@@ -930,6 +964,28 @@ EOF
    <metadata owner="http://www.kde.org">
     <ID>1733523249/3</ID>
     <isSystemItem>true</isSystemItem>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Drive">
+  <title>Drive</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="inode-directory"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1733769851/0</ID>
+   </metadata>
+  </info>
+ </bookmark>
+ <bookmark href="file:///home/ultra/Games">
+  <title>Games</title>
+  <info>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="inode-directory"/>
+   </metadata>
+   <metadata owner="http://www.kde.org">
+    <ID>1733769857/1</ID>
    </metadata>
   </info>
  </bookmark>

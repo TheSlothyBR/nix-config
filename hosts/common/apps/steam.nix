@@ -25,6 +25,9 @@
                 "wayland"
                 "x11"
               ];
+              filesystems = [
+                "~/Games"
+              ];
             };
           };
         };
