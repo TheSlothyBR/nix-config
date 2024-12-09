@@ -40,6 +40,21 @@
       };
     };
 
+    systemd.services."brave-chromium-cli-arguments" = {
+      description = "Brave Chromium CLI Arguments";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        cat << 'EOF' > ~/.var/app/com.brave.Browser/config/chromium-flags.conf
+--password-store=basic
+EOF
+      '';
+    };
+
     systemd.services."brave-keepassxc-integration" = {
       description = "Generate files for KeePassXC flatpak browser integration";
       wantedBy = [ "multi-user.target" ];

@@ -31,6 +31,7 @@
     extraGroups = [
       "audio"
       "networkmanager"
+      "input" #remove with fusuma
       "video"
       "wheel"
     ];

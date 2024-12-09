@@ -43,12 +43,14 @@
         kate
         khelpcenter
         konsole
+        krdp
         okular
         print-manager
+        plasma-browser-integration
+        xwaylandvideobridge
       ];
       systemPackages = let
         stable = with pkgs; [
-          #(callPackage ../../pkgs/flatpak-xdg-utils.nix {})
           (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
           (callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {})
           (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix {})
@@ -62,7 +64,7 @@
           kde-rounded-corners
           inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
           inputs.kvlibadwaita.packages.${pkgs.system}.default
-          fusuma #wont be needed when KDE allows rebinding of gestures
+          fusuma #requires adding user to iputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
         ];
@@ -542,6 +544,7 @@
             };
           };
           shortcuts = {
+            "kwin"."plasma-kando" = "Meta+Space,none,Kando - plasma-kando";
             "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
             "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
           };
@@ -577,8 +580,29 @@ fi
       '';
     };
 
+    systemd.services."generate-fusuma-autostart" = {
+      description = "Generate Fusuma Autostart";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/fusuma.desktop
+[Desktop Entry]
+Exec=fusuma -d
+Icon=
+Name=fusuma
+Type=Application
+X-KDE-AutostartScript=true
+EOF
+      '';
+    };
+
     systemd.services."generate-kando-autostart" = {
-      description = "Generate Kando Autostert";
+      description = "Generate Kando Autostart";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
