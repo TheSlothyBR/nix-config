@@ -16,9 +16,9 @@
         packages = [
           {
             appId = "org.keepassxc.KeePassXC";
-      	    origin = "flathub";
-      	  }
-      	];
+            origin = "flathub";
+          }
+        ];
         overrides = {
           "org.keepassxc.KeePassXC" = {
             Context = {
@@ -66,5 +66,37 @@ LastActiveDatabase=/home/${isUser}/Drive/Apps/KeePassXC/s.kdbx
 EOF
       '';
     };
+  };
+
+  systemd.services."generate-keepassxc-autostart" = {
+    description = "Generate KeePassXC Autostart";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "${isUser}";
+      Group = "users";
+    };
+    script = ''
+      mkdir -p ~/.config/autostart
+      cat << 'EOF' > ~/.config/autostart/org.keepassxc.KeePassXC.desktop
+[Desktop Entry]
+Categories=Utility;Security;Qt;
+Comment=Community-driven port of the Windows application “KeePass Password Safe”
+Exec=flatpak run --branch=stable --arch=x86_64 --command=keepassxc --file-forwarding org.keepassxc.KeePassXC @@ %f @@
+GenericName=Password Manager
+Icon=org.keepassxc.KeePassXC
+Keywords=security;privacy;password-manager;yubikey;password;keepass;
+MimeType=application/x-keepass2;
+Name=KeePassXC
+SingleMainWindow=true
+StartupNotify=true
+StartupWMClass=keepassxc
+Terminal=false
+Type=Application
+Version=1.5
+X-Flatpak=org.keepassxc.KeePassXC
+X-GNOME-SingleWindow=true
+EOF
+    '';
   };
 }

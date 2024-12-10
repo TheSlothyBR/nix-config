@@ -22,7 +22,7 @@
       users.${isUser} = {
         directories = [
           ".local/share/icons" #only klassy needs this, probably can be changed
-          ".config/kando"
+          #".config/kando"
         ];
         files = [
           ".config/fusuma/config.yml"
@@ -53,9 +53,10 @@
           (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
           (callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {})
           (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix {})
+          (callPackage ../../pkgs/pywal16-libadwaita.nix {})
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
           application-title-bar
-          kando
+          #kando
           kara
           kdePackages.krohnkite
           kdePackages.qtstyleplugin-kvantum
@@ -66,6 +67,7 @@
           fusuma #requires adding user to iputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
+          pywal16
         ];
         unstable = with pkgs.unstable; [
         
@@ -129,17 +131,23 @@
               ];
             };
           };
-          #window-rules = [
-          #  {
-          #    description = "Name";
-          #    match = {
-          #      text
-          #    };
-          #    apply = {
-          #      text
-          #    };
-          #  }
-          #];
+          window-rules = [
+            {
+              description = "Open Steam in Gaming Desktop";
+              match = {
+                window-class = {
+                  value = ".*Steam.*";
+                  type = "regex";
+                };
+              };
+              apply = {
+                desktops = {
+                  value = "Desktop_3";
+                  apply = "apply-initially";
+                };
+              };
+            }
+          ];
           desktop = {
             widgets = [
               {
@@ -236,13 +244,14 @@
                         "org.kde.plasma.networkmanagement"
                         "org.kde.plasma.volume"
                         "org.kde.plasma.battery"
-                        "org.kde.plasma.systemMonitor"
+                        "org.kde.plasma.systemmonitor"
                       ];
                       hidden = [
                         "org.kde.plasma.bluetooth"
                         "org.kde.plasma.brightness"
                         "luisbocanegra.kdematerialyou.colors"
-                        "org.kandomenu.kando"
+                        "kando"
+                        "steam"
                         "org.kde.plasma.notifications"
                         "org.kde.plasma.devicenotifier"
                         "org.kde.plasma.cameraindicator"
@@ -549,7 +558,7 @@
             };
           };
           shortcuts = {
-            "kwin"."plasma-kando" = "Meta+Space"; #,none,Kando - plasma-kando
+            #"kwin"."plasma-kando" = "Meta+Space";
             "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
             "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
           };
@@ -565,9 +574,12 @@
         User = "${isUser}";
         Group = "users";
       };
+      path = [
+        "/run/current-system/sw/bin/qdbus"
+      ];
       script = ''
-WALLPAPER=$(find $DRIVE/Wallpapers -type f | shuf -n 1)
-SCRIPT=$(cat <<EOF
+WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
+SCRIPT=$(cat << EOF
 var allDesktops = desktops();
 for (i=0;i<allDesktops.length;i++)
 {
@@ -576,7 +588,8 @@ for (i=0;i<allDesktops.length;i++)
     d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");
     d.writeConfig("Image", "file://''${WALLPAPER}")
 }
-EOF)
+EOF
+)
 if [ -f "$WALLPAPER" ]; then
   qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$SCRIPT"
 else
@@ -602,30 +615,6 @@ Icon=
 Name=fusuma
 Type=Application
 X-KDE-AutostartScript=true
-EOF
-      '';
-    };
-
-    systemd.services."generate-kando-autostart" = {
-      description = "Generate Kando Autostart";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        User = "${isUser}";
-        Group = "users";
-      };
-      script = ''
-        mkdir -p ~/.config/autostart
-        cat << 'EOF' > ~/.config/autostart/kando.desktop
-[Desktop Entry]
-Categories=Utility
-Comment=The Cross-Platform Pie Menu
-Exec=kando %U
-GenericName=Pie Menu
-Icon=kando
-Name=Kando
-Type=Application
-Version=1.4
 EOF
       '';
     };

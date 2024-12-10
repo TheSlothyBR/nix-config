@@ -21,6 +21,7 @@
     gestures.enable = true;
     git.enable = true;
     inputs.enable = true;
+    kando.enable = true;
     kate.enable = true;
     keepassxc.enable = true;
     kernel.enable = true;
