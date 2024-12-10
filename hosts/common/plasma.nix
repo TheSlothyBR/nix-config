@@ -22,10 +22,9 @@
       users.${isUser} = {
         directories = [
           ".local/share/icons" #only klassy needs this, probably can be changed
+          ".config/kando"
         ];
         files = [
-          ".config/kando/config.json"
-          ".config/kando/menus.json"
           ".config/fusuma/config.yml"
         ];
       };
@@ -472,6 +471,12 @@
                 InactiveSecondOutlineUsePalette = true;
               };
             };
+            "kwalletrc" = {
+              "Wallet" = {
+                "Default Wallet" = "kdewallet";
+                Enabled = false;
+              };
+            };
             "powerdevilrc" = {
               "AC/Display" = {
                 UseProfileSpecificDisplayBrightness = true;
@@ -544,7 +549,7 @@
             };
           };
           shortcuts = {
-            "kwin"."plasma-kando" = "Meta+Space,none,Kando - plasma-kando";
+            "kwin"."plasma-kando" = "Meta+Space"; #,none,Kando - plasma-kando
             "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
             "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
           };
