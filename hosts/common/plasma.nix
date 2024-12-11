@@ -18,13 +18,16 @@
   config = lib.mkIf config.custom.plasma.enable {
     services.desktopManager.plasma6.enable = true;
 
+    nixpkgs.overlays = [
+      (final: prev: {
+       plasma-panel-spacer-extended = (pkgs.callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {});
+      })
+    ];
+
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
           ".local/share/icons" #only klassy needs this, probably can be changed
-        ];
-        files = [
-          ".config/fusuma/config.yml"
         ];
       };
     };
@@ -50,7 +53,6 @@
       systemPackages = let
         stable = with pkgs; [
           (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
-          (callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {})
           (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix {})
           (callPackage ../../pkgs/pywal16-libadwaita.nix {})
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
@@ -68,7 +70,7 @@
           pywal16
         ];
         unstable = with pkgs.unstable; [
-        
+          
         ];
       in
         stable ++ unstable;
@@ -134,7 +136,7 @@
               description = "Open Steam in Gaming Desktop";
               match = {
                 window-class = {
-                  value = ".*Steam.*";
+                  value = "Steam";
                   type = "regex";
                 };
               };
@@ -258,7 +260,7 @@
                         "org.kde.plasma.kscreen"
                       ];
                       configs = {
-                        systemmonitor = {
+                        systemMonitor = {
                           displayStyle = "org.kde.ksysguard.barchart";
                           title = "System Resources";
                           showTitle = true;
@@ -556,47 +558,50 @@
             };
           };
           shortcuts = {
-            "kwin"."plasma-kando" = "Meta+Space\,none\,Kando - plasma-kando";
+            "kwin"."plasma-kando" = "Meta+Space";
             "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
             "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
           };
         };
+
+#        systemd.user.services."plasma-random-wallpaper" = {
+#          Unit = {
+#            Description = "Plasma Set Random Wallpaper On Boot";
+#          };
+#          Service = {
+#            Type = "oneshot";
+#            ExecStart = toString (pkgs.writeShellApplication {
+#              name = "plasma-random-wallpaper";
+#              runtimeInputs = [ pkgs.kdePackages.qttools ];
+#              text = ''
+#WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
+#SCRIPT=$(cat << EOF
+#var allDesktops = desktops();
+#for (i=0;i<allDesktops.length;i++)
+#{
+#    d = allDesktops[i];
+#    d.wallpaperPlugin = "org.kde.image";
+#    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");
+#    d.writeConfig("Image", "file://''${WALLPAPER}")
+#}
+#EOF
+#)
+#if [ -f "$WALLPAPER" ]; then
+#  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$SCRIPT"
+#else
+#  exit 1
+#fi
+#'';
+#            });
+#          };
+#          Install = {
+#            WantedBy = [ "default.target" ];
+#          };
+#        };
       };
     };
 
-    systemd.services."plasma-random-wallpaper" = {
-      description = "Plasma Set Random Wallpaper On Boot";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        User = "${isUser}";
-        Group = "users";
-      };
-      path = [
-        "/run/current-system/sw/"
-      ];
-      script = ''
-WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
-SCRIPT=$(cat << EOF
-var allDesktops = desktops();
-for (i=0;i<allDesktops.length;i++)
-{
-    d = allDesktops[i];
-    d.wallpaperPlugin = "org.kde.image";
-    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");
-    d.writeConfig("Image", "file://''${WALLPAPER}")
-}
-EOF
-)
-if [ -f "$WALLPAPER" ]; then
-  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$SCRIPT"
-else
-  exit 1
-fi
-      '';
-    };
-
-    systemd.services."generate-fusuma-autostart" = {
+    systemd.services."generate-fusuma-autostart-and-config" = {
       description = "Generate Fusuma Autostart";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -613,6 +618,14 @@ Icon=
 Name=fusuma
 Type=Application
 X-KDE-AutostartScript=true
+EOF
+
+        mkdir -p ~/.config/fusuma
+        cat << 'EOF' > ~/.config/fusuma/config.yml
+hold:
+  3:
+    command: "flatpak run menu.kando.Kando --menu Plasma"
+    interval: 0.5
 EOF
       '';
     };

@@ -5,7 +5,7 @@
 , ...
 }:{
   imports = [
-    inputs.nur.nixosModules.nur
+    inputs.nur.modules.nixos.default
   ];
 
   options = {
@@ -24,7 +24,7 @@
       })
     ];
 
-    environment.systemPackages = with config.nur.repos; [
+    environment.systemPackages = with pkgs.nur.repos; [
       shadowrz.klassy-qt6
     ];
   };

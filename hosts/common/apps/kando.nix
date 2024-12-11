@@ -18,6 +18,16 @@
             origin = "flathub";
           }
         ];
+        overrides = {
+          "menu.kando.Kando" = {
+            Context = {
+              sockets = [
+                "wayland"
+                "x11"
+              ];
+            };
+          };
+        };
       };
     };
 
