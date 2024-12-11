@@ -1,10 +1,10 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "kde-wallpaper-effects-widget";
   version = "0.3.0";
 
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-pZiPH38E9CSaBOnutZM/QeQnst6Ppvxhd4An+n21vr8=";
   };
+
+  dontBuild = true;
 
   dontWrapQtApps = true;
 

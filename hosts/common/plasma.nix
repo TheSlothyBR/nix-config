@@ -22,7 +22,6 @@
       users.${isUser} = {
         directories = [
           ".local/share/icons" #only klassy needs this, probably can be changed
-          #".config/kando"
         ];
         files = [
           ".config/fusuma/config.yml"
@@ -56,7 +55,6 @@
           (callPackage ../../pkgs/pywal16-libadwaita.nix {})
           (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
           application-title-bar
-          #kando
           kara
           kdePackages.krohnkite
           kdePackages.qtstyleplugin-kvantum
@@ -64,7 +62,7 @@
           kde-rounded-corners
           inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
           inputs.kvlibadwaita.packages.${pkgs.system}.default
-          fusuma #requires adding user to iputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
+          fusuma #requires adding user to inputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
           pywal16
@@ -143,7 +141,7 @@
               apply = {
                 desktops = {
                   value = "Desktop_3";
-                  apply = "apply-initially";
+                  apply = "initially";
                 };
               };
             }
@@ -260,7 +258,7 @@
                         "org.kde.plasma.kscreen"
                       ];
                       configs = {
-                        systemMonitor = {
+                        systemmonitor = {
                           displayStyle = "org.kde.ksysguard.barchart";
                           title = "System Resources";
                           showTitle = true;
@@ -558,7 +556,7 @@
             };
           };
           shortcuts = {
-            #"kwin"."plasma-kando" = "Meta+Space";
+            "kwin"."plasma-kando" = "Meta+Space\,none\,Kando - plasma-kando";
             "services/org.wezfurlong.wezterm.desktop"."_launch" = "Meta+T";
             "services/org.kde.krunner.desktop"."_launch" = "Search\tAlt+F2\tAlt+Space\tMeta+O";
           };
@@ -575,7 +573,7 @@
         Group = "users";
       };
       path = [
-        "/run/current-system/sw/bin/qdbus"
+        "/run/current-system/sw/"
       ];
       script = ''
 WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)

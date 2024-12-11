@@ -1,10 +1,10 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "pywal16-libadwaita";
   version = "unstable-2024-12-10";
 
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     rev = "c1bc34ca8aae8a13501e64ca50eb715aeca74121";
     hash = "sha256-w8EhFnzZqaujASSUrPBs+gHfHRcvpbcOQv7aBFfcdws=";
   };
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall

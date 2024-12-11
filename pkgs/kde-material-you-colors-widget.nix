@@ -1,10 +1,10 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "kde-material-you-colors-widget";
   version = "1.9.3";
 
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-hew+aWbfWmqTsxsNx/0Ow0WZAVl0e6OyzDxcKm+nlzQ=";
   };
+
+  dontBuild = true;
 
   dontWrapQtApps = true;
 

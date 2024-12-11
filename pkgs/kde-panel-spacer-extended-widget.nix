@@ -1,11 +1,11 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , glib
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "kde-panel-spacer-extended-widget";
   version = "1.9.0";
 
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [
     glib
   ];
+
+  dontBuild = true;
 
   dontWrapQtApps = true;
 
