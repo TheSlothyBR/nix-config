@@ -10,6 +10,14 @@
   };
 
   config = lib.mkIf config.custom.utils.enable {
+    system.activationScripts = {
+      shell-bash-alias = {
+        text = ''
+          ln -s /bin/sh /bin/bash
+        '';
+      };
+    };
+
     programs = {
       nh = {
         enable = true;
@@ -23,14 +31,7 @@
         wget
         wl-clipboard
         tealdeer
-      #] ++ [
-      #  nh
-      #  nix-output-monitor
-      #  nvd
       ];
-      sessionVariables = {
-      #  FLAKE = "/etc/nixos/dotfiles";
-      };
     };
   };
 }

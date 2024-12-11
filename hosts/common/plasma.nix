@@ -564,40 +564,39 @@
           };
         };
 
-#        systemd.user.services."plasma-random-wallpaper" = {
-#          Unit = {
-#            Description = "Plasma Set Random Wallpaper On Boot";
-#          };
-#          Service = {
-#            Type = "oneshot";
-#            ExecStart = toString (pkgs.writeShellApplication {
-#              name = "plasma-random-wallpaper";
-#              runtimeInputs = [ pkgs.kdePackages.qttools ];
-#              text = ''
-#WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
-#SCRIPT=$(cat << EOF
-#var allDesktops = desktops();
-#for (i=0;i<allDesktops.length;i++)
-#{
-#    d = allDesktops[i];
-#    d.wallpaperPlugin = "org.kde.image";
-#    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");
-#    d.writeConfig("Image", "file://''${WALLPAPER}")
-#}
-#EOF
-#)
-#if [ -f "$WALLPAPER" ]; then
-#  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$SCRIPT"
-#else
-#  exit 1
-#fi
-#'';
-#            });
-#          };
-#          Install = {
-#            WantedBy = [ "default.target" ];
-#          };
-#        };
+        systemd.user.services."plasma-random-wallpaper" = {
+          Unit = {
+            Description = "Plasma Set Random Wallpaper On Boot";
+          };
+          Service = {
+            Type = "oneshot";
+            ExecStart = toString (pkgs.writeShellApplication {
+              name = "plasma-random-wallpaper";
+              runtimeInputs = [ pkgs.kdePackages.qttools ];
+              text = ''
+WALLPAPER=$(find /home/ultra/Drive/Wallpapers -type f | shuf -n 1)
+if [ -f "$WALLPAPER" ]; then
+  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+desktops().forEach((d) => {
+    d.currentConfigGroup = [
+      'Wallpaper',
+      'org.kde.image',
+      'General'
+    ]
+    d.writeConfig('Image', 'file://$WALLPAPER')
+    d.reloadConfig()
+})
+"
+else
+  exit 1
+fi
+'';
+            });
+          };
+          Install = {
+            WantedBy = [ "default.target" ];
+          };
+        };
       };
     };
 
