@@ -18,7 +18,7 @@
         name = "drive-gui";
         runtimeInputs = [ pkgs.rclone ];
         text = ''
-          rclone rcd --rc-web-gui --rc-user=${isUser} --rc-pass=$(cat ${config.sops.secrets."drive/id".path})
+          rclone rcd --rc-web-gui --rc-user=${isUser} --rc-pass="$(cat ${config.sops.secrets."drive/id".path})"
         '';
       })
     ];
