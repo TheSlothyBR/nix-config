@@ -13,7 +13,7 @@
     system.activationScripts = {
       shell-bash-alias = {
         text = ''
-          ln -s /bin/sh /bin/bash
+          ln -sf /bin/sh /bin/bash
         '';
       };
     };

@@ -14,6 +14,13 @@
     environment.systemPackages = with pkgs; [
       rclone
       rclone-browser
+      (pkgs.writeShellApplication {
+        name = "drive-gui";
+        runtimeInputs = [ pkgs.rclone ];
+        text = ''
+          rclone rcd --rc-web-gui --rc-user=${isUser} --rc-pass=$(cat ${config.sops.secrets."drive/id".path})
+        '';
+      })
     ];
 
     sops.secrets."drive/token" = {

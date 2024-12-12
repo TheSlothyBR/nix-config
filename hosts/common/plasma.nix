@@ -68,6 +68,27 @@
           plasma-panel-colorizer
           python312Packages.kde-material-you-colors
           pywal16
+          (pkgs.writeShellApplication {
+            name = "plasma-random-wallpaper";
+            runtimeInputs = [ pkgs.kdePackages.qttools ];
+            text = ''
+WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
+if [ -f "$WALLPAPER" ]; then
+  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+    desktops().forEach((d) => {
+        d.currentConfigGroup = [
+          'Wallpaper',
+          'org.kde.image',
+          'General'
+        ]
+        d.writeConfig('Image', 'file://$WALLPAPER')
+        d.reloadConfig()
+    })"
+else
+  exit 1
+fi
+'';
+          })
         ];
         unstable = with pkgs.unstable; [
           
@@ -564,39 +585,18 @@
           };
         };
 
-        systemd.user.services."plasma-random-wallpaper" = {
-          Unit = {
-            Description = "Plasma Set Random Wallpaper On Boot";
-          };
-          Service = {
-            Type = "oneshot";
-            ExecStart = toString (pkgs.writeShellApplication {
-              name = "plasma-random-wallpaper";
-              runtimeInputs = [ pkgs.kdePackages.qttools ];
-              text = ''
-WALLPAPER=$(find /home/ultra/Drive/Wallpapers -type f | shuf -n 1)
-if [ -f "$WALLPAPER" ]; then
-  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
-desktops().forEach((d) => {
-    d.currentConfigGroup = [
-      'Wallpaper',
-      'org.kde.image',
-      'General'
-    ]
-    d.writeConfig('Image', 'file://$WALLPAPER')
-    d.reloadConfig()
-})
-"
-else
-  exit 1
-fi
-'';
-            });
-          };
-          Install = {
-            WantedBy = [ "default.target" ];
-          };
-        };
+        #systemd.user.services."plasma-random-wallpaper" = #{
+        #  Unit = {
+        #    Description = "Plasma Set Random Wallpaper On Boot";
+        #  };
+        #  Service = {
+        #    Type = "oneshot";
+        #    ExecStart = toString ();
+        #  };
+        #  Install = {
+        #    WantedBy = [ "default.target" ];
+        #  };
+        #};
       };
     };
 
@@ -651,6 +651,28 @@ EOF
       '';
     };
 
+#on_change_hook=${lib.getExe (pkgs.writeShellApplication {
+#  name = "plasma-random-wallpaper";
+#  runtimeInputs = [ pkgs.kdePackages.qttools ];
+#  text = ''
+#WALLPAPER=$(find /home/ultra/Drive/Wallpapers -type f | shuf -n 1)
+#if [ -f "$WALLPAPER" ]; then
+#  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+#    desktops().forEach((d) => {
+#        d.currentConfigGroup = [
+#          'Wallpaper',
+#          'org.kde.image',
+#          'General'
+#        ]
+#        d.writeConfig('Image', 'file://$WALLPAPER')
+#        d.reloadConfig()
+#    })"
+#else
+#  exit 1
+#fi
+#'';
+#})}
+
     systemd.services."generate-material-you-colors-config" = {
       description = "Generate Material You colors Config";
       wantedBy = [ "multi-user.target" ];
@@ -661,7 +683,7 @@ EOF
       };
       script = ''
         mkdir -p ~/.config/kde-material-you-colors
-        cat << 'EOF' > ~/.config//config.conf
+        cat << 'EOF' > ~/.config/kde-material-you-colors/config.conf
 [CUSTOM]
 chroma_multiplier=1
 color=
@@ -684,7 +706,7 @@ light_saturation_multiplier=1
 main_loop_delay=1
 monitor=0
 ncolor=0
-on_change_hook=
+on_change_hook=/run/current-system/sw/bin/plasma-random-wallpaper
 once_after_change=false
 pause_mode=false
 plasma_follows_scheme=false
