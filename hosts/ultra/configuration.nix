@@ -23,7 +23,10 @@
     inputs.enable = true;
     kando.enable = true;
     kate.enable = true;
-    keepassxc.enable = true;
+    keepassxc = {
+      enable = true;
+      autostart = true;
+    };
     kernel.enable = true;
     neovim.enable = true;
     nix-config = {
