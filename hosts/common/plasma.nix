@@ -74,16 +74,21 @@
             text = ''
 WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
 if [ -f "$WALLPAPER" ]; then
-  qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
-    desktops().forEach((d) => {
-        d.currentConfigGroup = [
-          'Wallpaper',
-          'org.kde.image',
-          'General'
-        ]
-        d.writeConfig('Image', 'file://$WALLPAPER')
-        d.reloadConfig()
-    })"
+  if [ ! -f "/home/${isUser}/.config/kde-material-you-colors/.ran" ]; then
+    qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+      desktops().forEach((d) => {
+          d.currentConfigGroup = [
+            'Wallpaper',
+            'org.kde.image',
+            'General'
+          ]
+          d.writeConfig('Image', 'file://$WALLPAPER')
+          d.reloadConfig()
+      })"
+    touch /home/${isUser}/.config/kde-material-you-colors/.ran
+  else
+    exit
+  fi
 else
   exit 1
 fi
@@ -672,7 +677,7 @@ main_loop_delay=1
 monitor=0
 ncolor=0
 on_change_hook=/run/current-system/sw/bin/plasma-random-wallpaper
-once_after_change=true
+once_after_change=false
 pause_mode=false
 plasma_follows_scheme=false
 pywal=false
