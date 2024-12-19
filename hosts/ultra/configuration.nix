@@ -48,6 +48,7 @@
     steam.enable = true;
     stremio.enable = true;
     stylix.enable = true;
+    umu.enable = true;
     utils.enable = true;
     wezterm.enable = true;
     wifi-adapter.enable = true;
