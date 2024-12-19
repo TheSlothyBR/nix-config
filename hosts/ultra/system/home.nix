@@ -28,12 +28,15 @@
   users.mutableUsers = true;
   users.users."${globals.ultra.userName}" = {
     isNormalUser = true;
-    extraGroups = [
-      "audio"
-      "networkmanager"
-      "input" #remove with fusuma
-      "video"
+    #shell = pkgs.;
+    extraGroups = lib.custom.ifTheyExist [
       "wheel"
+      "audio"
+      "video"
+      "networkmanager"
+      "libvirtd"
+      "wireshark"
+      "input" #remove with fusuma
     ];
     hashedPasswordFile = config.sops.secrets."${globals.ultra.hostName}/password".path;
   };
