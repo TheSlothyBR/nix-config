@@ -19,7 +19,7 @@
       #win-spice
     ];
 
-    virtualization = {
+    virtualisation = {
       libvirtd = {
         enable = true;
         qemu = {

@@ -10,7 +10,6 @@ lib: with lib; rec {
 
     listFiles = dir: map (file: dir + "/${file}") (filter (file: hasSuffix ".nix" file && file != "default.nix" && file != "disko.nix") (custom.getFiles dir));
 
-    ifTheyExist = groups :
-      |> filter (group: hasAttr group config.users.groups);
+    ifTheyExist = groups: filter (group: hasAttr group config.users.groups);
   };
 }

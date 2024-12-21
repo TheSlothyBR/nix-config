@@ -29,7 +29,7 @@
   users.users."${globals.ultra.userName}" = {
     isNormalUser = true;
     #shell = pkgs.;
-    extraGroups = lib.custom.ifTheyExist [
+    extraGroups = builtins.filter (group: builtins.hasAttr group config.users.groups) [ #lib.custom.ifTheyExist
       "wheel"
       "audio"
       "video"

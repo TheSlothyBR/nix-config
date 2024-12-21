@@ -68,18 +68,17 @@ EOF
       '';
     };
 
-    systemd.services = lib.mkIf config.custom.keepassxc.autostart {
-      "generate-keepassxc-autostart" = {
-        description = "Generate KeePassXC Autostart";
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          User = "${isUser}";
-          Group = "users";
-        };
-        script = ''
-          mkdir -p ~/.config/autostart
-          cat << 'EOF' > ~/.config/autostart/org.keepassxc.KeePassXC.desktop
+    systemd.services."generate-keepassxc-autostart" = lib.mkIf config.custom.keepassxc.autostart {
+      description = "Generate KeePassXC Autostart";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/org.keepassxc.KeePassXC.desktop
 [Desktop Entry]
 Categories=Utility;Security;Qt;
 Comment=Community-driven port of the Windows application “KeePass Password Safe”
@@ -98,8 +97,7 @@ Version=1.5
 X-Flatpak=org.keepassxc.KeePassXC
 X-GNOME-SingleWindow=true
 EOF
-        '';
-      };
+      '';
     };
   };
 }
