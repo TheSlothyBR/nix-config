@@ -2,9 +2,21 @@ keys:
   - &master age1ycqn5e3rust4erv2y72a2laq5vujw35muy24vuxhez57cg23w5nsnpq3ec
   - &hosts:
     - &ultra 
+    - &corsair
 creation_rules:
   - path_regex: hosts/common/secrets/secrets.yaml$
     key_groups:
     - age:
       - *master
       - *ultra
+      #- *corsair
+  #- path_regex: hosts/ultra/system/secrets/secrets.yaml$
+  #  key_groups:
+  #  - age:
+  #    - *master
+  #    - *ultra
+  - path_regex: hosts/corsair/system/secrets/secrets.yaml$
+    key_groups:
+    - age:
+      - *master
+      - *corsair

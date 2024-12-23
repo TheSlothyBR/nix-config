@@ -10,6 +10,12 @@ in {
     drives = [ "/dev/sda" ];
     system = builtins.elemAt architectures 0;
   };
+  corsair = {
+    hostName = "corsair";
+    userName = "corsair";
+    drives = [ "/dev/sda" "/dev/sdb" ];
+    system = builtins.elemAt architectures 0;
+  };
   customIso = {
     hostName = "customIso";
     userName = "customIso";
