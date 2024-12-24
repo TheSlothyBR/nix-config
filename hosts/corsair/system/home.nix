@@ -23,7 +23,10 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  users.users.root.hashedPassword = "!";
+  users.users.root = {
+    hashedPassword = "!";
+    #shell = "${pkgs.shadow}/bin/nologin";
+  };
 
   sops.secrets."${isUser}/password" = {
     sopsFile = ./secrets/secrets.yaml;

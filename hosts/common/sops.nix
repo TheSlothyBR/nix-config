@@ -21,8 +21,12 @@
       age = {
         sshKeyPaths = map (x: x.path) config.services.openssh.hostKeys;
         keyFile = "/persist/system/var/lib/sops-nix/keys.txt";
-        generateKey = true;
+        #generateKey = true;
       };
+    };
+
+    environment.sessionVariables = {
+      SOPS_AGE_KEY_FILE = "${config.sops.age.keyFile}";
     };
   };
 }
