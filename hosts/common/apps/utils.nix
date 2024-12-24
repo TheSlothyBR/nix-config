@@ -1,6 +1,7 @@
 { config
 , pkgs
 , lib
+, globals
 , ...
 }:{
   options = {
@@ -21,7 +22,7 @@
     programs = {
       nh = {
         enable = true;
-        flake = "/etc/nixos/dotfiles";
+        flake = "${global.meta.flakePath}";
         #clean.extraArgs = "--keep-since 2d";
       };
     };

@@ -109,7 +109,7 @@
                 unset SOPS_AGE_KEY_FILE' \
           EXIT;
           mkdir -p /tmp/usb
-          mount /dev/disk/by-id/usb-Kingston_DT_101_G2_0018F30CA1A8BD30F17B0199-0:0-part1 /tmp/usb
+          mount ${globals.meta.usb} /tmp/usb
           
           modprobe zram
           zramctl /dev/zram0 --algorithm zstd --size "$(grep MemTotal /proc/meminfo | tr -dc '0-9')KiB"
@@ -118,11 +118,11 @@
           mount -o remount,size=6G,noatime /nix/.rw-store
           
           touch /tmp/luks_password
-          nix-shell -p git --command "git clone https://github.com/TheSlothyBR/nix-config.git /dotfiles && cd /dotfiles"
+          nix-shell -p git --command "git clone https://github.com/${globals.meta.owner}/${globals.meta.repo}.git /dotfiles && cd /dotfiles"
           
           configs=(
-            ultra
-            corsair
+            ${globals.ultra.hostName}
+            ${globals.corsair.hostName}
           )
 
           NO_INSTALL=1

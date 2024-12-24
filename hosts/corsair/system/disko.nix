@@ -37,7 +37,7 @@
                 extraOpenArgs = [ "--allow-discards" ];
                 content = {
                   type = "lvm_pv";
-                  vg = "pool";
+                  vg = "${globals.meta.lvmPool}";
                 };
               };
             };
@@ -60,7 +60,7 @@
                 extraOpenArgs = [ "--allow-discards" ];
                 content = {
                   type = "lvm_pv";
-                  vg = "pool";
+                  vg = "${globals.meta.lvmPool}";
                 };
               };
             };
@@ -72,16 +72,16 @@
       pool = {
         type = "lvm_vg";
         lvs = {
-          system = {
+          ${globals.meta.lvmLogicalSystem} = {
             size = "87%VG";
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ];
               postCreateHook = ''
                 TMP=$(mktemp -d);
-                mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
+                mount -t btrfs -o subvol=root "/dev/${globals.meta.lvmPool}/${globals.meta.lvmLogicalSystem}" "$TMP";
                 mkdir -p $TMP/{persist,nix,root,.snapshots,.swapvol,.vm};
-                mount -t btrfs -o subvol=snapshots "/dev/pool/system" "$TMP/.snapshots";
+                mount -t btrfs -o subvol=snapshots "/dev/${globals.meta.lvmPool}/${globals.meta.lvmLogicalSystem}" "$TMP/.snapshots";
                 trap 'umount -A $TMP; rm -rf $TMP' EXIT;
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
@@ -91,7 +91,7 @@
                 cp /tmp/usb/data/secrets/keys.txt /mnt/persist/system/var/lib/sops-nix/
                 chmod 0600 /mnt/persist/system/var/lib/sops-nix/keys.txt
                 trap 'rm -rf /tmp/luks_password;' EXIT;
-                cp -r /dotfiles /mnt/persist/system/etc/nixos;
+                cp -r /dotfiles/* /mnt/persist/system${global.meta.flakePath};
               '';
               subvolumes = {
                 "/persist" = {
