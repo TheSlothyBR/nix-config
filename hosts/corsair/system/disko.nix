@@ -112,7 +112,7 @@
                 TMP=$(mktemp -d);
                 mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
                 mkdir -p $TMP/{persist,nix,root,.snapshots,.swapvol,.vm};
-                mount -t btrfs -o subvol=snapshots "/dev/pool/system" "$TMP/.snapshots";
+                mount -t btrfs -o subvol=snapshots "/dev/pool/storage" "$TMP/.snapshots";
                 trap 'umount -A $TMP; rm -rf $TMP' EXIT;
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
