@@ -99,7 +99,7 @@
               type = "filesystem";
               format = "ntfs";
               mountpoint = "/.vm";
-              extraArgs = [];
+              extraArgs = [ "-f" ];
               mountOptions = [];
             };
           };
