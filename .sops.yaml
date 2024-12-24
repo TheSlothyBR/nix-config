@@ -9,12 +9,12 @@ creation_rules:
     - age:
       - *master
       - *ultra
-      #- *corsair
-  #- path_regex: hosts/ultra/system/secrets/secrets.yaml$
-  #  key_groups:
-  #  - age:
-  #    - *master
-  #    - *ultra
+      - *corsair
+  - path_regex: hosts/ultra/system/secrets/secrets.yaml$
+    key_groups:
+    - age:
+      - *master
+      - *ultra
   - path_regex: hosts/corsair/system/secrets/secrets.yaml$
     key_groups:
     - age:

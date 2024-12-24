@@ -10,7 +10,7 @@
   disko.devices = {
     disk = {
       main = {
-        device = builtins.elemAt globals.corsair.drives 0; #change implementation?
+        device = builtins.elemAt globals.corsair.drives 0;
         type = "disk";
         content = {
           type = "gpt";

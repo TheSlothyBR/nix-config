@@ -8,7 +8,7 @@ lib: with lib; rec {
 
     getFiles = dir: collect isString (mapAttrsRecursive (path: type: concatStringsSep "/" path) (custom.readDirRecursive dir));
 
-    listFiles = dir: map (file: dir + "/${file}") (filter (file: hasSuffix ".nix" file && file != "default.nix" && file != "disko.nix") (custom.getFiles dir));
+    listFiles = dir: map (file: dir + "/${file}") (filter (file: hasSuffix ".nix" file && file != "default.nix") (custom.getFiles dir));
 
     ifTheyExist = groups: filter (group: hasAttr group config.users.groups);
   };

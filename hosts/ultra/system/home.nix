@@ -1,5 +1,6 @@
 { inputs
-, globals
+, isConfig
+, isUser
 , config
 , lib
 , ...
@@ -24,9 +25,12 @@
 
   users.users.root.hashedPassword = "!";
 
-  sops.secrets."${globals.ultra.hostName}/password".neededForUsers = true;
+  sops.secrets."${isUser}/password" = {
+    sopsFile = ./secrets/secrets.yaml;
+    neededForUsers = true;
+  };
   users.mutableUsers = true;
-  users.users."${globals.ultra.userName}" = {
+  users.users."${isUser}" = {
     isNormalUser = true;
     #shell = pkgs.;
     extraGroups = builtins.filter (group: builtins.hasAttr group config.users.groups) [ #lib.custom.ifTheyExist
@@ -38,19 +42,19 @@
       "wireshark"
       "input" #remove with fusuma
     ];
-    hashedPasswordFile = config.sops.secrets."${globals.ultra.hostName}/password".path;
+    hashedPasswordFile = config.sops.secrets."${isUser}/password".path;
   };
 
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useUserPackages = true;
     useGlobalPkgs = true;
-    users.${globals.ultra.userName} = {
+    users.${isUser} = {
       programs.home-manager.enable = true;
       home = {
         stateVersion = "24.05";
-        username = "${globals.ultra.userName}";
-        homeDirectory = "/home/${globals.ultra.userName}";
+        username = "${isUser}";
+        homeDirectory = "/home/${isUser}";
         packages = [
           
         ];

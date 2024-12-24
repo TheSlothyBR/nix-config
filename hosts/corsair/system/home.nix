@@ -25,7 +25,7 @@
 
   users.users.root.hashedPassword = "!";
 
-  sops.secrets."${isConfig}/password" = {
+  sops.secrets."${isUser}/password" = {
     sopsFile = ./secrets/secrets.yaml;
     neededForUsers = true;
   };

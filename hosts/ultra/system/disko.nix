@@ -1,12 +1,16 @@
-{ drives ? "Set this to storage drives, such as /dev/sda. Pass as arguments to disko when formating"
+{ inputs
 , globals
 , pkgs
 , ...
 }:{
+  imports = [
+    inputs.disko.nixosModules.default
+  ];
+
   disko.devices = {
     disk = {
       main = {
-        device = drives;
+        device = builtins.elemAt globals.ultra.drives 0;
         type = "disk";
         content = {
           type = "gpt";
