@@ -1,10 +1,10 @@
-{ globals
+{ isConfig
 , ...
 }:{
   services.resolved.enable = true;
 
   networking = {
-    hostName = "${globals.ultra.hostName}";
+    hostName = "${isConfig}";
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;

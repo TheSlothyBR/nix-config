@@ -1,4 +1,4 @@
-{ globals
+{ isUser
 , pkgs
 , config
 , ...
@@ -34,7 +34,7 @@
   services.displayManager.sddm.settings = {
     Autologin = {
       Session = "plasma";
-      User = "${globals.ultra.userName}";
+      User = "${isUser}";
     };
   };
 }

@@ -1,5 +1,6 @@
 { inputs
-, globals
+, isConfig
+, isUser
 , ...
 }:{
   
@@ -17,7 +18,7 @@
         requires = [ "dev-pool-system.device" ];
         after = [
           "dev-pool-system.device"
-          "systemd-cryptsetup@ultra.service"
+          "systemd-cryptsetup@${isConfig}.service"
         ];
         before = [ "sysroot.mount" ];
         unitConfig.DefaultDependencies = "no";
@@ -60,7 +61,7 @@
 
   environment.persistence."/persist" = {
     hideMounts = true;
-    users.${globals.corsair.userName} = {
+    users.${isUser} = {
       directories = [
         "Desktop"
         "Documents"
@@ -77,17 +78,17 @@
   };
 
   environment.sessionVariables = {
-    DRIVE = "/home/${globals.corsair.userName}/Drive";
-    GAMES = "/home/${globals.corsair.userName}/Games";
+    DRIVE = "/home/${isUser}/Drive";
+    GAMES = "/home/${isUser}/Games";
   };
 
   programs.fuse.userAllowOther = true;
 
-  home-manager.users.${globals.corsair.userName} = {
+  home-manager.users.${isUser} = {
     imports = [
       inputs.impermanence.nixosModules.home-manager.impermanence
     ];
-    home.persistence."/persist/home/${globals.corsair.userName}" = {
+    home.persistence."/persist/home/${isUser}" = {
       #directories = [
       #  { directory = ".local/share/Steam"; method = "symlink"; }
       #];
