@@ -28,6 +28,7 @@
       users.${isUser} = {
         directories = [
           ".local/share/icons" #only klassy needs this, probably can be changed
+          ".local/share/kwalletd"
         ];
       };
     };
@@ -136,7 +137,7 @@ fi
             #iconTheme = "YaruPlasma-Dark";
             soundTheme = "ocean";
             clickItemTo = "select";
-            wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/ScarletTree/contents/images/5120x2880.png";
+            #wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/ScarletTree/contents/images/5120x2880.png";
           };
           kwin = {
             titlebarButtons = {
@@ -509,7 +510,7 @@ fi
             "kwalletrc" = {
               "Wallet" = {
                 "Default Wallet" = "kdewallet";
-                Enabled = false;
+                Enabled = true;
               };
             };
             "powerdevilrc" = {
