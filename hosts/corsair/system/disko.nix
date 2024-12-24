@@ -73,7 +73,7 @@
         type = "lvm_vg";
         lvs = {
           system = {
-            size = "100%FREE";
+            size = "87%VG";
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ];
@@ -118,13 +118,13 @@
             };
           };
           vm = {
-            size = "14%VG";
+            size = "100%FREE";
             content = {
               type = "filesystem";
               format = "ntfs";
               mountpoint = "/.vm";
               extraArgs = [ "-f" ];
-              mountOptions = [];
+              mountOptions = [ "defaults" ];
             };
           };
         };
