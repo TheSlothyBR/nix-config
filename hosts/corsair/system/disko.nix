@@ -1,5 +1,4 @@
-{ drives ? "Set this to storage drives, such as /dev/sda. Pass as arguments to disko when formating"
-, inputs
+{ inputs
 , globals
 , pkgs
 , ...
@@ -11,7 +10,7 @@
   disko.devices = {
     disk = {
       main = {
-        device = builtins.elemAt drives 0; #change implementation?
+        device = builtins.elemAt globals.corsair.drives 0; #change implementation?
         type = "disk";
         content = {
           type = "gpt";
@@ -46,7 +45,7 @@
         };
       };
       secondary = {
-        device = builtins.elemAt drives 1;
+        device = builtins.elemAt globals.corsair.drives 1;
         type = "disk";
         content = {
           type = "gpt";
