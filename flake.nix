@@ -197,7 +197,6 @@
           
           	else
           	  echo "Error: unknown configuration provided"
-          	  exit 1
           	fi
           done
         '';
