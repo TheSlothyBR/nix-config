@@ -173,7 +173,7 @@
           # Should probably check the existance of a lock file also
           
           export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
-          sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" /dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml > /tmp/luks_password
+          sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
           
           for config in "''${configs[@]}"; do
           	if [[ "$config" == "$FLAKE" ]]; then
