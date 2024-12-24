@@ -73,10 +73,26 @@
         type = "lvm_vg";
         lvs = {
           system = {
-            size = "66%VG";
+            size = "100%FREE";
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ];
+              postCreateHook = ''
+                TMP=$(mktemp -d);
+                mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
+                mkdir -p $TMP/{persist,nix,root,.snapshots,.swapvol,.vm};
+                mount -t btrfs -o subvol=snapshots "/dev/pool/system" "$TMP/.snapshots";
+                trap 'umount -A $TMP; rm -rf $TMP' EXIT;
+                btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
+              '';
+              postMountHook = ''
+                mkdir -p /mnt/persist/system/etc/nixos;
+                mkdir -p /mnt/persist/system/var/lib/sops-nix
+                cp /tmp/usb/data/secrets/keys.txt /mnt/persist/system/var/lib/sops-nix/
+                chmod 0600 /mnt/persist/system/var/lib/sops-nix/keys.txt
+                trap 'rm -rf /tmp/luks_password;' EXIT;
+                cp -r /dotfiles /mnt/persist/system/etc/nixos;
+              '';
               subvolumes = {
                 "/persist" = {
                   mountpoint = "/persist";
@@ -90,6 +106,14 @@
                   mountpoint = "/";
                   mountOptions = [ "subvol=root" "compress=zstd" "noatime" ];
                 };
+                "/snapshots" = {
+                  mountpoint = "/.snapshots";
+                  mountOptions = [ "subvol=snapshots" "compress=zstd" "noatime" ];
+                };
+                "/swap" = {
+                  mountpoint = "/.swapvol";
+                  swap.swapfile.size = "4G";
+                }; 
               };
             };
           };
@@ -101,39 +125,6 @@
               mountpoint = "/.vm";
               extraArgs = [ "-f" ];
               mountOptions = [];
-            };
-          };
-          storage = {
-            size = "100%FREE";
-            content = {
-              type = "btrfs";
-              extraArgs = [ "-f" ];
-              postCreateHook = ''
-                TMP=$(mktemp -d);
-                mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
-                mkdir -p $TMP/{persist,nix,root,.snapshots,.swapvol,.vm};
-                mount -t btrfs -o subvol=snapshots "/dev/pool/storage" "$TMP/.snapshots";
-                trap 'umount -A $TMP; rm -rf $TMP' EXIT;
-                btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
-              '';
-              postMountHook = ''
-                mkdir -p /mnt/persist/system/etc/nixos;
-                mkdir -p /mnt/persist/system/var/lib/sops-nix
-                cp /tmp/usb/data/secrets/keys.txt /mnt/persist/system/var/lib/sops-nix/
-                chmod 0600 /mnt/persist/system/var/lib/sops-nix/keys.txt
-                trap 'rm -rf /tmp/luks_password;' EXIT;
-                cp -r /dotfiles /mnt/persist/system/etc/nixos;
-              '';
-              subvolumes = {
-                "/swap" = {
-                  mountpoint = "/.swapvol";
-                  swap.swapfile.size = "4G";
-                };
-                "/snapshots" = {
-                  mountpoint = "/.snapshots";
-                  mountOptions = [ "subvol=snapshots" "compress=zstd" "noatime" ];
-                };
-              };
             };
           };
         };
