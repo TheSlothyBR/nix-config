@@ -198,7 +198,7 @@
               read -s -p "LUKS and Login Password: " PASS
               HASH=$(mkpasswd $PASS)
               touch /tmp/luks_password
-              echo -n $PASS > /tmp/luks_password
+              printf '%s' $PASS > /tmp/luks_password
               cat << 'EOF' > "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
 ''${FLAKE}:
     password: $HASH
