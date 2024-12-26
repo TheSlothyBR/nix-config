@@ -98,7 +98,7 @@
     in {
       ${system}.install = pkgs.writeShellApplication {
         name = "install";
-        runtimeInputs = with pkgs; [ git sops ];
+        runtimeInputs = with pkgs; [ age git sops ssh-to-age ];
         text = ''
           trap 'mount -o remount,size=2G,noatime /nix/.rw-store; \
                 swapoff /dev/zram0; \
@@ -120,6 +120,7 @@
           touch /tmp/luks_password
           nix-shell -p git --command "git clone https://github.com/${globals.meta.owner}/${globals.meta.repo}.git /dotfiles && cd /dotfiles"
           
+          #lib.custom.getSetValuesList globals [ "hostName" ] [ "meta" ]
           configs=(
             ${globals.ultra.hostName}
             ${globals.corsair.hostName}
@@ -131,73 +132,111 @@
 
           if [[ $# -eq 0 ]]; then
             echo "Provide a Nix Flake config name, check script for options"
-            exit
+            exit 1
           fi
 
           while [[ $# -gt 0 ]]; do
             case $1 in
-          	-h|--help)
-          	  echo "Provide a Nix Flake config name, check script for options"
-          	  exit
-          	  ;;
-          	-f|--flake)
-          	  FLAKE=$2
-          	  shift
-          	  shift
-          	  ;;
-          	--format-only)
-          	  NO_INSTALL=0
-          	  shift
-          	  ;;
-          	-c|--cores)
-          	  CORES=$2
-          	  shift
-          	  shift
-          	  ;;
-          	-j|--max-jobs)
-          	  JOBS=$2
-          	  shift
-          	  shift
-          	  ;;
-          	*)
-          	  echo "Error: no known argument provided"
-          	  exit 1
-          	  ;;
+            -h|--help)
+              echo "Provide a Nix Flake config name, check script for options"
+              exit
+              ;;
+            -f|--flake)
+              FLAKE=$2
+              shift
+              shift
+              ;;
+            --format-only)
+              NO_INSTALL=0
+              shift
+              ;;
+            -c|--cores)
+              CORES=$2
+              shift
+              shift
+              ;;
+            -j|--max-jobs)
+              JOBS=$2
+              shift
+              shift
+              ;;
+            *)
+              echo "Error: no known argument provided"
+              exit 1
+              ;;
             esac
           done
 
-          if [[ $(find "/dotfiles/hosts/''${FLAKE}/system/" -mindepth 1 -maxdepth 1 -name "hardware-configuration.nix" | grep -q ".") -ne 0 ]]; then
-            echo "Error: no placeholder hardware-configuration.nix file found"
-            exit
+          if [ ! -f "/dotfiles/flake.lock" ]; then
+            echo "Error: no placeholder flake.lock file found"
+            exit 1
           fi
-          # Should probably check the existance of a lock file also
-          
-          export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.txt
-          sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
+
+          if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/hardware-configuration.nix" ]; then
+            echo "Error: no placeholder hardware-configuration.nix file found"
+            exit 1
+          fi
+
+          if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml ]; then
+            echo "Error: no placeholder secrets.yaml file found"
+            exit 1
+          fi
+
+          export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.age
+
+          if grep -e '\s*-\s&''${FLAKE}\sage[0-9a-zA-Z]{59}$' "/dotfiles/.sops.yaml"; then
+            cp "/tmp/usb/data/secrets/''${FLAKE}.age" "/tmp/''${FLAKE}.age"
+            SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
+            sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
+          else
+            ssh-keygen -t ed25519 -f "/tmp/''${FLAKE}_ed25519_key"
+            ssh-to-age -- -private-key -i "/tmp/''${FLAKE}_ed25519_key" > "/tmp/''${FLAKE}.age"
+            age -c age-keygen -y "/tmp/''${FLAKE}_pub.age"
+            SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
+            if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
+              sed -i -e 's@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo ''${VAR})@g' /dotfiles/.sops.yaml
+              read -s -p "LUKS and Login Password: " PASS
+              HASH=$(mkpasswd $PASS)
+              touch /tmp/luks_password
+              echo -n $PASS > /tmp/luks_password
+              cat << 'EOF' > "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
+''${FLAKE}:
+    password: $HASH
+    luks: $PASS
+EOF
+              sops -e -i "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
+              unset HASH
+              unset PASS
+            else
+              sed -i -e 's@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo ''${VAR})@g' /dotfiles/.sops.yaml
+              sops updatekeys -y "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
+              sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
+            fi
+          fi
           
           for config in "''${configs[@]}"; do
-          	if [[ "$config" == "$FLAKE" ]]; then
+            if [[ "$config" == "$FLAKE" ]]; then
           
                 if grep -q "{}" "/dotfiles/hosts/''${config}/system/hardware-configuration.nix"; then
                   nixos-generate-config --no-filesystems --root /mnt --show-hardware-config > "/dotfiles/hosts/''${config}/system/hardware-configuration.nix"
                 fi
           
-          	  if [[ NO_INSTALL -eq 0 ]]; then
-          		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
-          		exit
-          	  elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
-          		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+              if [[ NO_INSTALL -eq 0 ]]; then
+                nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+                exit
+              elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
+                nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
                   nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/dotfiles#''${config}"
-          		exit
-          	  else
-          		nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+                exit
+              else
+                nix --experimental-features "nix-command flakes" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
                   nixos-install --root /mnt --no-root-password --flake "/dotfiles#''${config}"
                   exit
-          	  fi
+              fi
           
-          	else
-          	  echo "Error: unknown configuration provided"
-          	fi
+            else
+              echo "Error: unknown configuration provided"
+            fi
           done
         '';
       };

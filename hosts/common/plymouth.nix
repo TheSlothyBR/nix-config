@@ -13,12 +13,12 @@
     boot = {
       plymouth = {
         enable = true;
-        theme = "hud_3";
-        themePackages = with pkgs; [
-          (adi1090x-plymouth-themes.override {
-            selected_themes = [ "hud_3" ];
-          })
-        ];
+        #theme = "hud_3";
+        #themePackages = with pkgs; [
+        #  (adi1090x-plymouth-themes.override {
+        #    selected_themes = [ "hud_3" ];
+        #  })
+        #];
       };
       loader.systemd-boot.consoleMode = "max";
 
