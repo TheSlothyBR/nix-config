@@ -197,7 +197,7 @@
             age age-keygen -y "/tmp/''${FLAKE}_pub.age"
             SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
             if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
-              sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo ''${VAR})@g" /dotfiles/.sops.yaml
+              sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
               read -rs -p "LUKS and Login Password: " PASS
               HASH=$(mkpasswd "$PASS")
               touch /tmp/luks_password
