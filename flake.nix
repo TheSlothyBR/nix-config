@@ -193,8 +193,8 @@
             sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
           else
             ssh-keygen -t ed25519 -f "/tmp/''${FLAKE}_ed25519_key"
-            ssh-to-age -- -private-key -i "/tmp/''${FLAKE}_ed25519_key" > "/tmp/''${FLAKE}.age"
-            age -c age-keygen -y "/tmp/''${FLAKE}_pub.age"
+            ssh-to-age -private-key -i "/tmp/''${FLAKE}_ed25519_key" > "/tmp/''${FLAKE}.age"
+            age age-keygen -y "/tmp/''${FLAKE}_pub.age"
             SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
             if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
               sed -i -e 's@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo ''${VAR})@g' /dotfiles/.sops.yaml
