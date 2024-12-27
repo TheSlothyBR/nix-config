@@ -192,7 +192,7 @@
           else
             ssh-keygen -t ed25519 -f "/tmp/''${FLAKE}_ed25519_key" -N ""
             ssh-to-age -private-key -i "/tmp/''${FLAKE}_ed25519_key" > "/tmp/''${FLAKE}.age"
-            age-keygen -y "/tmp/''${FLAKE}.age" -o "/tmp/''${FLAKE}_pub.age"
+            age-keygen -y -o "/tmp/''${FLAKE}_pub.age" "/tmp/''${FLAKE}.age"
             SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
             if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
               sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
@@ -205,7 +205,6 @@
     luks: $PASS
 EOF
               sops -e -i "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
-              unset HASH
               unset PASS
             else
               sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
