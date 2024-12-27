@@ -199,12 +199,11 @@
             if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
               sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
               read -rs -p "LUKS and Login Password: " PASS
-              HASH=$(mkpasswd "$PASS")
               touch /tmp/luks_password
               printf '%s' "$PASS" > /tmp/luks_password
               cat << 'EOF' > "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
 ''${FLAKE}:
-    password: $HASH
+    password: $(mkpasswd "$PASS")
     luks: $PASS
 EOF
               sops -e -i "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
