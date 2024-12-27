@@ -187,7 +187,7 @@
 
           export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.age
 
-          if grep -e '\s*-\s&''${FLAKE}\sage[0-9a-zA-Z]{59}$' "/dotfiles/.sops.yaml"; then
+          if grep -e "\s*-\s&''${FLAKE}\sage[0-9a-zA-Z]{59}$" "/dotfiles/.sops.yaml"; then
             cp "/tmp/usb/data/secrets/''${FLAKE}.age" "/tmp/''${FLAKE}.age"
             SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
             sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
@@ -197,11 +197,11 @@
             age age-keygen -y "/tmp/''${FLAKE}_pub.age"
             SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
             if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
-              sed -i -e 's@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo ''${VAR})@g' /dotfiles/.sops.yaml
-              read -s -p "LUKS and Login Password: " PASS
-              HASH=$(mkpasswd $PASS)
+              sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo ''${VAR})@g" /dotfiles/.sops.yaml
+              read -rs -p "LUKS and Login Password: " PASS
+              HASH=$(mkpasswd "$PASS")
               touch /tmp/luks_password
-              printf '%s' $PASS > /tmp/luks_password
+              printf '%s' "$PASS" > /tmp/luks_password
               cat << 'EOF' > "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
 ''${FLAKE}:
     password: $HASH
@@ -211,7 +211,7 @@ EOF
               unset HASH
               unset PASS
             else
-              sed -i -e 's@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo ''${VAR})@g' /dotfiles/.sops.yaml
+              sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
               sops updatekeys -y "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
               sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
             fi
