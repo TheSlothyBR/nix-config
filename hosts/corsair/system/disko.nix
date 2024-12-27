@@ -87,7 +87,7 @@
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
               postMountHook = ''
-                mkdir -p /mnt${global.meta.persistFlakePath};
+                mkdir -p /mnt${globals.meta.persistFlakePath};
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
                 for filename in /tmp; do
                   if [[ $filename = *'${isConfig}'* ]] && [[ ! $filename = *'_ed25519_key'* ]]; then
@@ -100,7 +100,7 @@
                 done
                 chmod 0600 "/mnt/persist/system/var/lib/sops-nix/${isConfig}.age"
                 trap 'rm -rf /tmp/luks_password;' EXIT;
-                cp -r /dotfiles/* /mnt${global.meta.persistFlakePath};
+                cp -r /dotfiles/* /mnt${globals.meta.persistFlakePath};
               '';
               subvolumes = {
                 "/persist" = {

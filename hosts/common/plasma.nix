@@ -966,7 +966,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file://${global.meta.flakePath}">
+ <bookmark href="file://${globals.meta.flakePath}">
   <title>dotfiles</title>
   <info>
    <metadata owner="http://freedesktop.org">

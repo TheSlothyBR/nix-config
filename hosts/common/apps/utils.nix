@@ -22,7 +22,7 @@
     programs = {
       nh = {
         enable = true;
-        flake = "${global.meta.flakePath}";
+        flake = "${globals.meta.flakePath}";
         #clean.extraArgs = "--keep-since 2d";
       };
     };
