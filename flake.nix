@@ -195,7 +195,7 @@
             age-keygen -y -o "/tmp/''${FLAKE}_pub.age" "/tmp/''${FLAKE}.age"
             SOPS_AGE_KEY_FILE=/tmp/''${FLAKE}.age
             if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
-              sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
+              sed -i -e "s@[[:space:]]*-[[:space:]]\&''${FLAKE}[[:space:]]*@    - \&''${FLAKE} $(cat "/tmp/''${FLAKE}_pub.age")@g" /dotfiles/.sops.yaml
               read -rs -p "LUKS and Login Password: " PASS
               touch /tmp/luks_password
               printf '%s' "$PASS" > /tmp/luks_password
@@ -207,7 +207,7 @@ EOF
               sops -e -i "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
               unset PASS
             else
-              sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
+              sed -i -e "s@[[:space:]]*-[[:space:]]\&''${FLAKE}[[:space:]]*@    - \&''${FLAKE} $(cat "/tmp/''${FLAKE}_pub.age")@g" /dotfiles/.sops.yaml
               sops updatekeys -y "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
               sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
             fi
