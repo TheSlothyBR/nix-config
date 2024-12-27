@@ -119,9 +119,7 @@
           
           touch /tmp/luks_password
 
-          NIX_EXPERIMENTAL=--experimental-features 'nix-command flakes'
-
-          nix "$NIX_EXPERIMENTAL" shell nixpkgs#git -c "git clone https://github.com/${globals.meta.owner}/${globals.meta.repo}.git /dotfiles && cd /dotfiles"
+          nix --experimental-features 'nix-command flakes' shell nixpkgs#git -c "git clone https://github.com/${globals.meta.owner}/${globals.meta.repo}.git /dotfiles && cd /dotfiles"
           
           #lib.custom.getSetValuesList globals [ "hostName" ] [ "meta" ]
           configs=(
@@ -224,14 +222,14 @@ EOF
                 fi
           
               if [[ NO_INSTALL -eq 0 ]]; then
-                nix "$NIX_EXPERIMENTAL" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+                nix --experimental-features 'nix-command flakes' run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
                 exit
               elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
-                nix "$NIX_EXPERIMENTAL" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+                nix --experimental-features 'nix-command flakes' run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
                 nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/dotfiles#''${config}"
                 exit
               else
-                nix "$NIX_EXPERIMENTAL" run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
+                nix --experimental-features 'nix-command flakes' run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
                 nixos-install --root /mnt --no-root-password --flake "/dotfiles#''${config}"
                 exit
               fi
