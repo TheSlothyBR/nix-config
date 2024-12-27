@@ -199,16 +199,16 @@
               read -rs -p "LUKS and Login Password: " PASS
               touch /tmp/luks_password
               printf '%s' "$PASS" > /tmp/luks_password
-              cat << 'EOF' > "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
+              cat << 'EOF' > "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
 ''${FLAKE}:
     password: $(mkpasswd "$PASS")
     luks: $PASS
 EOF
-              sops -e -i "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
+              sops -e -i "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
               unset PASS
             else
               sed -i -e "s@\s*-\s&''${FLAKE}\s?@\s*-\s&''${FLAKE}\s$(VAR=$(cat "/tmp/''${FLAKE}_pub.age"); echo "''${VAR}")@g" /dotfiles/.sops.yaml
-              sops updatekeys -y "/dotfiles/host/''${FLAKE}/system/secrets/secrets.yaml"
+              sops updatekeys -y "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
               sops -d --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
             fi
           fi
