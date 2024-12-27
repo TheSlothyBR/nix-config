@@ -81,7 +81,7 @@
               postCreateHook = ''
                 TMP=$(mktemp -d);
                 mount -t btrfs -o subvol=root "/dev/${globals.meta.lvmPool}/${globals.meta.lvmLogicalSystem}" "$TMP";
-                mkdir -p $TMP/{persist,nix,root,.snapshots,.swapvol,.vm};
+                mkdir -p "$TMP"/{persist,nix,root,.snapshots,.swapvol,.vm};
                 mount -t btrfs -o subvol=snapshots "/dev/${globals.meta.lvmPool}/${globals.meta.lvmLogicalSystem}" "$TMP/.snapshots";
                 trap 'umount -A $TMP; rm -rf $TMP' EXIT;
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
@@ -89,7 +89,7 @@
               postMountHook = ''
                 mkdir -p /mnt${globals.meta.persistFlakePath};
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
-                for filename in /tmp; do
+                for filename in /tmp/*; do
                   if [[ $filename = *'${isConfig}'* ]] && [[ ! $filename = *'_ed25519_key'* ]]; then
                     cp "/tmp/$filename" /mnt/persist/system/var/lib/sops-nix/
                   elif [[ $filename = *'${isConfig}'* ]] && [[ $filename = *'_ed25519_key'* ]]; then
