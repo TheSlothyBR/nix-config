@@ -119,9 +119,7 @@
           
           touch /tmp/luks_password
 
-          NIX_EXPERIMENTAL='--experimental-features "nix-command flakes"'
-
-          nix "$NIX_EXPERIMENTAL" shell nixpkgs#git -c git clone https://github.com/${globals.meta.owner}/${globals.meta.repo}.git /dotfiles && cd /dotfiles
+          nix --experimental-features 'nix-command flakes' shell nixpkgs#git -c git clone https://github.com/${globals.meta.owner}/${globals.meta.repo}.git /dotfiles && cd /dotfiles
           
           #lib.custom.getSetValuesList globals [ "hostName" ] [ "meta" ]
           configs=(
