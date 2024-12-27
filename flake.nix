@@ -105,8 +105,8 @@
                 modprobe -r zram; \
                 echo 1 > /sys/module/zswap/parameters/enabled; \
                 umount -A /tmp/usb; \
-                unset SOPS_AGE_KEY_FILE' \
-                rm -rf /{dotfiles,tmp/usb,tmp/*{.age,_key,_key.pub}}; \
+                unset SOPS_AGE_KEY_FILE; \
+                rm -rf /{dotfiles,tmp/usb,tmp/*{.age,_key,_key.pub}}' \
           EXIT;
           mkdir -p /tmp/usb
           mount ${globals.meta.usb} /tmp/usb
