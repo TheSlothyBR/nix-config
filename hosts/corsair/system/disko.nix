@@ -1,5 +1,6 @@
 { inputs
 , globals
+, isConfig
 , pkgs
 , ...
 }:{
@@ -86,12 +87,20 @@
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
               postMountHook = ''
-                mkdir -p /mnt/persist/system/etc/nixos;
+                mkdir -p /mnt${global.meta.persistFlakePath};
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
-                cp /tmp/usb/data/secrets/keys.txt /mnt/persist/system/var/lib/sops-nix/
-                chmod 0600 /mnt/persist/system/var/lib/sops-nix/keys.txt
+                for filename in /tmp; do
+                  if [[ $filename = *'${isConfig}'* ]] && [[ ! $filename = *'_ed25519_key'* ]]; then
+                    cp "/tmp/$filename" /mnt/persist/system/var/lib/sops-nix/
+                  elif [[ $filename = *'${isConfig}'* ]] && [[ $filename = *'_ed25519_key'* ]]; then
+                    cp "/tmp/$filename" /mnt/persist/system/etc/ssh/
+                  else
+                    return
+                  fi
+                done
+                chmod 0600 "/mnt/persist/system/var/lib/sops-nix/${isConfig}.age"
                 trap 'rm -rf /tmp/luks_password;' EXIT;
-                cp -r /dotfiles/* /mnt/persist/system${global.meta.flakePath};
+                cp -r /dotfiles/* /mnt${global.meta.persistFlakePath};
               '';
               subvolumes = {
                 "/persist" = {

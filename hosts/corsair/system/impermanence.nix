@@ -63,6 +63,7 @@
     hideMounts = true;
     users.${isUser} = {
       directories = [
+        #.dotfiles
         "Desktop"
         "Documents"
         "Downloads"

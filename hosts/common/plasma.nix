@@ -1,6 +1,7 @@
 { pkgs
 , inputs
 , config
+, globals
 , isUser
 , lib
 , ...
@@ -965,7 +966,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///etc/nixos/dotfiles">
+ <bookmark href="file://${global.meta.flakePath}">
   <title>dotfiles</title>
   <info>
    <metadata owner="http://freedesktop.org">
