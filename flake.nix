@@ -180,7 +180,7 @@
             exit 1
           fi
 
-          if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml ]; then
+          if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
             echo "Error: no placeholder secrets.yaml file found"
             exit 1
           fi
