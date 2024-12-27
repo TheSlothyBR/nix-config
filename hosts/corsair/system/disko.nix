@@ -90,12 +90,12 @@
                 mkdir -p /mnt${globals.meta.persistFlakePath};
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
                 for filename in /tmp/*; do
-                  if [[ $filename = *'${isConfig}'* ]] && [[ ! $filename = *'_ed25519_key'* ]]; then
+                  if printf '%s' "$filename" | grep -q -e '${isConfig}.*\.age'; then
                     cp "/tmp/$filename" /mnt/persist/system/var/lib/sops-nix/
-                  elif [[ $filename = *'${isConfig}'* ]] && [[ $filename = *'_ed25519_key'* ]]; then
+                  elif printf '%s' "$filename" | grep -q -e '${isConfig}_ed25519_key.*'; then
                     cp "/tmp/$filename" /mnt/persist/system/etc/ssh/
                   else
-                    return
+                    :
                   fi
                 done
                 chmod 0600 "/mnt/persist/system/var/lib/sops-nix/${isConfig}.age"
