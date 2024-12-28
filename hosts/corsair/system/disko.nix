@@ -89,11 +89,12 @@
               postMountHook = ''
                 mkdir -p /mnt${globals.meta.persistFlakePath};
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
+                mkdir -p /mnt/persist/system/etc/ssh
                 for filename in /tmp/*; do
                   if printf '%s' "$filename" | grep -q -e '${isConfig}.*\.age'; then
-                    cp "/tmp/$filename" /mnt/persist/system/var/lib/sops-nix/
+                    cp "$filename" /mnt/persist/system/var/lib/sops-nix
                   elif printf '%s' "$filename" | grep -q -e '${isConfig}_ed25519_key.*'; then
-                    cp "/tmp/$filename" /mnt/persist/system/etc/ssh/
+                    cp "$filename" /mnt/persist/system/etc/ssh
                   else
                     :
                   fi
