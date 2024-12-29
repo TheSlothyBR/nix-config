@@ -91,12 +91,13 @@
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
                 mkdir -p /mnt/persist/system/etc/ssh
                 for filename in /tmp/*; do
-                  if printf '%s' "$filename" | grep -q ${isConfig}.age; then
+                  if printf '%s' "$filename" | grep -q ${isConfig}*.age; then
                     cp "$filename" /mnt/persist/system/var/lib/sops-nix
                   elif printf '%s' "$filename" | grep -q ${isConfig}_ed25519_key; then
                     cp "$filename" /mnt/persist/system/etc/ssh
                   fi
                 done
+                exit 0
                 chmod 0600 "/mnt/persist/system/var/lib/sops-nix/${isConfig}.age"
                 trap 'rm -rf /tmp/luks_password;' EXIT;
                 cp -r /dotfiles/* /mnt${globals.meta.persistFlakePath};
