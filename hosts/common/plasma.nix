@@ -2,6 +2,7 @@
 , inputs
 , config
 , globals
+, isConfig
 , isUser
 , lib
 , ...
