@@ -930,7 +930,7 @@ EOF
    <GroupState-SearchFor-IsHidden>false</GroupState-SearchFor-IsHidden>
   </metadata>
  </info>
- <bookmark href="file:///home/ultra">
+ <bookmark href="file:///home/${isUser}">
   <title>Home</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -942,7 +942,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Desktop">
+ <bookmark href="file:///home/${isUser}/Desktop">
   <title>Desktop</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -954,7 +954,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Documents">
+ <bookmark href="file:///home/${isUser}/Documents">
   <title>Documents</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -966,7 +966,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file://${globals.meta.flakePath}">
+ <bookmark href="file://${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath}">
   <title>dotfiles</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -977,7 +977,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Downloads">
+ <bookmark href="file:///home/${isUser}/Downloads">
   <title>Downloads</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -989,7 +989,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Drive">
+ <bookmark href="file:///home/${isUser}/Drive">
   <title>Drive</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -1000,7 +1000,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Games">
+ <bookmark href="file:///home/${isUser}/Games">
   <title>Games</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -1011,7 +1011,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Music">
+ <bookmark href="file:///home/${isUser}/Music">
   <title>Music</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -1023,7 +1023,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Pictures">
+ <bookmark href="file:///home/${isUser}/Pictures">
   <title>Pictures</title>
   <info>
    <metadata owner="http://freedesktop.org">
@@ -1035,7 +1035,7 @@ EOF
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/ultra/Videos">
+ <bookmark href="file:///home/${isUser}/Videos">
   <title>Videos</title>
   <info>
    <metadata owner="http://freedesktop.org">
