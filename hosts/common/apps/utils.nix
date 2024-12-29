@@ -1,7 +1,8 @@
 { config
+, isConfig
+, globals
 , pkgs
 , lib
-, globals
 , ...
 }:{
   options = {
@@ -22,7 +23,7 @@
     programs = {
       nh = {
         enable = true;
-        flake = "${globals.meta.flakePath}";
+        flake = "${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath}";
         #clean.extraArgs = "--keep-since 2d";
       };
     };

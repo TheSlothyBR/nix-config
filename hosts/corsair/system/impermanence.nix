@@ -1,4 +1,5 @@
 { inputs
+, globals
 , isConfig
 , isUser
 , ...
@@ -26,7 +27,7 @@
         script = ''
           MNTPOINT=$(mktemp -d)
           (
-            mount -t btrfs -o subvol=/ /dev/pool/system "$MNTPOINT"
+            mount -t btrfs -o subvol=/ /dev/${globals.meta.lvmPool}/${globals.meta.lvmLogicalSystem} "$MNTPOINT"
             trap 'umount "$MNTPOINT"' EXIT
 
             btrfs subvolume list -o "$MNTPOINT/root" | cut -f9 -d ' ' |
@@ -45,7 +46,7 @@
   environment.persistence."/persist/system" = {
     hideMounts = true;
     directories = [
-      "/etc/nixos"
+      #"/etc/nixos"
       "/etc/secureboot"
       "/etc/NetworkManager/system-connections"
       "/etc/ssh"
@@ -63,7 +64,7 @@
     hideMounts = true;
     users.${isUser} = {
       directories = [
-        #.dotfiles
+        ".dotfiles"
         "Desktop"
         "Documents"
         "Downloads"
@@ -90,9 +91,6 @@
       inputs.impermanence.nixosModules.home-manager.impermanence
     ];
     home.persistence."/persist/home/${isUser}" = {
-      #directories = [
-      #  { directory = ".local/share/Steam"; method = "symlink"; }
-      #];
       allowOther = true;
     };
   };

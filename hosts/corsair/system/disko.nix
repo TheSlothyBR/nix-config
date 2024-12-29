@@ -87,14 +87,14 @@
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
               postMountHook = ''
-                mkdir -p /mnt${globals.meta.persistFlakePath};
+                mkdir -p /mnt${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath};
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
                 mkdir -p /mnt/persist/system/etc/ssh
                 cp /tmp/${isConfig}{.age,_pub.age} /mnt/persist/system/var/lib/sops-nix ||:
                 cp /tmp/${isConfig}{_ed25519_key,_ed25519_key.pub} /mnt/persist/system/etc/ssh ||:
                 chmod 0600 "/mnt/persist/system/var/lib/sops-nix/${isConfig}.age"
                 trap 'rm -rf /tmp/luks_password;' EXIT;
-                cp -rT /dotfiles /mnt${globals.meta.persistFlakePath};
+                cp -rT /dotfiles /mnt${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath};
               '';
               subvolumes = {
                 "/persist" = {

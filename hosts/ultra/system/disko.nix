@@ -1,5 +1,6 @@
 { inputs
 , globals
+, isConfig
 , pkgs
 , ...
 }:{
@@ -56,19 +57,21 @@
               extraArgs = [ "-f" ];
               postCreateHook = ''
                 TMP=$(mktemp -d);
-                mount -t btrfs -o subvol=root "/dev/pool/system" "$TMP";
-                mkdir -p $TMP/{persist,nix,root,.snapshots,.swapvol};
-                mount -t btrfs -o subvol=snapshots "/dev/pool/system" "$TMP/.snapshots";
+                mount -t btrfs -o subvol=root "/dev/${globals.meta.lvmPool}/${globals.meta.lvmLogicalSystem}" "$TMP";
+                mkdir -p "$TMP"/{persist,nix,root,.snapshots,.swapvol};
+                mount -t btrfs -o subvol=snapshots "/dev/${globals.meta.lvmPool}/${globals.meta.lvmLogicalSystem}" "$TMP/.snapshots";
                 trap 'umount -A $TMP; rm -rf $TMP' EXIT;
                 btrfs subvolume snapshot -r "$TMP" "$TMP/.snapshots/blank-root";
               '';
               postMountHook = ''
-                mkdir -p /mnt/persist/system/etc/nixos;
+                mkdir -p /mnt${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath};
                 mkdir -p /mnt/persist/system/var/lib/sops-nix
-                cp /tmp/usb/data/secrets/keys.txt /mnt/persist/system/var/lib/sops-nix/
-                chmod 0600 /mnt/persist/system/var/lib/sops-nix/keys.txt
+                mkdir -p /mnt/persist/system/etc/ssh
+                cp /tmp/${isConfig}{.age,_pub.age} /mnt/persist/system/var/lib/sops-nix ||:
+                cp /tmp/${isConfig}{_ed25519_key,_ed25519_key.pub} /mnt/persist/system/etc/ssh ||:
+                chmod 0600 "/mnt/persist/system/var/lib/sops-nix/${isConfig}.age"
                 trap 'rm -rf /tmp/luks_password;' EXIT;
-                cp -r /dotfiles /mnt/persist/system/etc/nixos;
+                cp -rT /dotfiles /mnt${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath};
               '';
               subvolumes = {
                 "/persist" = {

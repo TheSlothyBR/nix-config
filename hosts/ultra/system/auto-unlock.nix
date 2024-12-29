@@ -5,7 +5,7 @@
 }:{
   security.pam.services = {
     sddm-autologin.text = ''
-          auth     requisite pam_nologin.so
+      auth     requisite pam_nologin.so
 	  auth     required  pam_succeed_if.so uid >= ${toString config.services.displayManager.sddm.autoLogin.minimumUid} quiet
 	  auth     required  pam_permit.so
 	  auth     optional  pam_systemd_loadkey.so

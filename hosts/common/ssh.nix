@@ -5,9 +5,7 @@
 , isUser
 , isConfig
 , ...
-}:let
-  hosts = builtins.filter (x: ! (x == "customIso")) (lib.attrNames outputs.nixosConfigurations);
-in {
+}:{
   options = {
     custom.ssh = {
       enable = lib.mkEnableOption "ssh config";
@@ -25,19 +23,10 @@ in {
         AcceptEnv = "WAYLAND_DISPLAY";
         X11Forwarding = true;
       };
-      #hostKeys = [
-      #  {
-      #    path = "/persist/system/etc/ssh/${isConfig}_ed25519_key";
-      #    type = "ed25519";
-      #  }
-      #];
     };
     
     programs.ssh = {
       startAgent = true;
-      #knownHosts = lib.genAttrs hosts (hostname: {
-      #  publicKeyFile = ./secrets/${hostname}_ed25519_key.pub;
-      #});
     };
 
     home-manager.users.${isUser} = {
