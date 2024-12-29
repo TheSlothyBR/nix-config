@@ -36,7 +36,7 @@ SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent
     };
     security.pam.sshAgentAuth = {
       enable = true;
-      authorizedKeysFiles = ["/etc/ssh/authorized_keys.d/%u"];
+      authorizedKeysFiles = [ "/etc/ssh/authorized_keys.d/%u" ];
     };
 
     systemd.services."link-ssh_known_hosts" = {
@@ -47,6 +47,13 @@ SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent
       script = ''
         ln -sf /home/${isUser}/.ssh/known_hosts /etc/ssh/ssh_known_hosts
       '';
+    };
+
+    environment.persistence."/persist/system" = {
+      hideMounts = true;
+      directories = [
+        "/etc/ssh"
+      ];
     };
 
     environment.persistence."/persist" = {

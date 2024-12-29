@@ -46,10 +46,8 @@
   environment.persistence."/persist/system" = {
     hideMounts = true;
     directories = [
-      #"/etc/nixos"
       "/etc/secureboot"
       "/etc/NetworkManager/system-connections"
-      "/etc/ssh"
       "/var/log"
       "/var/lib/bluetooth"
       "/var/lib/nixos"
