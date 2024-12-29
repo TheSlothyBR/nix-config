@@ -45,7 +45,6 @@
   environment.persistence."/persist/system" = {
     hideMounts = true;
     directories = [
-      "/etc/nixos"
       "/etc/secureboot"
       "/etc/NetworkManager/system-connections"
       "/var/log"
@@ -62,7 +61,7 @@
     hideMounts = true;
     users.${isUser} = {
       directories = [
-        ".dotfiles"
+        "${globals.mate.flakePath}"
         "Desktop"
         "Documents"
         "Downloads"

@@ -203,12 +203,14 @@ $FLAKE:
     password: $(mkpasswd "$PASS")
     luks: $PASS
 EOF
-            sops -d --age "$(cat /tmp/"''${FLAKE}".age)" --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
+              sops -d --age "$(cat /tmp/"''${FLAKE}".age)" --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
+              sops updatekeys -y "/dotfiles/hosts/common/secrets/secrets.yaml"
               unset PASS
             else
               sed -i -e "s@[[:space:]]*-[[:space:]]\&''${FLAKE}[[:space:]]*@    - \&''${FLAKE} $(cat "/tmp/''${FLAKE}_pub.age")@g" /dotfiles/.sops.yaml
               sops updatekeys -y "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
-            sops -d --age "$(cat /tmp/"''${FLAKE}".age)" --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
+              sops updatekeys -y "/dotfiles/hosts/common/secrets/secrets.yaml"
+              sops -d --age "$(cat /tmp/"''${FLAKE}".age)" --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
             fi
           fi
           
