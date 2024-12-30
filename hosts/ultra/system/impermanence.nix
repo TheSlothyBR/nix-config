@@ -61,7 +61,7 @@
     hideMounts = true;
     users.${isUser} = {
       directories = [
-        "${globals.mate.flakePath}"
+        "${globals.meta.flakePath}"
         "Desktop"
         "Documents"
         "Downloads"
