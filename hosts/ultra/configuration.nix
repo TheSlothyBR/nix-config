@@ -28,6 +28,7 @@
       autostart = true;
     };
     kernel.enable = true;
+    lutris.enable = true;
     neovim.enable = true;
     nix-config = {
       enable = true;
