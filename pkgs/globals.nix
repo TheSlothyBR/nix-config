@@ -13,7 +13,7 @@ rec {
     userName = "ultra";
     drives = [ "/dev/sda" ];
     system = builtins.elemAt meta.architectures 0;
-	  persistFlakePath = "/persist/home/${corsair.userName}";
+	  persistFlakePath = "/persist/home/${ultra.userName}";
   };
   corsair = {
     hostName = "corsair";
