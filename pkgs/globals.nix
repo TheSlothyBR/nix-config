@@ -18,7 +18,7 @@ rec {
   corsair = {
     hostName = "corsair";
     userName = "corsair";
-    drives = [ "/dev/sda" "/dev/sdb" ];
+    drives = [ "/dev/nvme0n1p1" "/dev/sda" ];
     system = builtins.elemAt meta.architectures 0;
 	  persistFlakePath = "/persist/home/${corsair.userName}";
   };

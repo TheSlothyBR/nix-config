@@ -88,6 +88,7 @@ if [ -f "$WALLPAPER" ]; then
           d.writeConfig('Image', 'file://$WALLPAPER')
           d.reloadConfig()
       })"
+    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$WALLPAPER"
     touch /home/${isUser}/.config/kde-material-you-colors/.ran
   else
     exit
