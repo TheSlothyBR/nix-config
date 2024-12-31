@@ -13,7 +13,6 @@
   config = lib.mkIf config.custom.rclone.enable {
     environment.systemPackages = with pkgs; [
       rclone
-      #rclone-browser
       (pkgs.writeShellApplication {
         name = "drive-gui";
         runtimeInputs = [ pkgs.rclone ];

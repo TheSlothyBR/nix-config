@@ -11,14 +11,49 @@
   };
 
   config = lib.mkIf config.custom.git.enable {
-    sops.secrets."git/name" = {};
-    sops.secrets."git/email" = {};
-    home-manager.users.${isUser} = {
-      programs.git = {
-        enable = true;
-        userName = config.sops.secrets."git/name".path;
-        userEmail = config.sops.secrets."git/email".path;
+    environment.systemPackages = with pkgs; [
+	  git
+	];
+
+	sops.secrets."git/name" = {
+	  owner = "${isUser}";
+	};
+    sops.secrets."git/email" = {
+	  owner = "${isUser}";
+	};
+    #home-manager.users.${isUser} = {
+    #  programs.git = {
+    #    enable = true;
+    #    userName = config.sops.secrets."git/name".path;
+    #    userEmail = config.sops.secrets."git/email".path;
+    #  };
+    #};
+
+    systemd.services."generate-rclone-config" = {
+      description = "Generate Rclone Config";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
       };
+      script = ''
+        mkdir -p ~/.config/git
+        cat << 'EOF' > ~/.config/git/config
+[user]
+	name = name-placeholder
+	email = email-placeholder
+	username = name-placeholder
+[init]
+	defaultBranch = master
+[core]
+	editor = nvim
+	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	pager = delta
+EOF
+        sed -i "s@name-placeholder@$(cat ${config.sops.secrets."git/name".path})@g" ~/.config/git/config
+        sed -i "s@email-placeholder@$(cat ${config.sops.secrets."git/email".path})@g" ~/.config/git/config
+      '';
     };
 
     systemd.services."link-gitconfig" = {
