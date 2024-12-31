@@ -23,16 +23,26 @@
             Context = {
               sockets = [
                 "wayland"
-                "x11"
               ];
               filesystems = [
+                "!home"
                 "~/Games"
-				"~/.var/app/com.valvesoftware.Steam:ro"
+                "~/.steam"
               ];
             };
           };
         };
       };
+    };
+
+    systemd.services."lutris-steam-link" = {
+      description = "Creates symlink for Lutris to use Steam flatpak";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "sops-nix.service" ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        ln -sf /home/${isUser}/.var/apps/com.valvesoftware.Steam/.steam /home/${isUser}/.steam
+      '';
     };
 
     environment.persistence."/persist" = {
