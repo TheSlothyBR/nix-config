@@ -30,22 +30,37 @@
       	softtabstop = 2;
       	shiftwidth = 2;
       	wrap = true;
+        swapfile = false;
+        undofile = true;
+        undolevels = 10000;
       };
+      clipboard = {
+        providers.wl-copy = {
+          enable = true;
+          package = pkgs.wl-clipboard-rs;
+        };
+        register = "unnamedplus";
+      };     
+      #extraConfigLua = '''';
       colorschemes.nord.enable = true;
       globals = {
         mapleader = " ";
-        clipboard = {
-	        providers.wl-copy.enable = true;
-          register = "unnamedplus";
-        };
+        maplocalleader = " ";
       };
+      #extraPlugins = '''';
       plugins = {
         lualine.enable = true;
+        mini = {
+          enable = true;
+          modules = {
+            files = { };
+          };
+        };
         lsp = {
           servers = {
-           nixd = {
-             enable = true;
-           };
+            nixd = {
+              enable = true;
+            };
           };
         };
       };
@@ -60,8 +75,8 @@
         MANPAGER = "nvim +Man!";
       };
       systemPackages = with pkgs; [
-        nixfmt-rfc-style
-        nixd
+        #nixfmt-rfc-style
+        #nixd
       ];
     };
   };
