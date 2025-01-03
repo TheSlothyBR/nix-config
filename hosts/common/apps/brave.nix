@@ -8,6 +8,7 @@
   options = {
     custom.brave = {
       enable = lib.mkEnableOption "Brave Browser config";
+      autostart = lib.mkEnableOption "Autostart Brave";
     };
   };
 
@@ -40,6 +41,20 @@
       };
     };
 
+    systemd.services."generate-brave-autostart" = lib.mkIf config.custom.brave.autostart {
+      description = "Generate Lutris Autostart";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        #mkdir -p ~/.config/autostart
+        #cat << 'EOF' > ~/.config/autostart/.desktop
+	  ''
+    };
+
     systemd.services."brave-chromium-cli-arguments" = {
       description = "Brave Chromium CLI Arguments";
       wantedBy = [ "multi-user.target" ];
@@ -49,8 +64,8 @@
         Group = "users";
       };
       script = ''
-        cat << 'EOF' > ~/.var/app/com.brave.Browser/config/chromium-flags.conf
---password-store=basic
+#        cat << 'EOF' > ~/.var/app/com.brave.Browser/config/chromium-flags.conf
+#--password-store=basic
 EOF
       '';
     };

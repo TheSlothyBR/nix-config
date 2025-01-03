@@ -6,6 +6,7 @@
   options = {
     custom.lutris = {
       enable = lib.mkEnableOption "Lutris config";
+      autostart = lib.mkEnableOption "Autostart Lutris";
     };
   };
 
@@ -43,6 +44,20 @@
       script = ''
         ln -sf /home/${isUser}/.var/apps/com.valvesoftware.Steam/.steam /home/${isUser}/.steam
       '';
+    };
+
+    systemd.services."generate-lutris-autostart" = lib.mkIf config.custom.lutris.autostart {
+      description = "Generate Lutris Autostart";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        #mkdir -p ~/.config/autostart
+        #cat << 'EOF' > ~/.config/autostart/.desktop
+	  ''
     };
 
     environment.persistence."/persist" = {

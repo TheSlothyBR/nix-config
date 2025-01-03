@@ -6,6 +6,7 @@
   options = {
     custom.stremio = {
       enable = lib.mkEnableOption "Stremio config";
+	  autostart = lib.mkEnableOption "Autostart Stremio";
     };
   };
 
@@ -20,6 +21,21 @@
         ];
       };
     };
+
+    systemd.services."generate-stremio-autostart" = lib.mkIf config.custom.stremio.autostart {
+      description = "Generate Stremio Autostart";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        #mkdir -p ~/.config/autostart
+        #cat << 'EOF' > ~/.config/autostart/.desktop
+	  ''
+    };
+
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [

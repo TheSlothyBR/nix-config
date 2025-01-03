@@ -6,6 +6,7 @@
   options = {
     custom.obsidian = {
       enable = lib.mkEnableOption "Obsidian.md config";
+      autostart = lib.mkEnableOption "Autostart Obsidian";
     };
   };
 
@@ -15,10 +16,24 @@
         packages = [
           {
             appId = "md.obsidian.Obsidian";
-	    origin = "flathub";
-	  }
-	];
+	        origin = "flathub";
+	      }
+	    ];
       };
+    };
+
+    systemd.services."generate-obsidian-autostart" = lib.mkIf config.custom.obsidian.autostart {
+      description = "Generate Obsidian Autostart";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        #mkdir -p ~/.config/autostart
+        #cat << 'EOF' > ~/.config/autostart/.desktop
+	  ''
     };
 
     environment.persistence."/persist" = {
