@@ -26,10 +26,24 @@
       script = ''
         mkdir -p ~/.config/wezterm
         cat << 'EOF' > ~/.config/wezterm/wezterm.lua
-local wezterm = require 'wezterm'
-local config = {}
+local wezterm = require("wezterm")
+local config = wezterm.config_builder()
+-- local colors = dofile(os.getenv("HOME") .. "/<path>/<to>/<name>.lua")
 
-config.front_end = "WebGpu"
+config = {
+  front_end = "WebGpu",
+  enable_kitty_graphics = true,
+  max_fps = 60,
+  -- window_close_confirmation = "NeverPrompt",
+  -- font = wezterm.font("<nameHere>"),
+  window_padding = {
+    left = 2,
+    right = 2,
+    top = 15,
+    bottom = 0,
+  },
+  -- colors = {},
+}
 
 return config
 EOF
