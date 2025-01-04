@@ -39,6 +39,7 @@
     plasma.enable = true;
     plymouth.enable = true;
     rclone.enable = true;
+	retrodeck.enable = false;
     sddm.enable = true;
     sops.enable = true;
     sound = {

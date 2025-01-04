@@ -29,6 +29,7 @@
                 "!home"
                 "~/Games"
                 "~/.steam"
+				".var/app/org.libretro.RetroArch:ro"
               ];
             };
           };
