@@ -55,6 +55,10 @@
     wezterm.enable = true;
     wifi-adapter.enable = true;
     zellij.enable = true;
+	zotero = {
+	  enable = false;
+	  autostart = false;
+	};
     zswap.enable = true;
   };
 }
