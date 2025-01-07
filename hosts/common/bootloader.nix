@@ -14,7 +14,10 @@
       efi = {
         canTouchEfiVariables = true;
       };
-      systemd-boot.enable = config.custom.bootloader.systemd-boot.enable;
+      systemd-boot = {
+	    enable = config.custom.bootloader.systemd-boot.enable;
+	    editor = false;
+	  };
     };
   };
 }
