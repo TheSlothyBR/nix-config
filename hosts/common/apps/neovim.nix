@@ -1,4 +1,6 @@
 { inputs
+, outputs
+, isConfig
 , pkgs
 , config
 , lib
@@ -56,11 +58,34 @@
             files = { };
           };
         };
+		#treesitter = {
+		#  enable = true;
+		#  settings = {
+		#    indent.enable = true;
+		#	 highlight.enable = true;
+		#  };
+		#  folding = true;
+		#  nixvimInjections = true;
+		#  grammarPackages = pkgs.vimPlugins.nvim-treesitter.allGrammars;
+		#};
         lsp = {
           servers = {
+		    bashls.enable = true;
             nixd = {
               enable = true;
-            };
+              settings = 
+			  let
+			    flake = ''(builtins.getFlake "${outputs}")'';
+			  in {
+			    nixpkgs.expr = "import config {}";
+			    formatting.command = [ "${lib.getExe pkgs.nixfmt-rfc-style}" ];
+                options = rec {
+                  nixos.expr = "${flake}.nixosConfigurations.${isConfig}.options";
+                  home-manager.expr = "${nixos.expr}.home-manager.users.type.getSubOptions [ ]";
+				  nixvim.expr = "${flake}.packages.${builtins.currentSystem}.nvim.options";;
+                };
+			  };
+			};
           };
         };
       };
