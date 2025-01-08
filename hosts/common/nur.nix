@@ -25,7 +25,7 @@
     ];
 
     environment.systemPackages = with pkgs.nur.repos; [
-      shadowrz.klassy-qt6
+      #shadowrz.klassy-qt6
     ];
   };
 }

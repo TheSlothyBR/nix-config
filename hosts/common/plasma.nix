@@ -90,9 +90,9 @@ if [ -f "$WALLPAPER" ]; then
       })
       const screenLock = ConfigFile('kscreenlockerrc')
       screenLock.currentConfigGroup = [
-        'Greeter'
-        'Wallpaper'
-        'org.kde.image'
+        'Greeter',
+        'Wallpaper',
+        'org.kde.image',
         'General'
       ]
       screenLock.writeConfig('Image', 'file://$WALLPAPER')

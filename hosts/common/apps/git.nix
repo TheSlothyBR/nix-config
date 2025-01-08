@@ -29,8 +29,8 @@
     #  };
     #};
 
-    systemd.services."generate-rclone-config" = {
-      description = "Generate Rclone Config";
+    systemd.services."generate-git-config" = {
+      description = "Generate Git Config";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
