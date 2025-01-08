@@ -88,15 +88,15 @@ if [ -f "$WALLPAPER" ]; then
           d.writeConfig('Image', 'file://$WALLPAPER')
           d.reloadConfig()
       })
-	  const screenLock = ConfigFile('kscreenlockerrc')
-	  screenLock.currentConfigGroup = [
-	    'Greeter'
-		'Wallpaper'
-		'org.kde.image'
-		'General'
-	  ]
-	  screenLock.writeConfig('Image', 'file://$WALLPAPER')
-	"
+      const screenLock = ConfigFile('kscreenlockerrc')
+      screenLock.currentConfigGroup = [
+        'Greeter'
+        'Wallpaper'
+        'org.kde.image'
+        'General'
+      ]
+      screenLock.writeConfig('Image', 'file://$WALLPAPER')
+    "
     # kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$WALLPAPER"
     # qdbus org.freedesktop.ScreenSaver /ScreenSaver configure
     touch /home/${isUser}/.config/kde-material-you-colors/.ran

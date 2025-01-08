@@ -50,9 +50,36 @@
         Group = "users";
       };
       script = ''
-        #mkdir -p ~/.config/autostart
-        #cat << 'EOF' > ~/.config/autostart/.desktop
-	    '';
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/com.brave.Browser.desktop
+[Desktop Action new-private-window]
+Exec=flatpak run --branch=stable --arch=x86_64 --command=brave com.brave.Browser --incognito
+Name=New Private Window
+
+[Desktop Action new-tor-window]
+Exec=flatpak run --branch=stable --arch=x86_64 --command=brave com.brave.Browser --tor
+Name=New Private Window with Tor
+
+[Desktop Action new-window]
+Exec=flatpak run --branch=stable --arch=x86_64 --command=brave com.brave.Browser
+Name=New Window
+
+[Desktop Entry]
+Actions=new-window;new-private-window;new-tor-window;
+Categories=Network;WebBrowser;
+Comment=Access the Internet
+Exec=flatpak run --branch=stable --arch=x86_64 --command=brave --file-forwarding com.brave.Browser @@u %U @@
+GenericName=Web Browser
+Icon=com.brave.Browser
+MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ipfs;x-scheme-handler/ipns;
+Name=Brave
+StartupNotify=true
+StartupWMClass=brave-browser
+Terminal=false
+Type=Application
+Version=1.0
+X-Flatpak=com.brave.Browser
+       '';
     };
 
     systemd.services."brave-chromium-cli-arguments" = {

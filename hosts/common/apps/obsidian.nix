@@ -16,9 +16,9 @@
         packages = [
           {
             appId = "md.obsidian.Obsidian";
-	          origin = "flathub";
-	        }
-	      ];
+            origin = "flathub";
+          }
+        ];
       };
     };
 
@@ -31,9 +31,21 @@
         Group = "users";
       };
       script = ''
-        #mkdir -p ~/.config/autostart
-        #cat << 'EOF' > ~/.config/autostart/.desktop
-	    '';
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/md.obsidian.Obsidian.desktop
+[Desktop Entry]
+Categories=Office;
+Comment=Obsidian
+Exec=flatpak run --branch=stable --arch=x86_64 --command=obsidian.sh --file-forwarding md.obsidian.Obsidian @@u %U @@
+Icon=md.obsidian.Obsidian
+MimeType=x-scheme-handler/obsidian;
+Name=Obsidian
+StartupWMClass=obsidian
+Terminal=false
+Type=Application
+X-Flatpak=md.obsidian.Obsidian
+X-Flatpak-Tags=proprietary;
+      '';
     };
 
     environment.persistence."/persist" = {

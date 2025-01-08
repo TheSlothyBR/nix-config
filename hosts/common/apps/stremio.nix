@@ -31,9 +31,22 @@
         Group = "users";
       };
       script = ''
-        #mkdir -p ~/.config/autostart
-        #cat << 'EOF' > ~/.config/autostart/.desktop
-	    '';
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/com.stremio.Stremio.desktop
+[Desktop Entry]
+Categories=AudioVideo;Video;Player;TV;
+Comment=Video organizer for your Movies, TV Shows and TV Channels
+Exec=flatpak run --branch=stable --arch=x86_64 --command=/app/opt/stremio/stremio --file-forwarding com.stremio.Stremio @@u %U @@
+Icon=com.stremio.Stremio
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;x-scheme-handler/stremio;video/avi;video/msvideo;video/x-msvideo;video/mp4;video/x-matroska;
+Name=Stremio
+StartupWMClass=stremio
+Terminal=false
+Type=Application
+Version=1.0
+X-Desktop-File-Install-Version=0.27
+X-Flatpak=com.stremio.Stremio
+        '';
     };
 
     environment.persistence."/persist" = {

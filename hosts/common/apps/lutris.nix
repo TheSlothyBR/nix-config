@@ -29,7 +29,7 @@
                 "!home"
                 "~/Games"
                 "~/.steam"
-				".var/app/org.libretro.RetroArch:ro"
+                ".var/app/org.libretro.RetroDeck:ro"
               ];
             };
           };
@@ -56,9 +56,25 @@
         Group = "users";
       };
       script = ''
-        #mkdir -p ~/.config/autostart
-        #cat << 'EOF' > ~/.config/autostart/.desktop
-	    '';
+        mkdir -p ~/.config/autostart
+        cat << 'EOF' > ~/.config/autostart/net.lutris.Lutris.desktop
+[Desktop Entry]
+Categories=Game;
+Comment=Video Game Preservation Platform
+Exec=flatpak run --branch=stable --arch=x86_64 --command=lutris --file-forwarding net.lutris.Lutris @@u %U @@
+Icon=net.lutris.Lutris
+Keywords=gaming;wine;emulator;
+MimeType=x-scheme-handler/lutris;
+Name=Lutris
+StartupNotify=true
+StartupWMClass=Lutris
+Terminal=false
+Type=Application
+X-Desktop-File-Install-Version=0.28
+X-Flatpak=net.lutris.Lutris
+X-Flatpak-RenamedFrom=lutris.desktop;
+X-GNOME-UsesNotifications=true
+      '';
     };
 
     environment.persistence."/persist" = {
