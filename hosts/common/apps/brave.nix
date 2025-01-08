@@ -93,7 +93,7 @@ X-Flatpak=com.brave.Browser
       script = ''
 #        cat << 'EOF' > ~/.var/app/com.brave.Browser/config/chromium-flags.conf
 #--password-store=basic
-EOF
+#EOF
       '';
     };
 

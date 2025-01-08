@@ -78,6 +78,7 @@
 WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
 if [ -f "$WALLPAPER" ]; then
   if [ ! -f "/home/${isUser}/.config/kde-material-you-colors/.ran" ]; then
+    touch /home/${isUser}/.config/kde-material-you-colors/.ran
     qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
       desktops().forEach((d) => {
           d.currentConfigGroup = [
@@ -97,9 +98,7 @@ if [ -f "$WALLPAPER" ]; then
       ]
       screenLock.writeConfig('Image', 'file://$WALLPAPER')
     "
-    # kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$WALLPAPER"
-    # qdbus org.freedesktop.ScreenSaver /ScreenSaver configure
-    touch /home/${isUser}/.config/kde-material-you-colors/.ran
+    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$WALLPAPER"
   else
     exit
   fi
