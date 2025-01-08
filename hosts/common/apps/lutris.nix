@@ -45,7 +45,6 @@
         User = "${isUser}";
         Group = "users";
       };
-      serviceConfig.Type = "oneshot";
       script = ''
         ln -sf /home/${isUser}/.var/apps/com.valvesoftware.Steam/.steam /home/${isUser}/.steam
       '';
