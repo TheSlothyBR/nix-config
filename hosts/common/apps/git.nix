@@ -12,22 +12,15 @@
 
   config = lib.mkIf config.custom.git.enable {
     environment.systemPackages = with pkgs; [
-	  git
-	];
+	    git
+	  ];
 
-	sops.secrets."git/name" = {
-	  owner = "${isUser}";
-	};
-    sops.secrets."git/email" = {
-	  owner = "${isUser}";
-	};
-    #home-manager.users.${isUser} = {
-    #  programs.git = {
-    #    enable = true;
-    #    userName = config.sops.secrets."git/name".path;
-    #    userEmail = config.sops.secrets."git/email".path;
-    #  };
-    #};
+  	sops.secrets."git/name" = {
+  	  owner = "${isUser}";
+  	};
+      sops.secrets."git/email" = {
+  	  owner = "${isUser}";
+  	};
 
     systemd.services."generate-git-config" = {
       description = "Generate Git Config";
@@ -52,7 +45,7 @@
 	pager = delta
 EOF
         sed -i "s@name-placeholder@$(cat ${config.sops.secrets."git/name".path})@g" ~/.config/git/config
-        sed -i "s@email-placeholder@$(cat ${config.sops.secrets."git/email".path})@g" ~/.config/git/config
+        sed -i "s%email-placeholder%$(cat ${config.sops.secrets."git/email".path})%g" ~/.config/git/config
       '';
     };
 
