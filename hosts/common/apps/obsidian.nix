@@ -16,9 +16,9 @@
         packages = [
           {
             appId = "md.obsidian.Obsidian";
-	        origin = "flathub";
-	      }
-	    ];
+	          origin = "flathub";
+	        }
+	      ];
       };
     };
 
@@ -33,7 +33,7 @@
       script = ''
         #mkdir -p ~/.config/autostart
         #cat << 'EOF' > ~/.config/autostart/.desktop
-	  ''
+	    '';
     };
 
     environment.persistence."/persist" = {

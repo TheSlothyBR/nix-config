@@ -52,7 +52,7 @@
       script = ''
         #mkdir -p ~/.config/autostart
         #cat << 'EOF' > ~/.config/autostart/.desktop
-	  ''
+	    '';
     };
 
     systemd.services."brave-chromium-cli-arguments" = {

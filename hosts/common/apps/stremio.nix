@@ -6,7 +6,7 @@
   options = {
     custom.stremio = {
       enable = lib.mkEnableOption "Stremio config";
-	  autostart = lib.mkEnableOption "Autostart Stremio";
+	    autostart = lib.mkEnableOption "Autostart Stremio";
     };
   };
 
@@ -33,7 +33,7 @@
       script = ''
         #mkdir -p ~/.config/autostart
         #cat << 'EOF' > ~/.config/autostart/.desktop
-	  ''
+	    '';
     };
 
     environment.persistence."/persist" = {
