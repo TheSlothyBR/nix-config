@@ -24,14 +24,14 @@
       vimAlias = true;
       viAlias = true;
       opts = {
-      	number = true;
-      	relativenumber = true;
+        number = true;
+        relativenumber = true;
         expandtab = true;
-      	smarttab = true;
-      	tabstop = 2;
-      	softtabstop = 2;
-      	shiftwidth = 2;
-      	wrap = true;
+        smarttab = true;
+        tabstop = 2;
+        softtabstop = 2;
+        shiftwidth = 2;
+        wrap = true;
         swapfile = false;
         undofile = true;
         undolevels = 10000;
@@ -58,34 +58,34 @@
             files = { };
           };
         };
-	    	#treesitter = {
-	    	#  enable = true;
-	    	#  settings = {
-	    	#    indent.enable = true;
-	    	#	 highlight.enable = true;
-	    	#  };
-	    	#  folding = true;
-	    	#  nixvimInjections = true;
-	    	#  grammarPackages = pkgs.vimPlugins.nvim-treesitter.allGrammars;
-	    	#};
+        treesitter = {
+          enable = true;
+          #autoLoad = true;
+          settings = {
+            indent.enable = true;
+            highlight.enable = true;
+          };
+          #folding = true;
+          nixvimInjections = true;
+        };
         lsp = {
           servers = {
-		        bashls.enable = true;
+            bashls.enable = true;
             nixd = {
               enable = true;
               settings = 
-			        let
-			          flake = ''(builtins.getFlake "${outputs}")'';
-			        in {
-			          nixpkgs.expr = "import config {}";
-			          formatting.command = [ "${lib.getExe pkgs.nixfmt-rfc-style}" ];
+              let
+                flake = ''(builtins.getFlake "${outputs}")'';
+              in {
+                nixpkgs.expr = "import config {}";
+                formatting.command = [ "${lib.getExe pkgs.nixfmt-rfc-style}" ];
                 options = rec {
                   nixos.expr = "${flake}.nixosConfigurations.${isConfig}.options";
                   home-manager.expr = "${nixos.expr}.home-manager.users.type.getSubOptions [ ]";
-				          nixvim.expr = "${flake}.packages.${builtins.currentSystem}.nvim.options";
+                  nixvim.expr = "${flake}.packages.${builtins.currentSystem}.nvim.options";
                 };
-			        };
-			      };
+              };
+            };
           };
         };
       };
@@ -100,8 +100,8 @@
         MANPAGER = "nvim +Man!";
       };
       systemPackages = with pkgs; [
-        #nixfmt-rfc-style
-        #nixd
+        nixfmt-rfc-style
+        nixd
       ];
     };
   };

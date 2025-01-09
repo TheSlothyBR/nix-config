@@ -78,6 +78,10 @@
 WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
 if [ -f "$WALLPAPER" ]; then
   if [ ! -f "/home/${isUser}/.config/kde-material-you-colors/.ran" ]; then
+    if [ ! -f "/home/${isUser}/.config/kscreenlockerrc" ]; then
+      touch /home/${isUser}/.config/kscreenlockerrc
+    fi
+
     touch /home/${isUser}/.config/kde-material-you-colors/.ran
     qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
       desktops().forEach((d) => {
@@ -89,14 +93,6 @@ if [ -f "$WALLPAPER" ]; then
           d.writeConfig('Image', 'file://$WALLPAPER')
           d.reloadConfig()
       })
-      const screenLock = ConfigFile('kscreenlockerrc')
-      screenLock.currentConfigGroup = [
-        'Greeter',
-        'Wallpaper',
-        'org.kde.image',
-        'General'
-      ]
-      screenLock.writeConfig('Image', 'file://$WALLPAPER')
     "
     kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$WALLPAPER"
   else
@@ -175,7 +171,7 @@ fi
               description = "Open Steam in Gaming Desktop";
               match = {
                 window-class = {
-                  value = "Steam";
+                  value = "steam";
                   type = "regex";
                 };
               };
@@ -375,11 +371,19 @@ fi
                   iconTasks = {
                     launchers = [
                       "preferred://filemanager"
-                      "applications:org.wezfurlong.wezterm.desktop"
+                      (if config.custom.wezterm.enable
+                        then "applications:org.wezfurlong.wezterm.desktop"
+                        else ""
+                      )
                       "preferred://browser"
-                      "applications:md.obsidian.Obsidian.desktop"
-                      "applications:org.keepassxc.KeePassXC.desktop"
-                      #"applications:drive-gui.desktop"
+                      (if config.custom.obsidian.enable
+                        then "applications:md.obsidian.Obsidian.desktop"
+                        else ""
+                      )
+                      (if config.custom.keepassxc.enable
+                        then "applications:org.keepassxc.KeePassXC.desktop"
+                        else ""
+                      )
                     ];
                     appearance = {
                       showTooltips = true;
@@ -469,8 +473,9 @@ fi
           configFile = {
             "kdeglobals" = {
               "General" = {
-               TerminalApplication = "wezterm";
-               TerminalService = "org.wezfurlong.wezterm.desktop";
+                TerminalApplication = "wezterm";
+                TerminalService = "org.wezfurlong.wezterm.desktop";
+                BrowserApplication = "com.brave.Browser.desktop";
               };
             };
             "breezerc" = {
@@ -523,6 +528,11 @@ fi
               "Wallet" = {
                 "Default Wallet" = "kdewallet";
                 Enabled = true;
+              };
+            };
+            "plasmanotifyrc" = {
+              "Notifications" = {
+                LowPriorityHistory = true;
               };
             };
             "powerdevilrc" = {
