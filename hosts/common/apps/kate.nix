@@ -1,5 +1,5 @@
 { config
-, pkgs
+, isUser
 , lib
 , ...
 }:{
@@ -10,8 +10,24 @@
   };
 
   config = lib.mkIf config.custom.kate.enable {
-    environment.systemPackages = with pkgs.kdePackages; [
-      kate
-    ];
+    home-manager.users.${isUser} = {
+      services.flatpak = {
+        packages = [
+          {
+            appId = "org.kde.kate";
+            origin = "flathub";
+          }
+        ];
+      };
+    };
+
+    environment.persistence."/persist" = {
+      users.${isUser} = {
+        directories = [
+          ".var/app/org.kde.kate"
+        ];
+      };
+    };
+  };
   };
 }
