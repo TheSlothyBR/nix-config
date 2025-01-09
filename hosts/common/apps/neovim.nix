@@ -49,6 +49,7 @@
         mapleader = " ";
         maplocalleader = " ";
       };
+      diagnostics.virtual_lines.only_current_line = true;
       #extraPlugins = '''';
       plugins = {
         lualine.enable = true;
@@ -68,20 +69,25 @@
           #folding = true;
           nixvimInjections = true;
         };
+        lsp-lines.enable = true;
         lsp = {
           servers = {
             bashls.enable = true;
             nixd = {
               enable = true;
+              autostart = true;
+              #cmd = [ "nixd" ];
+              #filetypes = [ "nix" ];
+              #rootDir = [ "flake.nix" ".git" ];
               settings = 
               let
-                flake = ''(builtins.getFlake "${outputs}")'';
+                flake = ''(builtins.getFlake "${globals.${isConfig}.persistFlakePath}")'';
               in {
-                nixpkgs.expr = "import config {}";
+                nixpkgs.expr = ''import ${flake}.inputs.nixpkgs {}'';
                 formatting.command = [ "${lib.getExe pkgs.nixfmt-rfc-style}" ];
                 options = rec {
                   nixos.expr = "${flake}.nixosConfigurations.${isConfig}.options";
-                  home-manager.expr = "${nixos.expr}.home-manager.users.type.getSubOptions [ ]";
+                  home-manager.expr = "${flake}.homeConfigurations.${isConfig}.options";
                   nixvim.expr = "${flake}.packages.${builtins.currentSystem}.nvim.options";
                 };
               };
