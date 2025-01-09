@@ -1,5 +1,5 @@
 { inputs
-, outputs
+, globals
 , isConfig
 , pkgs
 , config
