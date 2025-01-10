@@ -1,0 +1,32 @@
+{ config
+, isUser
+, lib
+, ...
+}:{
+  options = {
+    custom.vlc = {
+      enable = lib.mkEnableOption "VLC config";
+    };
+  };
+
+  config = lib.mkIf config.custom.vlc.enable {
+    home-manager.users.${isUser} = {
+      services.flatpak = {
+        packages = [
+          {
+            appId = "org.videolan.VLC";
+            origin = "flathub";
+          }
+        ];
+      };
+    };
+
+    environment.persistence."/persist" = {
+      users.${isUser} = {
+        directories = [
+          ".var/app/org.videolan.VLC"
+        ];
+      };
+    };
+  };
+}

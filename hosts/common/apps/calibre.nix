@@ -4,24 +4,25 @@
 , ...
 }:{
   options = {
-    custom.retrodeck = {
-      enable = lib.mkEnableOption "RetroDECK config";
+    custom.calibre = {
+      enable = lib.mkEnableOption "Calibre config";
     };
   };
 
-  config = lib.mkIf config.custom.retrodeck.enable {
+  config = lib.mkIf config.custom.calibre.enable {
     home-manager.users.${isUser} = {
       services.flatpak = {
         packages = [
           {
-            appId = "net.retrodeck.retrodeck";
+            appId = "com.calibre_ebook.calibre";
             origin = "flathub";
           }
         ];
-		overrides = {
-          "net.retrodeck.retrodeck" = {
+        overrides = {
+          "com.calibre_ebook.calibre" = {
+            Context = {
               filesystems = [
-                "~/Games:rw"
+                "~/Drive/CalibreLibrary:rw"
               ];
             };
           };
@@ -32,7 +33,7 @@
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
-          ".var/app/net.retrodeck.retrodeck"
+          ".var/app/com.calibre_ebook.calibre"
         ];
       };
     };

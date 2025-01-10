@@ -4,24 +4,25 @@
 , ...
 }:{
   options = {
-    custom.retrodeck = {
-      enable = lib.mkEnableOption "RetroDECK config";
+    custom.thunderbird = {
+      enable = lib.mkEnableOption "Thunderbird config";
     };
   };
 
-  config = lib.mkIf config.custom.retrodeck.enable {
+  config = lib.mkIf config.custom.thunderbird.enable {
     home-manager.users.${isUser} = {
       services.flatpak = {
         packages = [
           {
-            appId = "net.retrodeck.retrodeck";
+            appId = "org.mozilla.Thunderbird";
             origin = "flathub";
           }
         ];
-		overrides = {
-          "net.retrodeck.retrodeck" = {
+        overrides = {
+          "org.mozilla.Thunderbird" = {
+            Context = {
               filesystems = [
-                "~/Games:rw"
+                "~/Drive/Apps/Thunderbird:rw"
               ];
             };
           };
@@ -32,7 +33,7 @@
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
-          ".var/app/net.retrodeck.retrodeck"
+          ".var/app/org.mozilla.Thunderbird"
         ];
       };
     };

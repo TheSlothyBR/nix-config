@@ -27,8 +27,8 @@
               ];
               filesystems = [
                 "!home"
-                "~/Games"
-                "~/.steam"
+                "~/Games:rw"
+                "~/.steam:rw"
                 ".var/app/org.libretro.RetroDeck:ro"
               ];
             };

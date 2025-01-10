@@ -27,7 +27,7 @@
                 "x11"
               ];
               filesystems = [
-                "~/Games"
+                "~/Games:rw"
               ];
             };
           };

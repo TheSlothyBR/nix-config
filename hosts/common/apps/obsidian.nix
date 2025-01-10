@@ -19,6 +19,15 @@
             origin = "flathub";
           }
         ];
+		overrides = {
+          "md.obsidian.Obsidian" = {
+            Context = {
+              filesystems = [
+                "~/Drive/ObsidianVault:rw"
+              ];
+            };
+          };
+        };
       };
     };
 

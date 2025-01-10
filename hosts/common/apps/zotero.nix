@@ -19,16 +19,17 @@
             origin = "flathub";
           }
         ];
-        #overrides = {
-        #  "org.zotero.Zotero" = {
-        #    Context = {
-        #      sockets = [
-        #        "wayland"
-        #        "x11"
-        #      ];
-        #    };
-        #  };
-        #};
+        overrides = {
+          "org.zotero.Zotero" = {
+            Context = {
+              filesystems = [
+				#"~/Drive/Zotero:rw"
+                "~/Drive/ZoteroData:rw"
+				"~/Drive/ZoteroVault:rw"
+              ];
+            };
+          };
+        };
       };
     };
 

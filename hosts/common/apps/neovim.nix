@@ -21,8 +21,10 @@
       enable = true;
       enableMan = true;
       defaultEditor = true;
+      editorconfig.enable = true;
       vimAlias = true;
       viAlias = true;
+      luaLoader.enable = true;
       opts = {
         number = true;
         relativenumber = true;
@@ -31,6 +33,9 @@
         tabstop = 2;
         softtabstop = 2;
         shiftwidth = 2;
+        scrolloff = 8;
+        smartindent = true;
+        spell = true;
         wrap = true;
         swapfile = false;
         undofile = true;
@@ -44,41 +49,72 @@
         register = "unnamedplus";
       };     
       #extraConfigLua = '''';
-      colorschemes.nord.enable = true;
+      colorschemes.nord = {
+        enable = true;
+        #lazyLoad.settings.colorscheme = "nord";
+      };
       globals = {
         mapleader = " ";
-        maplocalleader = " ";
+        #maplocalleader = " ";
       };
-      diagnostics.virtual_lines.only_current_line = true;
+      #diagnostics.virtual_lines.only_current_line = true;
       #extraPlugins = '''';
       plugins = {
-        lualine.enable = true;
-        mini = {
+        #lz-n.enable = true;
+        lualine = {
           enable = true;
-          modules = {
-            files = { };
-          };
+          #lazyLoad.settings.cmd = "lualine";
         };
-        treesitter = {
+        #mini = {
+        #  enable = true;
+        #  lazyLoad.settings.cmd = "mini";
+        #  modules = {
+        #    files = { };
+        #  };
+        #};
+        #telescope = {
+        #  enable = true;
+        #  lazyLoad.settings.cmd = "Telescope";
+        #};
+        #cmp = {
+        #  enable = true;
+        #  lazyLoad.settings.cmd = "cmp";
+        #  autoEnableSources = true;
+        #  settings = {
+        #    sources = [
+        #      { name = "nvim_lsp"; }
+        #    ];
+        #  };
+        #};
+        #treesitter = {
           enable = true;
-          #autoLoad = true;
+          #lazyLoad.settings.cmd = "Treesitter";
           settings = {
             indent.enable = true;
             highlight.enable = true;
           };
           #folding = true;
+          #nixGrammars = true;
           nixvimInjections = true;
         };
-        lsp-lines.enable = true;
+        #lsp-lines = {
+        #  enable = true;
+        #  lazyLoad.settings.cmd = "lsp-lines";
+        #};
+        #lsp-format = {
+        #  enable = true;
+        #  lazyLoad.settings.cmd = "lsp-format";
+        #  lspServersToEnable = "all";
+        #  setup.eslint.sync = true;
+        #};
         lsp = {
+          #inlayHints = true;
+          #onAttach = '''';
           servers = {
-            bashls.enable = true;
+            #bashls.enable = true;
             nixd = {
               enable = true;
               autostart = true;
-              #cmd = [ "nixd" ];
-              #filetypes = [ "nix" ];
-              #rootDir = [ "flake.nix" ".git" ];
               settings = 
               let
                 flake = ''(builtins.getFlake "${globals.${isConfig}.persistFlakePath}")'';
