@@ -18,8 +18,9 @@
             origin = "flathub";
           }
         ];
-		overrides = {
+		    overrides = {
           "net.retrodeck.retrodeck" = {
+            Context = {
               filesystems = [
                 "~/Games:rw"
               ];
@@ -28,7 +29,7 @@
         };
       };
     };
-
+    
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [

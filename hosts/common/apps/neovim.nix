@@ -86,7 +86,7 @@
         #    ];
         #  };
         #};
-        #treesitter = {
+        treesitter = {
           enable = true;
           #lazyLoad.settings.cmd = "Treesitter";
           settings = {
@@ -134,7 +134,7 @@
     };
 
     programs.nano.enable = false;
-
+    
     environment = {
       sessionVariables = {
         VISUAL = "nvim";

@@ -8,6 +8,7 @@
   ];
 
   custom = {
+    ark.enable = true;
     battery-optimisation.enable = true;
     bluetooth.enable = true;
     bootloader = {
@@ -16,6 +17,7 @@
     };
     brave.enable = true;
     calculator.enable = true;
+    calibre.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
     gestures.enable = true;
@@ -38,8 +40,9 @@
     obsidian.enable = true;
     plasma.enable = true;
     plymouth.enable = true;
+    protonplus.enable = true;
     rclone.enable = true;
-	retrodeck.enable = false;
+	  retrodeck.enable = true;
     sddm.enable = true;
     sops.enable = true;
     sound = {
@@ -50,15 +53,15 @@
     steam.enable = true;
     stremio.enable = true;
     stylix.enable = true;
-    umu.enable = false;
     utils.enable = true;
+    warehouse.enable = true;
     wezterm.enable = true;
     wifi-adapter.enable = true;
     zellij.enable = true;
-	zotero = {
-	  enable = false;
-	  autostart = false;
-	};
+	  zotero = {
+	    enable = true;
+	    autostart = false;
+	  };
     zswap.enable = true;
   };
 }

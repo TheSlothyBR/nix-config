@@ -33,7 +33,7 @@
     environment = {
       sessionVariables = {
         GTK_USE_PORTAL = 1;
-      };
+      } // config.home-manager.users.${isUser}.home.sessionVariables;
       systemPackages = let
         stable = with pkgs; [
         
@@ -45,7 +45,6 @@
         stable ++ unstable;
     };
 
-    systemd.user.sessionVariables = config.home-manager.users.${isUser}.home.sessionVariables;
 
     qt = {
       enable = true;
