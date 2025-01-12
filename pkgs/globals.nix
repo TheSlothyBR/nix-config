@@ -13,20 +13,27 @@ rec {
     userName = "ultra";
     drives = [ "/dev/sda" ];
     system = builtins.elemAt meta.architectures 0;
-	  persistFlakePath = "/persist/home/${ultra.userName}";
+	persistFlakePath = "/persist/home/${ultra.userName}";
   };
   corsair = {
     hostName = "corsair";
     userName = "corsair";
     drives = [ "/dev/nvme0n1p1" "/dev/sda" ];
     system = builtins.elemAt meta.architectures 0;
-	  persistFlakePath = "/persist/home/${corsair.userName}";
+	persistFlakePath = "/persist/home/${corsair.userName}";
+  };
+  test = {
+    hostName = "test";
+    userName = "test";
+    drives = [ "/dev/sda" ];
+    system = builtins.elemAt meta.architectures 0;
+	persistFlakePath = "/etc/nixos/${meta.flakePath}";
   };
   customIso = {
     hostName = "customIso";
     userName = "customIso";
     drives = [];
     system = builtins.elemAt meta.architectures 0;
-	  persistFlakePath = "/etc/nixos/${meta.flakePath}";
+	persistFlakePath = "/etc/nixos/${meta.flakePath}";
   };
 }
