@@ -125,6 +125,50 @@ fi
         #xdg.configFile = {
         #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark, this implementation creates reaad-only symlink
         #};
+        xdg = {
+          mimiApps = {
+            enable = true;
+            defaultApplications = {
+              "https" = [
+                (if config.custom.brave.enable
+                  then "com.brave.Browser.desktop"
+                  else ""
+                )
+              ];
+              "http" = [
+                (if config.custom.brave.enable
+                  then "com.brave.Browser.desktop"
+                  else ""
+                )
+              ];
+            };
+            associations = {
+              added = {
+                "https" = [
+                  (if config.custom.brave.enable
+                    then "com.brave.Browser.desktop"
+                    else ""
+                  )
+                  (if config.custom.nyxt.enable
+                    then "engineer.atlas.Nyxt.desktop"
+                    else ""
+                  )
+                ];
+                "http" = [
+                  (if config.custom.brave.enable
+                    then "com.brave.Browser.desktop"
+                    else ""
+                  )
+                  (if config.custom.nyxt.enable
+                    then "engineer.atlas.Nyxt.desktop"
+                    else ""
+                  )
+                ];
+              };
+              removed = {};
+            };
+          };
+        };
 
         programs.plasma = {
           enable = true;
@@ -475,7 +519,6 @@ fi
               "General" = {
                 TerminalApplication = "wezterm";
                 TerminalService = "org.wezfurlong.wezterm.desktop";
-                BrowserApplication = "com.brave.Browser.desktop";
               };
             };
             "breezerc" = {
