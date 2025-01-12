@@ -70,11 +70,17 @@
         ];
         overrides = {
           global = {
-            Context.sockets = [
-              "wayland"
-              "!x11"
-              "!fallback-x11"
-            ];
+            Context = {
+              sockets = [
+                "wayland"
+                "!x11"
+                "!fallback-x11"
+              ];
+              filesystems = [
+                "!home"
+                "!root"
+              ];
+            };
             Environment = {
               XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
               GTK_USE_PORTAL = "1";
