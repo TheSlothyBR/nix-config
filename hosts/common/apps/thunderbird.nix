@@ -23,6 +23,7 @@
             Context = {
               filesystems = [
                 "~/Drive/Apps/Thunderbird:rw"
+                "!~/.gnupg"
               ];
             };
           };

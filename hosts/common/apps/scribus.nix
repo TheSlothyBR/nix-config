@@ -18,6 +18,17 @@
             origin = "flathub";
           }
         ];
+        overrides = {
+          "net.scribus.Scribus" = {
+            Context = {
+              sockets = [
+                "!wayland"
+                "x11"
+                "fallback-x11"
+              ];
+            };
+          };
+        };
       };
     };
 

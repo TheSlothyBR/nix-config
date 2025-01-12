@@ -18,6 +18,17 @@
             origin = "flathub";
           }
         ];
+        overrides = {
+          "org.onlyoffice.desktopeditors" = {
+            Context = {
+              sockets = [
+                "!wayland"
+                "x11"
+                "fallback-x11"
+              ];
+            };
+          };
+        };
       };
     };
 

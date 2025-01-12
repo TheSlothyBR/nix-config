@@ -18,6 +18,16 @@
             origin = "flathub";
           }
         ];
+        overrides = {
+          "org.videolan.VLC" = {
+            Context = {
+              sockets = [
+                "wayland"
+                "x11"
+              ];
+            };
+          };
+        };
       };
     };
 

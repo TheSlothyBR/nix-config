@@ -18,6 +18,18 @@
             origin = "flathub";
           }
         ];
+        overrides = {
+          "com.usebottles.bottles" = {
+            Context = {
+              sockets = [
+                "wayland"
+              ];
+              filesystems = [
+                "~/Games:rw"
+              ];
+            };
+          };
+        };
       };
     };
 

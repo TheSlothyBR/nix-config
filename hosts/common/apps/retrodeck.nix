@@ -18,11 +18,13 @@
             origin = "flathub";
           }
         ];
-		    overrides = {
+		overrides = {
           "net.retrodeck.retrodeck" = {
             Context = {
               filesystems = [
                 "~/Games:rw"
+                "!~/.steam"
+                "!xdg-data/Steam"
               ];
             };
           };

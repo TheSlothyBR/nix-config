@@ -26,10 +26,9 @@
                 "wayland"
               ];
               filesystems = [
-                "!home"
                 "~/Games:rw"
                 "~/.steam:rw"
-                ".var/app/org.libretro.RetroDeck:ro"
+                "~/.var/app/org.libretro.RetroDeck:ro"
               ];
             };
           };
