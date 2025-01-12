@@ -20,13 +20,15 @@
         ];
         overrides = {
           "org.standardnotes.standardnotes" = {
-            filesystems = [
-              "~/Drive/Apps/standardnotes:rw"
-            ];
+            Context = {
+              filesystems = [
+                "~/Drive/Apps/standardnotes:rw"
+              ];
+            };
           };
         };
       };
-	};
+	  };
 
     environment.persistence."/persist" = {
       users.${isUser} = {

@@ -6,7 +6,7 @@
   options = {
     custom.zotero = {
       enable = lib.mkEnableOption "Zotero config";
-	  autostart = lib.mkEnableOption "Autostart Zotero";
+	    autostart = lib.mkEnableOption "Autostart Zotero";
     };
   };
 
@@ -15,17 +15,17 @@
       services.flatpak = {
         packages = [
           {
-            appId = ".var/app/org.zotero.Zotero";
+            appId = "org.zotero.Zotero";
             origin = "flathub";
           }
         ];
         overrides = {
           "org.zotero.Zotero" = {
             Context = {
+				      #"~/Drive/Zotero:rw"
               filesystems = [
-				#"~/Drive/Zotero:rw"
                 "~/Drive/ZoteroData:rw"
-				"~/Drive/ZoteroVault:rw"
+				        "~/Drive/ZoteroVault:rw"
               ];
             };
           };

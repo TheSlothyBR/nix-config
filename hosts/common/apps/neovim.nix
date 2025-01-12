@@ -94,7 +94,7 @@
             highlight.enable = true;
           };
           #folding = true;
-          #nixGrammars = true;
+          nixGrammars = true;
           nixvimInjections = true;
         };
         #lsp-lines = {
@@ -115,6 +115,9 @@
             nixd = {
               enable = true;
               autostart = true;
+              cmd = [ "nixd" ];
+              #filetypes = ;
+              #rootDir = ;
               settings = 
               let
                 flake = ''(builtins.getFlake "${globals.${isConfig}.persistFlakePath}")'';

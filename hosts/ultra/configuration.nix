@@ -15,6 +15,7 @@
       enable = true;
       systemd-boot.enable = true;
     };
+    bottles.enable = true;
     brave.enable = true;
     calculator.enable = true;
     calibre.enable = true;
@@ -30,6 +31,7 @@
       autostart = true;
     };
     kernel.enable = true;
+    ksnip.enable = true;
     lutris.enable = true;
     neovim.enable = true;
     nix-config = {
@@ -37,12 +39,16 @@
       allowUnfree = true;
     };
     nur.enable = true;
+    nyxt.enable = true;
     obsidian.enable = true;
+    okular.enable = true;
+    onlyoffice.enable = true;
     plasma.enable = true;
     plymouth.enable = true;
     protonplus.enable = true;
     rclone.enable = true;
 	  retrodeck.enable = true;
+    scribus.enable = true;
     sddm.enable = true;
     sops.enable = true;
     sound = {
@@ -50,10 +56,13 @@
       jack.enable = false;
     };
     ssh.enable = true;
+    standardnotes.enable = true;
     steam.enable = true;
     stremio.enable = true;
     stylix.enable = true;
+    thunderbird.enable = true;
     utils.enable = true;
+    vlc.enable = true;
     warehouse.enable = true;
     wezterm.enable = true;
     wifi-adapter.enable = true;
