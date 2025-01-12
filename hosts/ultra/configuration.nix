@@ -24,6 +24,7 @@
     gestures.enable = true;
     git.enable = true;
     inputs.enable = true;
+    jamovi.enable = true;
     kando.enable = true;
     kate.enable = true;
     keepassxc = {
@@ -32,6 +33,7 @@
     };
     kernel.enable = true;
     ksnip.enable = true;
+    loupe.enable = true;
     lutris.enable = true;
     neovim.enable = true;
     nix-config = {
@@ -67,10 +69,10 @@
     wezterm.enable = true;
     wifi-adapter.enable = true;
     zellij.enable = true;
-	  zotero = {
-	    enable = true;
-	    autostart = false;
-	  };
+	zotero = {
+	  enable = true;
+	  autostart = false;
+	};
     zswap.enable = true;
   };
 }
