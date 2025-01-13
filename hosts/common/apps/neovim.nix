@@ -225,7 +225,7 @@
         MANPAGER = "nvim +Man!";
       };
       systemPackages = with pkgs; [
-        #nixfmt-rfc-style
+        nixfmt-rfc-style
         #nixd
       ];
     };

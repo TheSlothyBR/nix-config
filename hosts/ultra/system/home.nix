@@ -25,7 +25,7 @@
 
   users.users.root = {
     hashedPassword = "!";
-    #shell = "${pkgs.shadow}/bin/nologin";
+    shell = "${pkgs.shadow}/bin/nologin";
   };
 
   sops.secrets."${isUser}/password" = {
@@ -35,8 +35,8 @@
   users.mutableUsers = true;
   users.users."${isUser}" = {
     isNormalUser = true;
-    #shell = pkgs.;
-    extraGroups = builtins.filter (group: builtins.hasAttr group config.users.groups) [ #lib.custom.ifTheyExist
+    shell = pkgs.fish;
+    extraGroups = builtins.filter (group: builtins.hasAttr group config.users.groups) [ 
       "wheel"
       "audio"
       "video"
