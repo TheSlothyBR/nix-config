@@ -30,6 +30,13 @@
           vimAlias = true;
           enableLuaLoader = true;
 
+          useSystemClipboard = true;
+          luaConfigRC.basic = '''';
+          lineNumberMode = "relative";
+          preventJunkFiles = true;
+          searchCase = "smart";
+          undoFile = true;
+
           globals = {
             options = {
               mapleader = " ";
@@ -48,9 +55,7 @@
             smartindent = true;
             softtabstop = -1;
             spell = true;
-            swapfile = false;
             tabstop = 2;
-            undofile = true;
             undolevels = 10000;
             wrap = true;
           };
