@@ -2,6 +2,7 @@
 , isConfig
 , isUser
 , config
+, pkgs
 , lib
 , ...
 }:{
@@ -27,6 +28,8 @@
     hashedPassword = "!";
     shell = "${pkgs.shadow}/bin/nologin";
   };
+
+  programs.fish.enable = true;
 
   sops.secrets."${isUser}/password" = {
     sopsFile = ./secrets/secrets.yaml;

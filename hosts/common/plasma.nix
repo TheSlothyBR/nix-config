@@ -126,7 +126,7 @@ fi
         #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark, this implementation creates reaad-only symlink
         #};
         xdg = {
-          mimiApps = {
+          mimeApps = {
             enable = true;
             defaultApplications = {
               "https" = [

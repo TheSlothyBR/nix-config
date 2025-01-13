@@ -51,7 +51,7 @@
 
     services.gnome = {
       games.enable = false;
-      core-utilities.enable = false
+      core-utilities.enable = false;
     };
 
     programs = {
