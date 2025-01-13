@@ -29,6 +29,7 @@
     environment.persistence."/persist" = {
       users.${isUser} = {
         directories = [
+          ".local/share/icons" #only klassy needs this, probably can be changed
           ".local/share/kwalletd"
         ];
       };
@@ -128,13 +129,13 @@ fi
           mimeApps = {
             enable = true;
             defaultApplications = {
-              "x-scheme-handler/https" = [
+              "https" = [
                 (if config.custom.brave.enable
                   then "com.brave.Browser.desktop"
                   else ""
                 )
               ];
-              "x-scheme-handler/http" = [
+              "http" = [
                 (if config.custom.brave.enable
                   then "com.brave.Browser.desktop"
                   else ""
@@ -143,7 +144,7 @@ fi
             };
             associations = {
               added = {
-                "x-scheme-handler/https" = [
+                "https" = [
                   (if config.custom.brave.enable
                     then "com.brave.Browser.desktop"
                     else ""
@@ -153,7 +154,7 @@ fi
                     else ""
                   )
                 ];
-                "x-scheme-handler/http" = [
+                "http" = [
                   (if config.custom.brave.enable
                     then "com.brave.Browser.desktop"
                     else ""

@@ -78,7 +78,7 @@
               ];
               filesystems = [
                 "!home"
-                "!/root"
+                "!root"
               ];
             };
             Environment = {

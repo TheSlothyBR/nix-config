@@ -7,6 +7,7 @@
 , ...
 }:{
   imports = [
+    #inputs.nixvim.nixosModules.nixvim
     inputs.nvf.nixosModules.default
   ];
 
@@ -224,7 +225,7 @@
       };
       systemPackages = with pkgs; [
         nixfmt-rfc-style
-        nil
+        #nixd
       ];
     };
   };
