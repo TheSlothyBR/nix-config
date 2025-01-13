@@ -16,6 +16,10 @@
       url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stylix = {
       url = "github:danth/stylix/release-24.11";
       inputs = {
@@ -124,7 +128,6 @@
           configs=(
             ultra
             corsair
-            test
           )
 
           NO_INSTALL=1
