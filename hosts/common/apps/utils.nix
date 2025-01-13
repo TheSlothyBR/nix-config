@@ -35,7 +35,7 @@
         eza
         tealdeer
         wget
-        wl-clipboard
+        wl-clipboard-rs
         zoxide
       ];
     };

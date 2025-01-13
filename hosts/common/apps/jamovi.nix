@@ -18,11 +18,15 @@
             origin = "flathub";
           }
         ];
-        Context = {
-          sockets = [
-            "wayland"
-            "x11"
-          ];
+        overrides = {
+          "org.jamovi.jamovi" = {
+            Context = {
+              sockets = [
+                "wayland"
+                "x11"
+              ];
+            };
+          };
         };
       };
     };

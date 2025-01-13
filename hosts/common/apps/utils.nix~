@@ -24,15 +24,19 @@
       nh = {
         enable = true;
         flake = "${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath}";
-        #clean.extraArgs = "--keep-since 2d";
+        clean.extraArgs = "--keep-since 2d";
       };
     };
 
     environment = {
       systemPackages = with pkgs; [
+        bat
+        erdtree
+        eza
+        tealdeer
         wget
         wl-clipboard
-        tealdeer
+        zoxide
       ];
     };
   };

@@ -18,6 +18,12 @@
             origin = "flathub";
           }
         ];
+        Context = {
+          sockets = [
+            "wayland"
+            "x11"
+          ];
+        };
       };
     };
 
