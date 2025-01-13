@@ -36,15 +36,27 @@
       } // config.home-manager.users.${isUser}.home.sessionVariables;
       systemPackages = let
         stable = with pkgs; [
-        
+          nautilus
         ];
         unstable = with pkgs.unstable; [
           
         ];
       in
         stable ++ unstable;
+      gnome.excludePackages = with pkgs; [
+        gnome-tour
+        gnome-shell-extensions
+      ];
     };
 
+    services.gnome = {
+      games.enable = false;
+      core-utilities.enable = false
+    };
+
+    programs = {
+      gnome-terminal.enable = false;
+    };
 
     qt = {
       enable = true;
