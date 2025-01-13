@@ -35,6 +35,7 @@
     ksnip.enable = true;
     loupe.enable = true;
     lutris.enable = true;
+    mimeapps.enable = true;
     neovim.enable = true;
     nix-config = {
       enable = true;
@@ -49,7 +50,7 @@
     plymouth.enable = true;
     protonplus.enable = true;
     rclone.enable = true;
-	  retrodeck.enable = true;
+	retrodeck.enable = true;
     scribus.enable = true;
     sddm.enable = true;
     sops.enable = true;
