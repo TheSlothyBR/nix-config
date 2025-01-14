@@ -19,7 +19,6 @@
     brave.enable = true;
     calculator.enable = true;
     calibre.enable = true;
-    fish.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
     fonts.enable = true;
@@ -55,6 +54,7 @@
 	retrodeck.enable = true;
     scribus.enable = true;
     sddm.enable = true;
+    shell.enable = true;
     sops.enable = true;
     sound = {
       enable = true;
