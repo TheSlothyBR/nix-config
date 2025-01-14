@@ -48,6 +48,7 @@
           options = {
             backspace = "indent,eol,start";
             cursorline = true,
+            completeopt = "menuone,noselect,fuzzy";
             expandtab = true;
 	        jumpoptions = "view";
             keymodel = "startsel";
