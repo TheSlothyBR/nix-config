@@ -667,6 +667,7 @@ EOF
 [Default Applications]
 ${if config.custom.brave.enable then "x-scheme-handler/https=com.brave.Browser.desktop" else ""}
 ${if config.custom.brave.enable then "x-scheme-handler/http=com.brave.Browser.desktop" else ""}
+${if config.custom.brave.enable then "x-scheme-handler/unknown=com.brave.Browser.desktop" else ""}
 image/*=org.gnome.Loupe.desktop
 video/*=org.videolan.VLC.desktop
 audio/*=org.videolan.VLC.desktop
