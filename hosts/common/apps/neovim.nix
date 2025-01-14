@@ -31,10 +31,10 @@
           enableLuaLoader = true;
 
           useSystemClipboard = true;
-          #luaConfigRC.basic = '''';
+          mouse = "nicr";
           lineNumberMode = "relative";
-          preventJunkFiles = true;
           searchCase = "smart";
+          preventJunkFiles = true;
           undoFile = {
             enable = true;
           };
@@ -47,20 +47,38 @@
 
           options = {
             backspace = "indent,eol,start";
+            cursorline = true,
             expandtab = true;
+	        jumpoptions = "view";
+            keymodel = "startsel";
+            list = true,
+	        listchars = "trail:·,nbsp:¿,tab:¿ ,extends:¿,precedes:¿",
+            mousemodel = "extend";
             number = true;
+            numberwidth = 3;
+            pumheight = 10;
             relativenumber = true;
             scrolloff = 8;
+            selection = "inclusive";
+            selectmode = "key,mouse,cmd";
             shiftwidth = 2;
             signcolumn = "no";
             smarttab = true;
             smartindent = true;
             softtabstop = -1;
             spell = true;
+            splitright = true;
+            splitbelow = true;
             tabstop = 2;
             undolevels = 10000;
             wrap = true;
+            wildmenu = true
           };
+          luaConfigRC.basic = ''
+            vim.opt.path:append({ "**" })
+          	vim.opt.iskeyword:append("-")
+	        vim.opt.whichwrap:append( '<,>,h,l,[,]' )
+          '';
 
           statusline.lualine.enable = true;
           telescope.enable = true;
