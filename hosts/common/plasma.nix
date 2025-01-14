@@ -105,6 +105,7 @@ else
 fi
 '';
           })
+          wl-clipboard-rs
         ];
         unstable = with pkgs.unstable; [
           
@@ -187,6 +188,11 @@ fi
               };
             }
           ];
+          fonts = {
+            general = {
+              family = "Cantarell";
+            };
+          };
           desktop = {
             widgets = [
               {

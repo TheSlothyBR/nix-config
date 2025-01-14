@@ -24,13 +24,6 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  users.users.root = {
-    hashedPassword = "!";
-    shell = "${pkgs.shadow}/bin/nologin";
-  };
-
-  programs.fish.enable = true;
-
   sops.secrets."${isUser}/password" = {
     sopsFile = ./secrets/secrets.yaml;
     neededForUsers = true;
@@ -38,7 +31,6 @@
   users.mutableUsers = true;
   users.users."${isUser}" = {
     isNormalUser = true;
-    shell = pkgs.fish;
     extraGroups = builtins.filter (group: builtins.hasAttr group config.users.groups) [ 
       "wheel"
       "audio"

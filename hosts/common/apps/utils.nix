@@ -30,13 +30,7 @@
 
     environment = {
       systemPackages = with pkgs; [
-        bat
-        erdtree
-        eza
-        tealdeer
         wget
-        wl-clipboard-rs
-        zoxide
       ];
     };
   };

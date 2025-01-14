@@ -42,6 +42,7 @@ config = {
     top = 15,
     bottom = 0,
   },
+  font_size = 11.0,
   -- colors = {},
 }
 

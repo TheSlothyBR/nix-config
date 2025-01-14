@@ -75,7 +75,9 @@
           };
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
+            accent-color = "orange";
           };
+          #"org/gnome/shell/extensions/" 
         };
         gtk = {
           enable = true;

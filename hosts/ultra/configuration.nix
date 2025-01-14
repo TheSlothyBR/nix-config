@@ -19,8 +19,10 @@
     brave.enable = true;
     calculator.enable = true;
     calibre.enable = true;
+    fish.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
+    fonts.enable = true;
     gestures.enable = true;
     git.enable = true;
     inputs.enable = true;
@@ -62,7 +64,6 @@
     standardnotes.enable = true;
     steam.enable = true;
     stremio.enable = true;
-    stylix.enable = true;
     thunderbird.enable = true;
     utils.enable = true;
     vlc.enable = true;
