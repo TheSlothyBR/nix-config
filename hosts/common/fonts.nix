@@ -13,12 +13,12 @@
   config = lib.mkIf config.custom.fonts.enable {
     fonts = {
       packages = with pkgs; [
-        cantarell-fonts
+        inter
         (nerdfonts.override { fonts = [ "FiraCode" ]; })
       ];
       fontconfig = {
         defaultFonts = {
-          sansSerif = [ "Cantarell" ];
+          sansSerif = [ "Inter Variable 11" ];
           monospace = [ "FiraCode Nerd Font Mono" ];
         };
       };

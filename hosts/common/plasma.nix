@@ -190,7 +190,7 @@ fi
           ];
           fonts = {
             general = {
-              family = "Cantarell";
+              family = "Inter Variable 11";
             };
           };
           desktop = {
