@@ -34,7 +34,9 @@ $time\
 $fill\
 $cmd_duration\
 [¿](fg:separator)\
-$directory\
+''${custom.parents}\
+[¿](fg:separator)\
+''${custom.size}\
 $git_commit\
 $git_branch\
 $nix_shell\
@@ -42,7 +44,7 @@ $container\
 [¿](fg:separator)\
 $battery\
 $line_break\
-[¿](fg:separator)''${env_var.PWD}$character'';
+[¿](fg:separator)$directory$character'';
           palete = "default";
           "palettes.default" = {
             separator  = "#35312c"; #grey
@@ -65,11 +67,15 @@ $line_break\
           cmd_duration = {
             format = "[¿](fg:accent)[$duration](fg:$icon bg:accent)[¿](fg:accent)";
           };
-          directory = {
-            truncation_length = 2;
-            fish_style_pwd_dir_length = 3;
-            read_only = "¿";
-            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ \($read_only\) $path](bg:background)[¿](fg:background)";
+          "custom.parents" = {
+            command = "pwd -P | cut -d '/' -f 2,3,4";
+            when = true;
+            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $output](bg:background)[¿](fg:background)";
+          };
+          "custom.size" = {
+            command = "du -sh | cut -f 1";
+            when = true;
+            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $output](bg:background)[¿](fg:background)";
           };
           git_commit = {
             tag_disabled = false;
@@ -99,10 +105,14 @@ $line_break\
             threshold = 15;
             style = "error";
           };
-          "env_var.PWD" = {
-            variable = "PWD";
-            default = "Unknown Dir";
-            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $env_value](bg:background)[¿](fg:background)";
+          directory = {
+            truncation_length = 0;
+            fish_style_pwd_dir_length = 0;
+            truncation_symbol = "";
+            truncate_to_repo = false;
+            read_only = "¿";
+            read_only_style = "fg:icon";
+            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $path $read_only](bg:background)[¿](fg:background)";
           };
           character = {
             format = "$symbol[¿](fg:accent)";
