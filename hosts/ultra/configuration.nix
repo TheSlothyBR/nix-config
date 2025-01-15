@@ -21,6 +21,7 @@
     calibre.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
+    font-viewer.enable = true;
     fonts.enable = true;
     gestures.enable = true;
     git.enable = true;
