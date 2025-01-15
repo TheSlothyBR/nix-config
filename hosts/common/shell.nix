@@ -31,12 +31,13 @@
           format = ''
 [¿¿](fg:separator)\
 $time\
+[¿](fg:separator)\
+$hostname\
+$username\
 $fill\
 $cmd_duration\
 [¿](fg:separator)\
 ''${custom.parents}\
-[¿](fg:separator)\
-''${custom.size}\
 $git_commit\
 $git_branch\
 $nix_shell\
@@ -61,6 +62,17 @@ $line_break\
             utc_time_offset = "-3";
             format = "[¿](fg:accent)[$time](fg:$icon bg:accent)[¿](fg:accent)";
           };
+          hostname = {
+            ssh_only = false;
+            ssh_symbol = "¿";
+            format = "[¿](fg:background)[($ssh_symbol )$hostname](bg:background)[¿](fg:accent bg:background)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)";
+          };
+          username = {
+            show_always = true;
+            style_user = "bg:background";
+            style_root = "fg:warning bg:background"; 
+            format = "[$username](bg:background)[¿](bg:background)";
+          };
           fill = {
             symbol = " ";
           };
@@ -69,11 +81,6 @@ $line_break\
           };
           "custom.parents" = {
             command = "pwd -P | cut -d '/' -f 2,3,4";
-            when = true;
-            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $output](bg:background)[¿](fg:background)";
-          };
-          "custom.size" = {
-            command = "du -sh | cut -f 1";
             when = true;
             format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $output](bg:background)[¿](fg:background)";
           };
@@ -112,7 +119,7 @@ $line_break\
             truncate_to_repo = false;
             read_only = "¿";
             read_only_style = "fg:icon";
-            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $path $read_only](bg:background)[¿](fg:background)";
+            format = "[¿](fg:accent)[¿](fg:icon bg:accent)[¿](fg:accent bg:background)[ $path( \($read_only\))](bg:background)[¿](fg:background)";
           };
           character = {
             format = "$symbol[¿](fg:accent)";
