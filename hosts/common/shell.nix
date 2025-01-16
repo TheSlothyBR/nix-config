@@ -1,10 +1,11 @@
-{ config
-, isUser
-, globals
-, pkgs
-, lib
-, ...
-}:{
+{
+  config,
+  isUser,
+  pkgs,
+  lib,
+  ...
+}:
+{
   options = {
     custom.shell = {
       enable = lib.mkEnableOption "Shell config";
@@ -20,7 +21,6 @@
       fish = {
         enable = true;
         interactiveShellInit = ''
-          starship init fish | source
           zoxide init fish | source
         '';
       };
@@ -28,103 +28,96 @@
         enable = true;
         settings = {
           add_newline = false;
+          command_timeout = 1000;
           format = ''
-[øø](fg:separator)\
-$time\
-[ø](fg:separator)\
-$hostname\
-$username\
-$fill\
-$cmd_duration\
-[ø](fg:separator)\
-''${custom.parents}\
-$git_commit\
-$git_branch\
-$nix_shell\
-$container\
-[ø](fg:separator)\
-$battery\
-$line_break\
-[ø](fg:separator)$directory$character'';
-          palete = "default";
-          "palettes.default" = {
-            separator  = "#35312c"; #grey
-            background = "#35312c"; #grey
-            icon = "#161514"; #black
-            accent = "#e26f31"; #orange
-            success = "#6BD425"; #green
-            error = "#e23140"; #red
-            warning = "#8047c1"; #purple
-            blue = "#5BC0EB";
+            [‚ï≠](fg:separator)$hostname$username[‚îÄ](fg:separator)$time$fill''${custom.parents}$git_commit$git_branch$nix_shell$container[‚îÄ](fg:separator)$battery$line_break[‚ï∞](fg:separator)$directory$character
+          '';
+          palette = "default";
+          palettes = {
+            default = {
+              separator = "#35312c"; # grey
+              background = "#35312c"; # grey
+              icon = "#161514"; # black
+              accent = "#e26f31"; # orange
+              success = "#6BD425"; # green
+              error = "#e23140"; # red
+              warning = "#8047c1"; # purple
+              blue = "#5BC0EB";
+            };
           };
           time = {
+            disabled = false;
             time_format = "%R";
             utc_time_offset = "-3";
-            format = "[ø](fg:accent)[$time](fg:$icon bg:accent)[ø](fg:accent)";
+            format = "[Óéà](fg:accent)[ $time](accent)";
           };
           hostname = {
             ssh_only = false;
-            ssh_symbol = "ø";
-            format = "[ø](fg:background)[($ssh_symbol )$hostname](bg:background)[ø](fg:accent bg:background)[ø](fg:icon bg:accent)[ø](fg:accent bg:background)";
+            ssh_symbol = "Û∞¥Ω";
+            format = "[ÓÇ∂](fg:background)[($ssh_symbol )$hostname](bg:background)[ÓÇ∂](fg:accent bg:background)[Û∞πª](fg:icon bg:accent)[ÓÇ¥](fg:accent bg:background)";
           };
           username = {
             show_always = true;
-            style_user = "bg:background";
-            style_root = "fg:warning bg:background"; 
-            format = "[$username](bg:background)[ø](bg:background)";
+            style_user = "fg:white bg:background";
+            style_root = "fg:warning bg:background";
+            format = "[$username]($style)[ÓÇ¥](fg:background)";
           };
           fill = {
             symbol = " ";
           };
           cmd_duration = {
-            format = "[ø](fg:accent)[$duration](fg:$icon bg:accent)[ø](fg:accent)";
+            format = "[ÓÇ∂](fg:accent)[$duration](fg:$icon bg:accent)[ÓÇ¥](fg:accent)[‚îÄ](fg:separator)";
           };
-          "custom.parents" = {
-            command = "pwd -P | cut -d '/' -f 2,3,4";
-            when = true;
-            format = "[ø](fg:accent)[ø](fg:icon bg:accent)[ø](fg:accent bg:background)[ $output](bg:background)[ø](fg:background)";
+          custom = {
+            parents = {
+              command = "pwd -P | cut -d '/' -f 2,3,4";
+              when = true;
+              format = "[ÓÇ∂](fg:accent)[ÔÅª](fg:icon bg:accent)[ÓÇ¥](fg:accent bg:background)[ $output](bg:background)[ÓÇ¥](fg:background)";
+            };
           };
           git_commit = {
             tag_disabled = false;
-            format = "[ø](fg:separator)[ø](fg:accent)[ø](fg:icon bg:accent)[ø](fg:accent bg:background)[ $hash$tag](bg:background)[ø](fg:background)";
+            format = "[‚îÄ](fg:separator)[ÓÇ∂](fg:accent)[Ó´º](fg:icon bg:accent)[ÓÇ¥](fg:accent bg:background)[ $hash( \($tag\))](bg:background)[ÓÇ¥](fg:background)";
           };
           git_branch = {
-            format = "[ø](fg:separator)[ø](fg:accent)[ø](fg:icon bg:accent)[ø](fg:accent bg:background)[ $symbol$branch(:$remote_branch)](bg:background)[ø](fg:background)";
+            format = "[‚îÄ](fg:separator)[ÓÇ∂](fg:accent)[Óú•](fg:icon bg:accent)[ÓÇ¥](fg:accent bg:background)[ $symbol$branch(:$remote_branch)](bg:background)[ÓÇ¥](fg:background)";
           };
           nix_shell = {
-            format = "[ø](fg:separator)[ø](fg:accent)[ø](fg:icon bg:accent)[ø](fg:accent bg:background)[ $name \($state\)](bg:background)[ø](fg:background)";
+            format = "[‚îÄ](fg:separator)[ÓÇ∂](fg:accent)[Ôåì](fg:icon bg:accent)[ÓÇ¥](fg:accent bg:background)[ $name \($state\)](bg:background)[ÓÇ¥](fg:background)";
           };
           container = {
-            format = "[ø](fg:separator)[ø](fg:accent)[ø](fg:icon bg:accent)[ø](fg:accent bg:background)[ $name](bg:background)[ø](fg:background)";
+            format = "[‚îÄ](fg:separator)[ÓÇ∂](fg:accent)[Ôí∑](fg:icon bg:accent)[ÓÇ¥](fg:accent bg:background)[ $name](bg:background)[ÓÇ¥](fg:background)";
           };
           battery = {
-            format = "[ø](fg:accent)[$symbol](fg:$style bg:accent)[$percentage]($fg:icon bg:accent)[ø](fg:accent)";
-          };
-          "battery.display" = {
-            threshold = 100;
-            style = "success";
-          }
-          "battery.display" = {
-            threshold = 50;
-            style = "warning";
-          }
-          "battery.display" = {
-            threshold = 15;
-            style = "error";
+            format = "[ÓÇ∂](fg:accent)[$symbol](fg:$style bg:accent)[ÓÇ¥](fg:accent)";
+            display = [
+              {
+                threshold = 100;
+                style = "success";
+              }
+              {
+                threshold = 50;
+                style = "warning";
+              }
+              {
+                threshold = 15;
+                style = "error";
+              }
+            ];
           };
           directory = {
-            truncation_length = 0;
+            truncation_length = 100;
             fish_style_pwd_dir_length = 0;
             truncation_symbol = "";
             truncate_to_repo = false;
-            read_only = "ø";
+            read_only = "Û∞âê";
             read_only_style = "fg:icon";
-            format = "[ø](fg:accent)[ø](fg:icon bg:accent)[ø](fg:accent bg:background)[ $path( \($read_only\))](bg:background)[ø](fg:background)";
+            format = "[ÓÇ∂](fg:accent)[ÔÅª](fg:icon bg:accent)[ÓÇ¥](fg:accent bg:background)[ $path( \($read_only\))](bg:background)[ÓÇ¥](fg:background)";
           };
           character = {
-            format = "$symbol[ø](fg:accent)";
-            success_symbol = "[ø](fg:success)";
-            error_symbol = "[ø](fg:error)";
+            format = " $symbol [Û∞ÖÇ](fg:accent) ";
+            success_symbol = "[ÔÅù](fg:success)";
+            error_symbol = "[ÔÅú](fg:error)";
           };
         };
       };

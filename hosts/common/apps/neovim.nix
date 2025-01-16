@@ -31,7 +31,6 @@
           enableLuaLoader = true;
 
           useSystemClipboard = true;
-          mouse = "nicr";
           lineNumberMode = "relative";
           searchCase = "smart";
           preventJunkFiles = true;
@@ -47,13 +46,14 @@
 
           options = {
             backspace = "indent,eol,start";
-            cursorline = true,
-            completeopt = "menuone,noselect,fuzzy";
+            cursorline = true;
+            #completeopt = "menuone,noselect";
             expandtab = true;
-	        jumpoptions = "view";
+            jumpoptions = "view";
             keymodel = "startsel";
-            list = true,
-	        listchars = "trail:·,nbsp:¿,tab:¿ ,extends:¿,precedes:¿",
+            list = true;
+            #listchars = "trail:·,nbsp:¿,tab:¿ ,extends:¿,precedes:¿";
+            mouse = "nicr";
             mousemodel = "extend";
             number = true;
             numberwidth = 3;
@@ -73,12 +73,12 @@
             tabstop = 2;
             undolevels = 10000;
             wrap = true;
-            wildmenu = true
+            wildmenu = true;
           };
           luaConfigRC.basic = ''
-            vim.opt.path:append({ "**" })
-          	vim.opt.iskeyword:append("-")
-	        vim.opt.whichwrap:append( '<,>,h,l,[,]' )
+                        vim.opt.path:append({ "**" })
+                        vim.opt.iskeyword:append("-")
+                        vim.opt.whichwrap:append( '<,>,h,l,[,]' )
           '';
 
           statusline.lualine.enable = true;

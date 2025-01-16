@@ -21,7 +21,6 @@
     calibre.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
-    font-viewer.enable = true;
     fonts.enable = true;
     gestures.enable = true;
     git.enable = true;
@@ -72,10 +71,10 @@
     wezterm.enable = true;
     wifi-adapter.enable = true;
     zellij.enable = true;
-	zotero = {
-	  enable = true;
-	  autostart = false;
-	};
+    zotero = {
+      enable = true;
+      autostart = false;
+    };
     zswap.enable = true;
   };
 }

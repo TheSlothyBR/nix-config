@@ -1,14 +1,16 @@
-{ pkgs
-, inputs
-, config
-, globals
-, isConfig
-, isUser
-, lib
-, ...
-}:{
+{
+  pkgs,
+  inputs,
+  config,
+  globals,
+  isConfig,
+  isUser,
+  lib,
+  ...
+}:
+{
   imports = [
-    
+
   ];
 
   options = {
@@ -25,7 +27,9 @@
 
     nixpkgs.overlays = [
       (final: prev: {
-       plasma-panel-spacer-extended = (pkgs.callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix {});
+        plasma-panel-spacer-extended = (
+          pkgs.callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix { }
+        );
       })
     ];
 
@@ -55,62 +59,63 @@
         spectacle
         xwaylandvideobridge
       ];
-      systemPackages = let
-        stable = with pkgs; [
-          (callPackage ../../pkgs/kde-material-you-colors-widget.nix {})
-          (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix {})
-          (callPackage ../../pkgs/pywal16-libadwaita.nix {})
-          (callPackage ../../pkgs/yaru-unity-plasma-icons.nix {})
-          application-title-bar
-          kara
-          kdePackages.krohnkite
-          kdePackages.qtstyleplugin-kvantum
-          kdePackages.sddm-kcm
-          kde-rounded-corners
-          inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
-          inputs.kvlibadwaita.packages.${pkgs.system}.default
-          fusuma #requires adding user to inputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
-          plasma-panel-colorizer
-          python312Packages.kde-material-you-colors
-          pywal16
-          (pkgs.writeShellApplication {
-            name = "plasma-random-wallpaper";
-            runtimeInputs = [ pkgs.kdePackages.qttools ];
-            text = ''
-WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
-if [ -f "$WALLPAPER" ]; then
-  if [ ! -f "/home/${isUser}/.config/kde-material-you-colors/.ran" ]; then
-    if [ ! -f "/home/${isUser}/.config/kscreenlockerrc" ]; then
-      touch /home/${isUser}/.config/kscreenlockerrc
-    fi
+      systemPackages =
+        let
+          stable = with pkgs; [
+            (callPackage ../../pkgs/kde-material-you-colors-widget.nix { })
+            (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix { })
+            (callPackage ../../pkgs/pywal16-libadwaita.nix { })
+            (callPackage ../../pkgs/yaru-unity-plasma-icons.nix { })
+            application-title-bar
+            kara
+            kdePackages.krohnkite
+            kdePackages.qtstyleplugin-kvantum
+            kdePackages.sddm-kcm
+            kde-rounded-corners
+            inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+            inputs.kvlibadwaita.packages.${pkgs.system}.default
+            fusuma # requires adding user to inputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
+            plasma-panel-colorizer
+            python312Packages.kde-material-you-colors
+            pywal16
+            (pkgs.writeShellApplication {
+              name = "plasma-random-wallpaper";
+              runtimeInputs = [ pkgs.kdePackages.qttools ];
+              text = ''
+                WALLPAPER=$(find /home/${isUser}/Drive/Wallpapers -type f | shuf -n 1)
+                if [ -f "$WALLPAPER" ]; then
+                  if [ ! -f "/home/${isUser}/.config/kde-material-you-colors/.ran" ]; then
+                    if [ ! -f "/home/${isUser}/.config/kscreenlockerrc" ]; then
+                      touch /home/${isUser}/.config/kscreenlockerrc
+                    fi
 
-    touch /home/${isUser}/.config/kde-material-you-colors/.ran
-    qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
-      desktops().forEach((d) => {
-          d.currentConfigGroup = [
-            'Wallpaper',
-            'org.kde.image',
-            'General'
-          ]
-          d.writeConfig('Image', 'file://$WALLPAPER')
-          d.reloadConfig()
-      })
-    "
-    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$WALLPAPER"
-  else
-    exit
-  fi
-else
-  exit 1
-fi
-'';
-          })
-          wl-clipboard-rs
-        ];
-        unstable = with pkgs.unstable; [
-          
-        ];
-      in
+                    touch /home/${isUser}/.config/kde-material-you-colors/.ran
+                    qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+                      desktops().forEach((d) => {
+                          d.currentConfigGroup = [
+                            'Wallpaper',
+                            'org.kde.image',
+                            'General'
+                          ]
+                          d.writeConfig('Image', 'file://$WALLPAPER')
+                          d.reloadConfig()
+                      })
+                    "
+                    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$WALLPAPER"
+                  else
+                    exit
+                  fi
+                else
+                  exit 1
+                fi
+              '';
+            })
+            wl-clipboard-rs
+          ];
+          unstable = with pkgs.unstable; [
+
+          ];
+        in
         stable ++ unstable;
     };
 
@@ -123,7 +128,7 @@ fi
     };
 
     home-manager = {
-      sharedModules  = [
+      sharedModules = [
         inputs.plasma-manager.homeManagerModules.plasma-manager
       ];
       users.${isUser} = {
@@ -154,8 +159,8 @@ fi
           };
           kwin = {
             titlebarButtons = {
-              right = [  ];
-              left = [  ];
+              right = [ ];
+              left = [ ];
             };
             borderlessMaximizedWindows = true;
             effects = {
@@ -190,7 +195,28 @@ fi
           ];
           fonts = {
             general = {
-              family = "Inter Variable 11";
+              family = "Inter Variable";
+              pointSize = 11;
+            };
+            fixedWidth = {
+              family = "FiraCode Nerd Font Mono";
+              pointSize = 10;
+            };
+            small = {
+              family = "Inter Variable";
+              pointSize = 9;
+            };
+            toolbar = {
+              family = "Inter Variable";
+              pointSize = 11;
+            };
+            menu = {
+              family = "Inter Variable";
+              pointSize = 11;
+            };
+            windowTitle = {
+              family = "Inter Variable";
+              pointSize = 11;
             };
           };
           desktop = {
@@ -253,7 +279,7 @@ fi
                   };
                 }
                 "luisbocanegra.panel.colorizer"
-                "org.kde.plasma.appmenu" 
+                "org.kde.plasma.appmenu"
                 "luisbocanegra.panelspacer.extended"
                 "org.kde.plasma.mediacontroller"
                 {
@@ -381,19 +407,10 @@ fi
                   iconTasks = {
                     launchers = [
                       "preferred://filemanager"
-                      (if config.custom.wezterm.enable
-                        then "applications:org.wezfurlong.wezterm.desktop"
-                        else ""
-                      )
+                      (if config.custom.wezterm.enable then "applications:org.wezfurlong.wezterm.desktop" else "")
                       "preferred://browser"
-                      (if config.custom.obsidian.enable
-                        then "applications:md.obsidian.Obsidian.desktop"
-                        else ""
-                      )
-                      (if config.custom.keepassxc.enable
-                        then "applications:org.keepassxc.KeePassXC.desktop"
-                        else ""
-                      )
+                      (if config.custom.obsidian.enable then "applications:md.obsidian.Obsidian.desktop" else "")
+                      (if config.custom.keepassxc.enable then "applications:org.keepassxc.KeePassXC.desktop" else "")
                     ];
                     appearance = {
                       showTooltips = true;
@@ -419,8 +436,8 @@ fi
                       };
                       showTasks = {
                         onlyInCurrentScreen = false;
-                        onlyInCurrentDesktop = true; 
-                        onlyInCurrentActivity = true; 
+                        onlyInCurrentDesktop = true;
+                        onlyInCurrentActivity = true;
                         onlyMinimized = false;
                       };
                       unhideOnAttentionNeeded = true;
@@ -515,8 +532,8 @@ fi
                 TransparentBlur = false;
               };
               "Round-Corners" = {
-                InactiveCornerRadius=15;
-                Size=15;
+                InactiveCornerRadius = 15;
+                Size = 15;
               };
               "PrimaryOutline" = {
                 ActiveOutlineUseCustom = false;
@@ -550,8 +567,8 @@ fi
                 DisplayBrightness = 90;
               };
               "Battery/Display" = {
-                 UseProfileSpecificDisplayBrightness = true;
-                 DisplayBrightness = 15;
+                UseProfileSpecificDisplayBrightness = true;
+                DisplayBrightness = 15;
               };
               "LowBattery/Display".DisplayBrightness = 15;
             };
@@ -633,23 +650,23 @@ fi
         Group = "users";
       };
       script = ''
-        mkdir -p ~/.config/autostart
-        cat << 'EOF' > ~/.config/autostart/fusuma.desktop
-[Desktop Entry]
-Exec=fusuma -d
-Icon=
-Name=fusuma
-Type=Application
-X-KDE-AutostartScript=true
-EOF
+                mkdir -p ~/.config/autostart
+                cat << 'EOF' > ~/.config/autostart/fusuma.desktop
+        [Desktop Entry]
+        Exec=fusuma -d
+        Icon=
+        Name=fusuma
+        Type=Application
+        X-KDE-AutostartScript=true
+        EOF
 
-        mkdir -p ~/.config/fusuma
-        cat << 'EOF' > ~/.config/fusuma/config.yml
-hold:
-  3:
-    command: "flatpak run menu.kando.Kando --menu Plasma"
-    interval: 0.5
-EOF
+                mkdir -p ~/.config/fusuma
+                cat << 'EOF' > ~/.config/fusuma/config.yml
+        hold:
+          3:
+            command: "flatpak run menu.kando.Kando --menu Plasma"
+            interval: 0.5
+        EOF
       '';
     };
 
@@ -662,25 +679,29 @@ EOF
         Group = "users";
       };
       script = ''
-        mkdir -p ~/.config
-        cat << 'EOF' > ~/.config/mimeapps.list
-[Default Applications]
-${if config.custom.brave.enable then "x-scheme-handler/https=com.brave.Browser.desktop" else ""}
-${if config.custom.brave.enable then "x-scheme-handler/http=com.brave.Browser.desktop" else ""}
-${if config.custom.brave.enable then "x-scheme-handler/unknown=com.brave.Browser.desktop" else ""}
-image/*=org.gnome.Loupe.desktop
-video/*=org.videolan.VLC.desktop
-audio/*=org.videolan.VLC.desktop
-application/pdf=org.kde.okular.desktop
-text/*=org.kde.kate.desktop
-application/x-torrent=org.kde.ktorrent.desktop
-application/x-bittorrent=org.kde.ktorrent.desktop
-x-scheme-handler/magnet=org.kde.ktorrent.desktop
-[Added Associations]
-x-scheme-handler/https=${if config.custom.brave.enable then "com.brave.Browser.desktop" else ""},${if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop" else ""}
-x-scheme-handler/http=${if config.custom.brave.enable then "com.brave.Browser.desktop" else ""},${if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop" else ""}
-[Removed Associations]
-EOF
+                mkdir -p ~/.config
+                cat << 'EOF' > ~/.config/mimeapps.list
+        [Default Applications]
+        ${if config.custom.brave.enable then "x-scheme-handler/https=com.brave.Browser.desktop" else ""}
+        ${if config.custom.brave.enable then "x-scheme-handler/http=com.brave.Browser.desktop" else ""}
+        ${if config.custom.brave.enable then "x-scheme-handler/unknown=com.brave.Browser.desktop" else ""}
+        image/*=org.gnome.Loupe.desktop
+        video/*=org.videolan.VLC.desktop
+        audio/*=org.videolan.VLC.desktop
+        application/pdf=org.kde.okular.desktop
+        text/*=org.kde.kate.desktop
+        application/x-torrent=org.kde.ktorrent.desktop
+        application/x-bittorrent=org.kde.ktorrent.desktop
+        x-scheme-handler/magnet=org.kde.ktorrent.desktop
+        [Added Associations]
+        x-scheme-handler/https=${if config.custom.brave.enable then "com.brave.Browser.desktop" else ""},${
+          if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop" else ""
+        }
+        x-scheme-handler/http=${if config.custom.brave.enable then "com.brave.Browser.desktop" else ""},${
+          if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop" else ""
+        }
+        [Removed Associations]
+        EOF
       '';
     };
 
@@ -693,16 +714,16 @@ EOF
         Group = "users";
       };
       script = ''
-        mkdir -p ~/.config/autostart
-        cat << 'EOF' > ~/.config/autostart/kde-material-you-colors.desktop
-[Desktop Entry]
-Exec=kde-material-you-colors
-Icon=color-management
-Name=KDE Material You Colors
-Comment=Starts/Restarts background process
-Type=Application
-X-KDE-AutostartScript=true
-EOF
+                mkdir -p ~/.config/autostart
+                cat << 'EOF' > ~/.config/autostart/kde-material-you-colors.desktop
+        [Desktop Entry]
+        Exec=kde-material-you-colors
+        Icon=color-management
+        Name=KDE Material You Colors
+        Comment=Starts/Restarts background process
+        Type=Application
+        X-KDE-AutostartScript=true
+        EOF
       '';
     };
 
@@ -715,50 +736,50 @@ EOF
         Group = "users";
       };
       script = ''
-        mkdir -p ~/.config/kde-material-you-colors
-        cat << 'EOF' > ~/.config/kde-material-you-colors/config.conf
-[CUSTOM]
-chroma_multiplier=1
-color=
-color_last=#d0265c
-custom_colors_list=
-custom_colors_list_last=#d0265c #74e448 #eece4f #66a3ef #532066 #297d81 #ccc1c1
-dark_brightness_multiplier=1
-dark_saturation_multiplier=1
-darker_window_list=
-disable_konsole=true
-gui_custom_exec_location=
-iconsdark=
-iconslight=
-klassy_windeco_outline=false
-konsole_opacity=100
-konsole_opacity_dark=100
-light=false
-light_brightness_multiplier=1
-light_saturation_multiplier=1
-main_loop_delay=1
-monitor=0
-ncolor=0
-on_change_hook=/run/current-system/sw/bin/plasma-random-wallpaper
-once_after_change=false
-pause_mode=false
-plasma_follows_scheme=false
-pywal=false
-pywal_follows_scheme=false
-pywal_light=false
-qdbus_executable=
-scheme_variant=5
-screenshot_delay=900
-screenshot_only_mode=false
-sierra_breeze_buttons_color=false
-startup_delay=0
-titlebar_opacity=100
-titlebar_opacity_dark=100
-tone_multiplier=1
-toolbar_opacity=100
-toolbar_opacity_dark=100
-use_startup_delay=false
-EOF
+                mkdir -p ~/.config/kde-material-you-colors
+                cat << 'EOF' > ~/.config/kde-material-you-colors/config.conf
+        [CUSTOM]
+        chroma_multiplier=1
+        color=
+        color_last=#d0265c
+        custom_colors_list=
+        custom_colors_list_last=#d0265c #74e448 #eece4f #66a3ef #532066 #297d81 #ccc1c1
+        dark_brightness_multiplier=1
+        dark_saturation_multiplier=1
+        darker_window_list=
+        disable_konsole=true
+        gui_custom_exec_location=
+        iconsdark=
+        iconslight=
+        klassy_windeco_outline=false
+        konsole_opacity=100
+        konsole_opacity_dark=100
+        light=false
+        light_brightness_multiplier=1
+        light_saturation_multiplier=1
+        main_loop_delay=1
+        monitor=0
+        ncolor=0
+        on_change_hook=/run/current-system/sw/bin/plasma-random-wallpaper
+        once_after_change=false
+        pause_mode=false
+        plasma_follows_scheme=false
+        pywal=false
+        pywal_follows_scheme=false
+        pywal_light=false
+        qdbus_executable=
+        scheme_variant=5
+        screenshot_delay=900
+        screenshot_only_mode=false
+        sierra_breeze_buttons_color=false
+        startup_delay=0
+        titlebar_opacity=100
+        titlebar_opacity_dark=100
+        tone_multiplier=1
+        toolbar_opacity=100
+        toolbar_opacity_dark=100
+        use_startup_delay=false
+        EOF
       '';
     };
 
@@ -771,196 +792,196 @@ EOF
         Group = "users";
       };
       script = ''
-        mkdir -p ~/.local/share/kxmlgui5/dolphin
-        cat << 'EOF' > ~/.local/share/kxmlgui5/dolphin/dolphinui.rc
-<!DOCTYPE gui>
-<gui name="dolphin" translationDomain="kxmlgui6" version="40">
- <MenuBar alreadyVisited="1">
-  <Menu alreadyVisited="1" name="file" noMerge="1">
-   <text translationDomain="kxmlgui6">&amp;File</text>
-   <Action name="file_new"/>
-   <Separator weakSeparator="1"/>
-   <Action name="new_menu"/>
-   <Action name="file_new"/>
-   <Action name="new_tab"/>
-   <Action name="file_close"/>
-   <Action name="undo_close_tab"/>
-   <Separator/>
-   <Action name="add_to_places"/>
-   <Separator/>
-   <Action name="renamefile"/>
-   <Action name="duplicate"/>
-   <Action name="movetotrash"/>
-   <Action name="deletefile"/>
-   <Separator/>
-   <Action name="show_target"/>
-   <Separator/>
-   <Action name="properties"/>
-   <Separator weakSeparator="1"/>
-   <Action name="file_close"/>
-   <Separator weakSeparator="1"/>
-   <Action name="file_quit"/>
-  </Menu>
-  <Menu alreadyVisited="1" name="edit" noMerge="1">
-   <text translationDomain="kxmlgui6">&amp;Edit</text>
-   <Action name="edit_undo"/>
-   <Separator weakSeparator="1"/>
-   <Action name="edit_cut"/>
-   <Action name="edit_copy"/>
-   <Action name="edit_paste"/>
-   <Separator weakSeparator="1"/>
-   <Action name="edit_select_all"/>
-   <Separator weakSeparator="1"/>
-   <Action name="edit_find"/>
-   <Separator weakSeparator="1"/>
-   <Action name="edit_undo"/>
-   <Separator/>
-   <Action name="edit_cut"/>
-   <Action name="edit_copy"/>
-   <Action name="copy_location"/>
-   <Action name="edit_paste"/>
-   <Separator/>
-   <Action name="show_filter_bar"/>
-   <Action name="edit_find"/>
-   <Separator/>
-   <Action name="toggle_selection_mode"/>
-   <Action name="copy_to_inactive_split_view"/>
-   <Action name="move_to_inactive_split_view"/>
-   <Action name="edit_select_all"/>
-   <Action name="invert_selection"/>
-  </Menu>
-  <Menu alreadyVisited="1" name="view" noMerge="1">
-   <text translationDomain="kxmlgui6">&amp;View</text>
-   <Action name="view_zoom_in"/>
-   <Action name="view_zoom_out"/>
-   <Separator weakSeparator="1"/>
-   <Action name="view_redisplay"/>
-   <Separator weakSeparator="1"/>
-   <Action name="view_zoom_in"/>
-   <Action name="view_zoom_reset"/>
-   <Action name="view_zoom_out"/>
-   <Separator/>
-   <Action name="sort"/>
-   <Action name="view_mode"/>
-   <Action name="additional_info"/>
-   <Action name="show_preview"/>
-   <Action name="show_in_groups"/>
-   <Action name="show_hidden_files"/>
-   <Action name="act_as_admin"/>
-   <Separator/>
-   <Action name="split_view_menu"/>
-   <Action name="popout_split_view"/>
-   <Action name="split_stash"/>
-   <Action name="redisplay"/>
-   <Action name="stop"/>
-   <Separator/>
-   <Action name="panels"/>
-   <Menu icon="edit-select-text" name="location_bar" noMerge="1">
-    <text context="@title:menu" translationDomain="dolphin">Location Bar</text>
-    <Action name="editable_location"/>
-    <Action name="replace_location"/>
-   </Menu>
-   <Separator/>
-   <Action name="view_properties"/>
-  </Menu>
-  <Menu alreadyVisited="1" name="go" noMerge="1">
-   <text translationDomain="kxmlgui6">&amp;Go</text>
-   <Action name="go_up"/>
-   <Action name="go_back"/>
-   <Action name="go_forward"/>
-   <Action name="go_home"/>
-   <Separator weakSeparator="1"/>
-   <Action name="bookmarks"/>
-   <Action name="closed_tabs"/>
-  </Menu>
-  <Menu alreadyVisited="1" name="tools" noMerge="1">
-   <text translationDomain="kxmlgui6">&amp;Tools</text>
-   <Action name="open_preferred_search_tool"/>
-   <Action name="open_terminal"/>
-   <Action name="open_terminal_here"/>
-   <Action name="focus_terminal_panel"/>
-   <Action name="compare_files"/>
-   <Action name="change_remote_encoding"/>
-  </Menu>
-  <Menu name="settings" noMerge="1">
-   <text translationDomain="kxmlgui6">&amp;Settings</text>
-   <Action name="options_show_menubar"/>
-   <Merge name="StandardToolBarMenuHandler"/>
-   <Merge name="KMDIViewActions"/>
-   <Action name="options_show_statusbar"/>
-   <Separator weakSeparator="1"/>
-   <Action name="switch_application_language"/>
-   <Action name="options_configure_keybinding"/>
-   <Action name="options_configure_toolbars"/>
-   <Action name="options_configure"/>
-  </Menu>
-  <Separator weakSeparator="1"/>
-  <Menu name="help" noMerge="1">
-   <text translationDomain="kxmlgui6">&amp;Help</text>
-   <Action name="help_contents"/>
-   <Action name="help_whats_this"/>
-   <Action name="open_kcommand_bar"/>
-   <Separator weakSeparator="1"/>
-   <Action name="help_report_bug"/>
-   <Separator weakSeparator="1"/>
-   <Action name="help_donate"/>
-   <Separator weakSeparator="1"/>
-   <Action name="help_about_app"/>
-   <Action name="help_about_kde"/>
-  </Menu>
- </MenuBar>
- <ToolBar alreadyVisited="1" name="mainToolBar" noMerge="1">
-  <Action name="hamburger_menu"/>
-  <text context="@title:menu" translationDomain="dolphin">Main Toolbar</text>
-  <Action name="go_back"/>
-  <Action name="go_forward"/>
-  <Action name="toggle_search"/>
-  <Spacer name="spacer_0"/>
- </ToolBar>
- <State name="new_file">
-  <disable>
-   <Action name="edit_undo"/>
-   <Action name="edit_redo"/>
-   <Action name="edit_cut"/>
-   <Action name="renamefile"/>
-   <Action name="movetotrash"/>
-   <Action name="deletefile"/>
-   <Action name="invert_selection"/>
-   <Separator/>
-   <Action name="go_back"/>
-   <Action name="go_forward"/>
-  </disable>
- </State>
- <State name="has_selection">
-  <enable>
-   <Action name="invert_selection"/>
-  </enable>
- </State>
- <State name="has_no_selection">
-  <disable>
-   <Action name="delete_shortcut"/>
-   <Action name="invert_selection"/>
-  </disable>
- </State>
- <ActionProperties scheme="Default">
-  <Action name="go_back" priority="0"/>
-  <Action name="go_forward" priority="0"/>
-  <Action name="go_up" priority="0"/>
-  <Action name="go_home" priority="0"/>
-  <Action name="stop" priority="0"/>
-  <Action name="icons" priority="0"/>
-  <Action name="compact" priority="0"/>
-  <Action name="details" priority="0"/>
-  <Action name="view_zoom_in" priority="0"/>
-  <Action name="view_zoom_reset" priority="0"/>
-  <Action name="view_zoom_out" priority="0"/>
-  <Action name="edit_cut" priority="0"/>
-  <Action name="edit_copy" priority="0"/>
-  <Action name="edit_paste" priority="0"/>
-  <Action name="toggle_search" priority="0"/>
-  <Action name="toggle_filter" priority="0"/>
- </ActionProperties>
-</gui>
+                mkdir -p ~/.local/share/kxmlgui5/dolphin
+                cat << 'EOF' > ~/.local/share/kxmlgui5/dolphin/dolphinui.rc
+        <!DOCTYPE gui>
+        <gui name="dolphin" translationDomain="kxmlgui6" version="40">
+         <MenuBar alreadyVisited="1">
+          <Menu alreadyVisited="1" name="file" noMerge="1">
+           <text translationDomain="kxmlgui6">&amp;File</text>
+           <Action name="file_new"/>
+           <Separator weakSeparator="1"/>
+           <Action name="new_menu"/>
+           <Action name="file_new"/>
+           <Action name="new_tab"/>
+           <Action name="file_close"/>
+           <Action name="undo_close_tab"/>
+           <Separator/>
+           <Action name="add_to_places"/>
+           <Separator/>
+           <Action name="renamefile"/>
+           <Action name="duplicate"/>
+           <Action name="movetotrash"/>
+           <Action name="deletefile"/>
+           <Separator/>
+           <Action name="show_target"/>
+           <Separator/>
+           <Action name="properties"/>
+           <Separator weakSeparator="1"/>
+           <Action name="file_close"/>
+           <Separator weakSeparator="1"/>
+           <Action name="file_quit"/>
+          </Menu>
+          <Menu alreadyVisited="1" name="edit" noMerge="1">
+           <text translationDomain="kxmlgui6">&amp;Edit</text>
+           <Action name="edit_undo"/>
+           <Separator weakSeparator="1"/>
+           <Action name="edit_cut"/>
+           <Action name="edit_copy"/>
+           <Action name="edit_paste"/>
+           <Separator weakSeparator="1"/>
+           <Action name="edit_select_all"/>
+           <Separator weakSeparator="1"/>
+           <Action name="edit_find"/>
+           <Separator weakSeparator="1"/>
+           <Action name="edit_undo"/>
+           <Separator/>
+           <Action name="edit_cut"/>
+           <Action name="edit_copy"/>
+           <Action name="copy_location"/>
+           <Action name="edit_paste"/>
+           <Separator/>
+           <Action name="show_filter_bar"/>
+           <Action name="edit_find"/>
+           <Separator/>
+           <Action name="toggle_selection_mode"/>
+           <Action name="copy_to_inactive_split_view"/>
+           <Action name="move_to_inactive_split_view"/>
+           <Action name="edit_select_all"/>
+           <Action name="invert_selection"/>
+          </Menu>
+          <Menu alreadyVisited="1" name="view" noMerge="1">
+           <text translationDomain="kxmlgui6">&amp;View</text>
+           <Action name="view_zoom_in"/>
+           <Action name="view_zoom_out"/>
+           <Separator weakSeparator="1"/>
+           <Action name="view_redisplay"/>
+           <Separator weakSeparator="1"/>
+           <Action name="view_zoom_in"/>
+           <Action name="view_zoom_reset"/>
+           <Action name="view_zoom_out"/>
+           <Separator/>
+           <Action name="sort"/>
+           <Action name="view_mode"/>
+           <Action name="additional_info"/>
+           <Action name="show_preview"/>
+           <Action name="show_in_groups"/>
+           <Action name="show_hidden_files"/>
+           <Action name="act_as_admin"/>
+           <Separator/>
+           <Action name="split_view_menu"/>
+           <Action name="popout_split_view"/>
+           <Action name="split_stash"/>
+           <Action name="redisplay"/>
+           <Action name="stop"/>
+           <Separator/>
+           <Action name="panels"/>
+           <Menu icon="edit-select-text" name="location_bar" noMerge="1">
+            <text context="@title:menu" translationDomain="dolphin">Location Bar</text>
+            <Action name="editable_location"/>
+            <Action name="replace_location"/>
+           </Menu>
+           <Separator/>
+           <Action name="view_properties"/>
+          </Menu>
+          <Menu alreadyVisited="1" name="go" noMerge="1">
+           <text translationDomain="kxmlgui6">&amp;Go</text>
+           <Action name="go_up"/>
+           <Action name="go_back"/>
+           <Action name="go_forward"/>
+           <Action name="go_home"/>
+           <Separator weakSeparator="1"/>
+           <Action name="bookmarks"/>
+           <Action name="closed_tabs"/>
+          </Menu>
+          <Menu alreadyVisited="1" name="tools" noMerge="1">
+           <text translationDomain="kxmlgui6">&amp;Tools</text>
+           <Action name="open_preferred_search_tool"/>
+           <Action name="open_terminal"/>
+           <Action name="open_terminal_here"/>
+           <Action name="focus_terminal_panel"/>
+           <Action name="compare_files"/>
+           <Action name="change_remote_encoding"/>
+          </Menu>
+          <Menu name="settings" noMerge="1">
+           <text translationDomain="kxmlgui6">&amp;Settings</text>
+           <Action name="options_show_menubar"/>
+           <Merge name="StandardToolBarMenuHandler"/>
+           <Merge name="KMDIViewActions"/>
+           <Action name="options_show_statusbar"/>
+           <Separator weakSeparator="1"/>
+           <Action name="switch_application_language"/>
+           <Action name="options_configure_keybinding"/>
+           <Action name="options_configure_toolbars"/>
+           <Action name="options_configure"/>
+          </Menu>
+          <Separator weakSeparator="1"/>
+          <Menu name="help" noMerge="1">
+           <text translationDomain="kxmlgui6">&amp;Help</text>
+           <Action name="help_contents"/>
+           <Action name="help_whats_this"/>
+           <Action name="open_kcommand_bar"/>
+           <Separator weakSeparator="1"/>
+           <Action name="help_report_bug"/>
+           <Separator weakSeparator="1"/>
+           <Action name="help_donate"/>
+           <Separator weakSeparator="1"/>
+           <Action name="help_about_app"/>
+           <Action name="help_about_kde"/>
+          </Menu>
+         </MenuBar>
+         <ToolBar alreadyVisited="1" name="mainToolBar" noMerge="1">
+          <Action name="hamburger_menu"/>
+          <text context="@title:menu" translationDomain="dolphin">Main Toolbar</text>
+          <Action name="go_back"/>
+          <Action name="go_forward"/>
+          <Action name="toggle_search"/>
+          <Spacer name="spacer_0"/>
+         </ToolBar>
+         <State name="new_file">
+          <disable>
+           <Action name="edit_undo"/>
+           <Action name="edit_redo"/>
+           <Action name="edit_cut"/>
+           <Action name="renamefile"/>
+           <Action name="movetotrash"/>
+           <Action name="deletefile"/>
+           <Action name="invert_selection"/>
+           <Separator/>
+           <Action name="go_back"/>
+           <Action name="go_forward"/>
+          </disable>
+         </State>
+         <State name="has_selection">
+          <enable>
+           <Action name="invert_selection"/>
+          </enable>
+         </State>
+         <State name="has_no_selection">
+          <disable>
+           <Action name="delete_shortcut"/>
+           <Action name="invert_selection"/>
+          </disable>
+         </State>
+         <ActionProperties scheme="Default">
+          <Action name="go_back" priority="0"/>
+          <Action name="go_forward" priority="0"/>
+          <Action name="go_up" priority="0"/>
+          <Action name="go_home" priority="0"/>
+          <Action name="stop" priority="0"/>
+          <Action name="icons" priority="0"/>
+          <Action name="compact" priority="0"/>
+          <Action name="details" priority="0"/>
+          <Action name="view_zoom_in" priority="0"/>
+          <Action name="view_zoom_reset" priority="0"/>
+          <Action name="view_zoom_out" priority="0"/>
+          <Action name="edit_cut" priority="0"/>
+          <Action name="edit_copy" priority="0"/>
+          <Action name="edit_paste" priority="0"/>
+          <Action name="toggle_search" priority="0"/>
+          <Action name="toggle_filter" priority="0"/>
+         </ActionProperties>
+        </gui>
       '';
     };
 
@@ -973,190 +994,190 @@ EOF
         Group = "users";
       };
       script = ''
-        mkdir -p ~/.local/share
-        cat << 'EOF' > ~/.local/share/user-places.xbel
-<?xml version="1.0" encoding="UTF-8"?>
-<xbel>
- <info>
-  <metadata owner="http://www.kde.org">
-   <kde_places_version>4</kde_places_version>
-   <GroupState-Places-IsHidden>false</GroupState-Places-IsHidden>
-   <GroupState-Remote-IsHidden>true</GroupState-Remote-IsHidden>
-   <GroupState-Devices-IsHidden>false</GroupState-Devices-IsHidden>
-   <GroupState-RemovableDevices-IsHidden>false</GroupState-RemovableDevices-IsHidden>
-   <GroupState-Tags-IsHidden>false</GroupState-Tags-IsHidden>
-   <withRecentlyUsed>true</withRecentlyUsed>
-   <GroupState-RecentlySaved-IsHidden>true</GroupState-RecentlySaved-IsHidden>
-   <withBaloo>true</withBaloo>
-   <GroupState-SearchFor-IsHidden>false</GroupState-SearchFor-IsHidden>
-  </metadata>
- </info>
- <bookmark href="file:///home/${isUser}">
-  <title>Home</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="user-home"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/0</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Desktop">
-  <title>Desktop</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="user-desktop"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/1</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Documents">
-  <title>Documents</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="folder-documents"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/2</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file://${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath}">
-  <title>dotfiles</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="inode-directory"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733524838/0</ID>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Downloads">
-  <title>Downloads</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="folder-downloads"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/3</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Drive">
-  <title>Drive</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="inode-directory"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733769851/0</ID>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Games">
-  <title>Games</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="inode-directory"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733769857/1</ID>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Music">
-  <title>Music</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="folder-music"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/6</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Pictures">
-  <title>Pictures</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="folder-pictures"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/7</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="file:///home/${isUser}/Videos">
-  <title>Videos</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="folder-videos"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/8</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="remote:/">
-  <title>Network</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="folder-network"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/4</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="trash:/">
-  <title>Trash</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="user-trash"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/5</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="recentlyused:/files">
-  <title>Recent Files</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="document-open-recent"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/9</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
- <bookmark href="recentlyused:/locations">
-  <title>Recent Locations</title>
-  <info>
-   <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="folder-open-recent"/>
-   </metadata>
-   <metadata owner="http://www.kde.org">
-    <ID>1733523249/10</ID>
-    <isSystemItem>true</isSystemItem>
-   </metadata>
-  </info>
- </bookmark>
-</xbel>
+                mkdir -p ~/.local/share
+                cat << 'EOF' > ~/.local/share/user-places.xbel
+        <?xml version="1.0" encoding="UTF-8"?>
+        <xbel>
+         <info>
+          <metadata owner="http://www.kde.org">
+           <kde_places_version>4</kde_places_version>
+           <GroupState-Places-IsHidden>false</GroupState-Places-IsHidden>
+           <GroupState-Remote-IsHidden>true</GroupState-Remote-IsHidden>
+           <GroupState-Devices-IsHidden>false</GroupState-Devices-IsHidden>
+           <GroupState-RemovableDevices-IsHidden>false</GroupState-RemovableDevices-IsHidden>
+           <GroupState-Tags-IsHidden>false</GroupState-Tags-IsHidden>
+           <withRecentlyUsed>true</withRecentlyUsed>
+           <GroupState-RecentlySaved-IsHidden>true</GroupState-RecentlySaved-IsHidden>
+           <withBaloo>true</withBaloo>
+           <GroupState-SearchFor-IsHidden>false</GroupState-SearchFor-IsHidden>
+          </metadata>
+         </info>
+         <bookmark href="file:///home/${isUser}">
+          <title>Home</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="user-home"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/0</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Desktop">
+          <title>Desktop</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="user-desktop"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/1</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Documents">
+          <title>Documents</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="folder-documents"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/2</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file://${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath}">
+          <title>dotfiles</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="inode-directory"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733524838/0</ID>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Downloads">
+          <title>Downloads</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="folder-downloads"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/3</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Drive">
+          <title>Drive</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="inode-directory"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733769851/0</ID>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Games">
+          <title>Games</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="inode-directory"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733769857/1</ID>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Music">
+          <title>Music</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="folder-music"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/6</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Pictures">
+          <title>Pictures</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="folder-pictures"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/7</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="file:///home/${isUser}/Videos">
+          <title>Videos</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="folder-videos"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/8</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="remote:/">
+          <title>Network</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="folder-network"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/4</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="trash:/">
+          <title>Trash</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="user-trash"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/5</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="recentlyused:/files">
+          <title>Recent Files</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="document-open-recent"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/9</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+         <bookmark href="recentlyused:/locations">
+          <title>Recent Locations</title>
+          <info>
+           <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="folder-open-recent"/>
+           </metadata>
+           <metadata owner="http://www.kde.org">
+            <ID>1733523249/10</ID>
+            <isSystemItem>true</isSystemItem>
+           </metadata>
+          </info>
+         </bookmark>
+        </xbel>
       '';
     };
   };
