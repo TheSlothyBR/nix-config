@@ -22,15 +22,20 @@
         enable = true;
         interactiveShellInit = ''
           zoxide init fish | source
+          function fish_greeting
+            if type -q fastfetch
+              fastfetch
+            end
+          end
         '';
       };
       starship = {
         enable = true;
         settings = {
           add_newline = false;
-          command_timeout = 1000;
+          command_timeout = 5000;
           format = ''
-            [╭](fg:separator)$hostname$username[─](fg:separator)$time$fill''${custom.parents}$git_commit$git_branch$nix_shell$container[─](fg:separator)$battery$line_break[╰](fg:separator)$directory$character
+            [╭](fg:separator)$hostname''${custom.username}[─](fg:separator)$time$fill''${custom.parents}$git_branch$nix_shell$container[─](fg:separator)$battery$line_break[╰](fg:separator)''${custom.directory}$character
           '';
           palette = "default";
           palettes = {
@@ -56,12 +61,6 @@
             ssh_symbol = "󰴽";
             format = "[](fg:background)[($ssh_symbol )$hostname](bg:background)[](fg:accent bg:background)[󰹻](fg:icon bg:accent)[](fg:accent bg:background)";
           };
-          username = {
-            show_always = true;
-            style_user = "fg:white bg:background";
-            style_root = "fg:warning bg:background";
-            format = "[$username]($style)[](fg:background)";
-          };
           fill = {
             symbol = " ";
           };
@@ -74,10 +73,16 @@
               when = true;
               format = "[](fg:accent)[](fg:icon bg:accent)[](fg:accent bg:background)[ $output](bg:background)[](fg:background)";
             };
-          };
-          git_commit = {
-            tag_disabled = false;
-            format = "[─](fg:separator)[](fg:accent)[](fg:icon bg:accent)[](fg:accent bg:background)[ $hash( \($tag\))](bg:background)[](fg:background)";
+            username = {
+              command = "whoami";
+              when = true;
+              format = "[$output](bg:background)[](fg:background)";
+            };
+            directory = {
+              command = "pwd -P | xargs basename";
+              when = true;
+              format = "[](fg:accent)[](fg:icon bg:accent)[](fg:accent bg:background)[ $output](bg:background)[](fg:background)";
+            };
           };
           git_branch = {
             format = "[─](fg:separator)[](fg:accent)[](fg:icon bg:accent)[](fg:accent bg:background)[ $symbol$branch(:$remote_branch)](bg:background)[](fg:background)";
@@ -105,15 +110,6 @@
               }
             ];
           };
-          directory = {
-            truncation_length = 100;
-            fish_style_pwd_dir_length = 0;
-            truncation_symbol = "";
-            truncate_to_repo = false;
-            read_only = "󰉐";
-            read_only_style = "fg:icon";
-            format = "[](fg:accent)[](fg:icon bg:accent)[](fg:accent bg:background)[ $path( \($read_only\))](bg:background)[](fg:background)";
-          };
           character = {
             format = " $symbol [󰅂](fg:accent) ";
             success_symbol = "[](fg:success)";
@@ -123,11 +119,27 @@
       };
     };
 
+    systemd.services."generate-fastfetch-config" = {
+      description = "Generate Fastfetch Config";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${isUser}";
+        Group = "users";
+      };
+      script = ''
+        #mkdir -p ~/.config/fastfetch
+        #cat << 'EOF' > ~/.config/fastfetch/config.jsonc
+        #EOF
+      '';
+    };
+
     environment = {
       systemPackages = with pkgs; [
         bat
         erdtree
         eza
+        fastfetch
         fishPlugins.fzf-fish
         fzf
         tealdeer

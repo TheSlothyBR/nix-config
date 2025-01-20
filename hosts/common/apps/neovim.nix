@@ -50,18 +50,18 @@
             #completeopt = "menuone,noselect";
             expandtab = true;
             jumpoptions = "view";
-            keymodel = "startsel";
+            #keymodel = "startsel";
             list = true;
             #listchars = "trail:·,nbsp:¿,tab:¿ ,extends:¿,precedes:¿";
             mouse = "nicr";
-            mousemodel = "extend";
+            #mousemodel = "extend";
             number = true;
             numberwidth = 3;
             pumheight = 10;
             relativenumber = true;
             scrolloff = 8;
-            selection = "inclusive";
-            selectmode = "key,mouse,cmd";
+            #selection = "inclusive";
+            #selectmode = "key,mouse,cmd";
             shiftwidth = 2;
             signcolumn = "no";
             smarttab = true;
@@ -76,9 +76,9 @@
             wildmenu = true;
           };
           luaConfigRC.basic = ''
-                        vim.opt.path:append({ "**" })
-                        vim.opt.iskeyword:append("-")
-                        vim.opt.whichwrap:append( '<,>,h,l,[,]' )
+            vim.opt.path:append({ "**" })
+            vim.opt.iskeyword:append("-")
+            -- vim.opt.whichwrap:append( '<,>,h,l,[,]' )
           '';
 
           statusline.lualine.enable = true;

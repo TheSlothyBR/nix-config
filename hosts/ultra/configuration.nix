@@ -1,10 +1,10 @@
-{ config
-, lib
-, ...
-}:{
+{
+  ...
+}:
+{
   imports = [
-   ../common
-   ./system
+    ../common
+    ./system
   ];
 
   custom = {
@@ -21,6 +21,7 @@
     calibre.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
+    flatsweep.enable = true;
     fonts.enable = true;
     gestures.enable = true;
     git.enable = true;
@@ -51,7 +52,7 @@
     plymouth.enable = true;
     protonplus.enable = true;
     rclone.enable = true;
-	retrodeck.enable = true;
+    retrodeck.enable = true;
     scribus.enable = true;
     sddm.enable = true;
     shell.enable = true;

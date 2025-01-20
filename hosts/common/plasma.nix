@@ -38,6 +38,9 @@
         directories = [
           ".local/share/kwalletd"
         ];
+        files = [
+          ".config/kwinoutputconfig.json"
+        ];
       };
     };
 
@@ -133,7 +136,7 @@
       ];
       users.${isUser} = {
         #xdg.configFile = {
-        #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark, this implementation creates reaad-only symlink
+        #  "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=KvLibadwaita"; #KvLibadwaitaDark, this implementation creates read-only symlink
         #};
 
         programs.plasma = {
@@ -193,32 +196,61 @@
               };
             }
           ];
-          fonts = {
-            general = {
-              family = "Inter Variable";
-              pointSize = 11;
-            };
-            fixedWidth = {
-              family = "FiraCode Nerd Font Mono";
-              pointSize = 10;
-            };
-            small = {
-              family = "Inter Variable";
-              pointSize = 9;
-            };
-            toolbar = {
-              family = "Inter Variable";
-              pointSize = 11;
-            };
-            menu = {
-              family = "Inter Variable";
-              pointSize = 11;
-            };
-            windowTitle = {
-              family = "Inter Variable";
-              pointSize = 11;
-            };
-          };
+          fonts =
+            if isConfig == "${globals.ultra.hostName}" then
+              {
+                general = {
+                  family = "Inter Variable";
+                  pointSize = 12;
+                };
+                fixedWidth = {
+                  family = "FiraCode Nerd Font Mono";
+                  pointSize = 11;
+                };
+                small = {
+                  family = "Inter Variable";
+                  pointSize = 10;
+                };
+                toolbar = {
+                  family = "Inter Variable";
+                  pointSize = 12;
+                };
+                menu = {
+                  family = "Inter Variable";
+                  pointSize = 12;
+                };
+                windowTitle = {
+                  family = "Inter Variable";
+                  pointSize = 12;
+                };
+              }
+            else
+              {
+                general = {
+                  family = "Inter Variable";
+                  pointSize = 11;
+                };
+                fixedWidth = {
+                  family = "FiraCode Nerd Font Mono";
+                  pointSize = 10;
+                };
+                small = {
+                  family = "Inter Variable";
+                  pointSize = 9;
+                };
+                toolbar = {
+                  family = "Inter Variable";
+                  pointSize = 11;
+                };
+                menu = {
+                  family = "Inter Variable";
+                  pointSize = 11;
+                };
+                windowTitle = {
+                  family = "Inter Variable";
+                  pointSize = 11;
+                };
+              };
           desktop = {
             widgets = [
               {
@@ -641,6 +673,22 @@
       };
     };
 
+    #systemd.services."declare-fractional-scaling" = {
+    #  description = "Declare Fractional Scaling";
+    #  wantedBy = [ "multi-user.target" ];
+    #  serviceConfig = {
+    #    Type = "oneshot";
+    #    User = "${isUser}";
+    #    Group = "users";
+    #  };
+    #  script = ''
+    #    if [ -f ~/.config/kwinoutputconfig.json ]; then
+    #      sed -i "@                "rgbRange": "Automatic",@a                "scale": 0.75," ~/.config/kwinoutputconfig.json
+    #    fi
+    #    #qdbus org.kde.KWin /KWin reloadConfig
+    #  '';
+    #};
+
     systemd.services."generate-fusuma-autostart-and-config" = {
       description = "Generate Fusuma Autostart";
       wantedBy = [ "multi-user.target" ];
@@ -682,24 +730,27 @@
                 mkdir -p ~/.config
                 cat << 'EOF' > ~/.config/mimeapps.list
         [Default Applications]
-        ${if config.custom.brave.enable then "x-scheme-handler/https=com.brave.Browser.desktop" else ""}
-        ${if config.custom.brave.enable then "x-scheme-handler/http=com.brave.Browser.desktop" else ""}
-        ${if config.custom.brave.enable then "x-scheme-handler/unknown=com.brave.Browser.desktop" else ""}
-        image/*=org.gnome.Loupe.desktop
-        video/*=org.videolan.VLC.desktop
-        audio/*=org.videolan.VLC.desktop
-        application/pdf=org.kde.okular.desktop
-        text/*=org.kde.kate.desktop
-        application/x-torrent=org.kde.ktorrent.desktop
-        application/x-bittorrent=org.kde.ktorrent.desktop
-        x-scheme-handler/magnet=org.kde.ktorrent.desktop
+        ${if config.custom.brave.enable then "x-scheme-handler/https=com.brave.Browser.desktop;" else ""}
+        ${if config.custom.brave.enable then "x-scheme-handler/http=com.brave.Browser.desktop;" else ""}
+        ${if config.custom.brave.enable then "x-scheme-handler/unknown=com.brave.Browser.desktop;" else ""}
+        image/*=org.gnome.Loupe.desktop;
+        video/*=org.videolan.VLC.desktop;
+        audio/*=org.videolan.VLC.desktop;
+        application/x-matroska=org.videolan.VLC.desktop;
+        application/pdf=org.kde.okular.desktop;
+        text/*=org.kde.kate.desktop;
+        application/x-torrent=org.kde.ktorrent.desktop;
+        application/x-bittorrent=org.kde.ktorrent.desktop;
+        x-scheme-handler/magnet=org.kde.ktorrent.desktop;
         [Added Associations]
-        x-scheme-handler/https=${if config.custom.brave.enable then "com.brave.Browser.desktop" else ""},${
-          if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop" else ""
+        x-scheme-handler/https=${if config.custom.brave.enable then "com.brave.Browser.desktop;" else ""},${
+          if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop;" else ""
         }
-        x-scheme-handler/http=${if config.custom.brave.enable then "com.brave.Browser.desktop" else ""},${
-          if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop" else ""
+        x-scheme-handler/http=${if config.custom.brave.enable then "com.brave.Browser.desktop;" else ""},${
+          if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop;" else ""
         }
+        video/*=org.videolan.VLC.desktop;
+        application/x-matroska=org.videolan.VLC.desktop;
         [Removed Associations]
         EOF
       '';
