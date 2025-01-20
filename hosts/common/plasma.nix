@@ -27,8 +27,38 @@
 
     nixpkgs.overlays = [
       (final: prev: {
-        plasma-panel-spacer-extended = (
-          pkgs.callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix { }
+        plasma-panel-spacer-extended = pkgs.callPackage ../../pkgs/kde-panel-spacer-extended-widget.nix { };
+      })
+      (final: prev: {
+        python = prev.python.override {
+          packageOverrides = (
+            nfinal: nprev: {
+              kde-material-you-colors = nprev.kde-material-you-colors.overrideAttrs (
+                mfinal: mprev: {
+                  version = "1.10.0";
+                  src = pkgs.fetchFromGitHub {
+                    owner = "luisbocanegra";
+                    repo = "kde-material-you-colors";
+                    tag = "v${mfinal.version}";
+                    hash = "sha256-qT2F3OtRzYagbBH/4kijuy4udD6Ak74WacIhfzaNWqo=";
+                  };
+                }
+              );
+            }
+          );
+        };
+      })
+      (final: prev: {
+        plasma-panel-colorizer = prev.plasma-panel-colorizer.overrideAttrs (
+          nfinal: nprev: {
+            version = "2.0.0";
+            src = pkgs.fetchFromGitHub {
+              owner = "luisbocanegra";
+              repo = "plasma-panel-colorizer";
+              tag = "v${nfinal.version}";
+              hash = "sha256-8QuVhUvjBj8Jbta/NxTw2BTv4P1Flsdf0TvSw/hFcHw=";
+            };
+          }
         );
       })
     ];
@@ -65,11 +95,11 @@
       systemPackages =
         let
           stable = with pkgs; [
+            application-title-bar
             (callPackage ../../pkgs/kde-material-you-colors-widget.nix { })
             (callPackage ../../pkgs/kde-wallpaper-effects-widget.nix { })
             (callPackage ../../pkgs/pywal16-libadwaita.nix { })
             (callPackage ../../pkgs/yaru-unity-plasma-icons.nix { })
-            application-title-bar
             kara
             kdePackages.krohnkite
             kdePackages.qtstyleplugin-kvantum
@@ -79,8 +109,6 @@
             inputs.kvlibadwaita.packages.${pkgs.system}.default
             fusuma # requires adding user to inputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
             plasma-panel-colorizer
-            python312Packages.kde-material-you-colors
-            pywal16
             (pkgs.writeShellApplication {
               name = "plasma-random-wallpaper";
               runtimeInputs = [ pkgs.kdePackages.qttools ];
@@ -113,6 +141,8 @@
                 fi
               '';
             })
+            python312Packages.kde-material-you-colors
+            pywal16
             wl-clipboard-rs
           ];
           unstable = with pkgs.unstable; [
@@ -277,7 +307,7 @@
               floating = true;
               alignment = "left";
               lengthMode = "fill";
-              height = 34;
+              height = 36;
               hiding = "none";
               widgets = [
                 {
@@ -432,7 +462,7 @@
               floating = true;
               alignment = "center";
               lengthMode = "fit";
-              height = 54;
+              height = 60;
               hiding = "dodgewindows";
               widgets = [
                 {
@@ -557,11 +587,12 @@
                 keepFloatAbove = false;
               };
               "Effect-blurplus" = {
-                BlurMatching = false;
-                BlurNonMatching = true;
-                BlurStrength = 3;
-                NoiseStrength = 7;
+                BlurDecorations = true;
+                BlurMenus = true;
+                BlurStrength = 6;
+                NoiseStrength = 8;
                 TransparentBlur = false;
+                WindowClasses = "plasmashell";
               };
               "Round-Corners" = {
                 InactiveCornerRadius = 15;
@@ -749,6 +780,7 @@
         x-scheme-handler/http=${if config.custom.brave.enable then "com.brave.Browser.desktop;" else ""},${
           if config.custom.nyxt.enable then "engineer.atlas.Nyxt.desktop;" else ""
         }
+        image/*=org.gnome.Loupe.desktop;
         video/*=org.videolan.VLC.desktop;
         application/x-matroska=org.videolan.VLC.desktop;
         [Removed Associations]
@@ -814,11 +846,8 @@
         on_change_hook=/run/current-system/sw/bin/plasma-random-wallpaper
         once_after_change=false
         pause_mode=false
-        plasma_follows_scheme=false
-        pywal=false
-        pywal_follows_scheme=false
+        pywal=true
         pywal_light=false
-        qdbus_executable=
         scheme_variant=5
         screenshot_delay=900
         screenshot_only_mode=false

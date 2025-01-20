@@ -1,18 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nix-update-script
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "kde-material-you-colors-widget";
-  version = "1.9.3";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kde-material-you-colors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hew+aWbfWmqTsxsNx/0Ow0WZAVl0e6OyzDxcKm+nlzQ=";
+    hash = "sha256-qT2F3OtRzYagbBH/4kijuy4udD6Ak74WacIhfzaNWqo=";
   };
 
   dontBuild = true;
