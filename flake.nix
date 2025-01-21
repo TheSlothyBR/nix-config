@@ -47,6 +47,10 @@
       url = "github:taj-ny/kwin-effects-forceblur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    kwin-gestures = {
+      url = "github:taj-ny/kwin-gestures";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     kvlibadwaita = {
       url = "github:MOIS3Y/KvLibadwaita";
       inputs.nixpkgs.follows = "nixpkgs";

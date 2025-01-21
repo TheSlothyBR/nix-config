@@ -118,9 +118,10 @@
             kdePackages.qtstyleplugin-kvantum
             kdePackages.sddm-kcm
             kde-rounded-corners
-            inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
             inputs.kvlibadwaita.packages.${pkgs.system}.default
-            fusuma # requires adding user to inputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
+            inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+            inputs.kwin-gestures.packages.${pkgs.system}.default
+            #fusuma # requires adding user to inputs group, which is insecure, bin wont be needed when KDE allows rebinding of gestures
             plasma-panel-colorizer
             (pkgs.writeShellApplication {
               name = "plasma-random-wallpaper";
@@ -623,6 +624,9 @@
               };
             };
             "kwinrc" = {
+              "Effect-overview" = {
+                BorderActivate = 9;
+              };
               Plugins = {
                 contrastEnabled = false;
                 forceblurEnabled = true;
@@ -634,11 +638,13 @@
               };
               "Effect-blurplus" = {
                 BlurDecorations = true;
+                BlurMatching = false;
+                BlurNonMatching = true;
                 BlurMenus = true;
                 BlurStrength = 6;
                 NoiseStrength = 8;
                 TransparentBlur = false;
-                WindowClasses = "plasmashell";
+                #WindowClasses = "plasmashell";
               };
               "Round-Corners" = {
                 InactiveCornerRadius = 15;
@@ -766,34 +772,34 @@
     #  '';
     #};
 
-    systemd.services."generate-fusuma-autostart-and-config" = {
-      description = "Generate Fusuma Autostart";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        User = "${isUser}";
-        Group = "users";
-      };
-      script = ''
-                mkdir -p ~/.config/autostart
-                cat << 'EOF' > ~/.config/autostart/fusuma.desktop
-        [Desktop Entry]
-        Exec=fusuma -d
-        Icon=
-        Name=fusuma
-        Type=Application
-        X-KDE-AutostartScript=true
-        EOF
+    #systemd.services."generate-fusuma-autostart-and-config" = {
+    #  description = "Generate Fusuma Autostart";
+    #  wantedBy = [ "multi-user.target" ];
+    #  serviceConfig = {
+    #    Type = "oneshot";
+    #    User = "${isUser}";
+    #    Group = "users";
+    #  };
+    #  script = ''
+    #            mkdir -p ~/.config/autostart
+    #            cat << 'EOF' > ~/.config/autostart/fusuma.desktop
+    #    [Desktop Entry]
+    #    Exec=fusuma -d
+    #    Icon=
+    #    Name=fusuma
+    #    Type=Application
+    #    X-KDE-AutostartScript=true
+    #    EOF
 
-                mkdir -p ~/.config/fusuma
-                cat << 'EOF' > ~/.config/fusuma/config.yml
-        hold:
-          3:
-            command: "flatpak run menu.kando.Kando --menu Plasma"
-            interval: 0.5
-        EOF
-      '';
-    };
+    #            mkdir -p ~/.config/fusuma
+    #            cat << 'EOF' > ~/.config/fusuma/config.yml
+    #    hold:
+    #      3:
+    #        command: "flatpak run menu.kando.Kando --menu Plasma"
+    #        interval: 0.5
+    #    EOF
+    #  '';
+    #};
 
     systemd.services."generate-mimeapps-file" = {
       description = "Generate mimeapps.list file";
