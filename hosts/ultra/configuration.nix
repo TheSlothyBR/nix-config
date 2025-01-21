@@ -25,6 +25,7 @@
     fonts.enable = true;
     gestures.enable = true;
     git.enable = true;
+    heroic-games.enable = true;
     inputs.enable = true;
     jamovi.enable = true;
     kando.enable = true;
