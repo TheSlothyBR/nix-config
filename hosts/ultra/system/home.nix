@@ -1,11 +1,10 @@
-{ inputs
-, isConfig
-, isUser
-, config
-, pkgs
-, lib
-, ...
-}:{
+{
+  inputs,
+  isUser,
+  config,
+  ...
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
@@ -31,14 +30,13 @@
   users.mutableUsers = true;
   users.users."${isUser}" = {
     isNormalUser = true;
-    extraGroups = builtins.filter (group: builtins.hasAttr group config.users.groups) [ 
+    extraGroups = builtins.filter (group: builtins.hasAttr group config.users.groups) [
       "wheel"
       "audio"
       "video"
       "networkmanager"
       "libvirtd"
       "wireshark"
-      "input" #remove with fusuma
     ];
     hashedPasswordFile = config.sops.secrets."${isUser}/password".path;
   };
@@ -54,7 +52,7 @@
         username = "${isUser}";
         homeDirectory = "/home/${isUser}";
         packages = [
-          
+
         ];
       };
     };

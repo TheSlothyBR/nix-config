@@ -25,7 +25,7 @@
             Context = {
               sockets = [
                 "wayland"
-                #"x11"
+                "x11"
               ];
             };
           };
