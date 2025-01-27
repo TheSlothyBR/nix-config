@@ -1,9 +1,10 @@
-{ inputs
-, globals
-, isConfig
-, pkgs
-, ...
-}:{
+{
+  inputs,
+  globals,
+  isConfig,
+  ...
+}:
+{
   imports = [
     inputs.disko.nixosModules.default
   ];
@@ -76,23 +77,39 @@
               subvolumes = {
                 "/persist" = {
                   mountpoint = "/persist";
-                  mountOptions = [ "subvol=persist" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=persist"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
                 "/nix" = {
                   mountpoint = "/nix";
-                  mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=nix"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
                 "/root" = {
                   mountpoint = "/";
-                  mountOptions = [ "subvol=root" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=root"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
                 "/swap" = {
                   mountpoint = "/.swapvol";
-                  swap.swapfile.size = "4G";
+                  swap.swapfile.size = "8G";
                 };
                 "/snapshots" = {
                   mountpoint = "/.snapshots";
-                  mountOptions = [ "subvol=snapshots" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=snapshots"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
               };
             };

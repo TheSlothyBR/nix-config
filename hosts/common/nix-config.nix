@@ -1,8 +1,10 @@
-{ inputs
-, config
-, lib
-, ...
-}:{
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
+{
   options = {
     custom.nix-config = {
       enable = lib.mkEnableOption "Nix config";
@@ -11,6 +13,11 @@
   };
 
   config = lib.mkIf config.custom.nix-config.enable {
+    boot.tmp = {
+      useTmpfs = true;
+      tmpfsSize = "95%";
+    };
+
     nix = {
       nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
       settings = {

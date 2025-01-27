@@ -1,14 +1,16 @@
-{ inputs
-, config
-, pkgs
-, isUser
-, lib
-, ...
-}:{
+{
+  inputs,
+  config,
+  pkgs,
+  isUser,
+  lib,
+  ...
+}:
+{
   imports = [
     inputs.nix-flatpak.nixosModules.nix-flatpak
   ];
-  
+
   options = {
     custom.flatpak = {
       enable = lib.mkEnableOption "Flatpak config";
@@ -28,7 +30,7 @@
         ];
       };
     };
-    
+
     systemd.services."flatpak-managed-install" = {
       serviceConfig = {
         ExecStartPre = "${pkgs.networkmanager}/bin/nm-online -q -t 90";
@@ -79,6 +81,10 @@
               filesystems = [
                 "!home"
                 "!/root"
+                "xdg-config/gtk-3.0:ro"
+                "xdg-config/gtk-4.0:ro"
+                "xdg-config/gtkrc:ro"
+                "xdg-config/gtkrc-2.0:ro"
               ];
             };
             Environment = {
@@ -87,7 +93,7 @@
               GTK_THEME = "Adwaita:dark";
             };
           };
-        };   
+        };
       };
       # Needed for desktop icons to show up due to nix-flatpak bug: #31
       xdg.systemDirs.data = [

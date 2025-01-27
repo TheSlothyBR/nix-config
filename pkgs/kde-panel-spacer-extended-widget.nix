@@ -1,13 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, glib
-, nix-update-script
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  glib,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "kde-panel-spacer-extended-widget";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
