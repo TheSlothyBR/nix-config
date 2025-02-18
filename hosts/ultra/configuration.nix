@@ -19,6 +19,7 @@
     brave.enable = true;
     calculator.enable = true;
     calibre.enable = true;
+    chrome.enable = true;
     flatpak.enable = true;
     flatseal.enable = true;
     flatsweep.enable = true;
@@ -70,8 +71,10 @@
     utils.enable = true;
     vlc.enable = true;
     warehouse.enable = true;
+    waydroid.enable = true;
     wezterm.enable = true;
     wifi-adapter.enable = true;
+    workflow.enable = true;
     zellij.enable = true;
     zotero = {
       enable = true;
