@@ -318,7 +318,9 @@
                     General = {
                       isEnabled = true;
                       hideWidget = true;
-                      #presetAutoloading = ''{"maximized":"/home/${isUser}/.config/panel-colorizer/presets/Default","touchingWindow":"/home/${isUser}/.config/panel-colorizer/presets/Default","floating":"/home/${isUser}/.config/panel-colorizer/presets/Bubbles"}'';
+                      floatingPreset = "Bubbles";
+                      touchingWindowPreset = "Default";
+                      maximizedPreset = "Default";
                     };
                   };
                 }
@@ -379,7 +381,12 @@
                           title = "System Resources";
                           showTitle = true;
                           showLegend = true;
-                          horizontalBars = true;
+                          settings = {
+                            "org.kde.ksysguard.barchart/General" = {
+                              horizontalBars = true;
+                              showYAxisLabels = false;
+                            };
+                          };
                           sensors = [
                             {
                               name = "cpu/all/usage";
@@ -502,7 +509,7 @@
                     General = {
                       isEnabled = true;
                       hideWidget = true;
-                      #presetAutoloading = ''{"floating":"/home/${isUser}/.config/panel-colorizer/presets/Lower"}'';
+                      floatingPreset = "lower";
                     };
                   };
                 }

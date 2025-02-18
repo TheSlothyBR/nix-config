@@ -1,10 +1,11 @@
-{ config
-, isConfig
-, globals
-, pkgs
-, lib
-, ...
-}:{
+{
+  config,
+  isConfig,
+  globals,
+  lib,
+  ...
+}:
+{
   options = {
     custom.utils = {
       enable = lib.mkEnableOption "Utils config";
@@ -26,12 +27,6 @@
         flake = "${globals.${isConfig}.persistFlakePath}/${globals.meta.flakePath}";
         clean.extraArgs = "--keep-since 2d";
       };
-    };
-
-    environment = {
-      systemPackages = with pkgs; [
-        wget
-      ];
     };
   };
 }

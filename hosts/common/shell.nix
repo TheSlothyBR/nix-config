@@ -133,7 +133,6 @@
         {
           "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
           "modules": [
-            "separator",
             "os",
             "de",
             "kernel",
@@ -159,6 +158,7 @@
         fishPlugins.fzf-fish
         fzf
         tealdeer
+        wget
         zoxide
       ];
       shellAliases = {

@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "luisbocanegra";
     repo = "plasma-panel-spacer-extended";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3ediynClboG6/dBQTih6jJPGjsTBZhZKOPQAjGLRNmk=";
+    hash = "sha256-Rr80bI+9xnrlj8JNTL+vGqOw9/98R0ub0pQfHQmEWNM=";
   };
 
   propagatedUserEnvPkgs = [
