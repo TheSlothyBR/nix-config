@@ -1,16 +1,21 @@
-{ pkgs
-, modulesPath
-, config
-, globals
-, ...
-}:{
+{
+  pkgs,
+  modulesPath,
+  config,
+  globals,
+  ...
+}:
+{
   imports = [
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
   ];
 
-  nixpkgs.hostPlatform = builtins.elemAt globals.meta.architectures 0;
+  nixpkgs = {
+    hostPlatform = builtins.elemAt globals.meta.architectures 0;
+    config.allowUnfree = true;
+  };
 
-  nix.settings.experimental-features = [ 
+  nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
@@ -18,9 +23,11 @@
   isoImage.squashfsCompression = "gzip -Xcompression-level 1";
 
   boot = {
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
-    extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
+    kernelPackages = pkgs.linuxKernel.packages.linux_6_14;
+    #extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
   };
+
+  hardware.enableAllFirmware = true;
 
   environment.systemPackages = with pkgs; [
     neovim
@@ -29,14 +36,14 @@
     fsarchiver
     (pkgs.writeShellApplication {
       name = "install";
-      runtimeInputs = [  ];
+      runtimeInputs = [ ];
       text = ''
         nix run github:${globals.meta.owner}/${globals.meta.repo} -- "$@"
       '';
     })
     (pkgs.writeShellApplication {
       name = "wipe";
-      runtimeInputs = [  ];
+      runtimeInputs = [ ];
       text = ''
         mount -o remount,size=2G,noatime /nix/.rw-store
         swapoff /dev/zram0

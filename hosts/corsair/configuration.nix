@@ -1,10 +1,12 @@
-{ config
-, lib
-, ...
-}:{
+{
+  config,
+  lib,
+  ...
+}:
+{
   imports = [
-   ../common
-   ./system
+    ../common
+    ./system
   ];
 
   custom = {
@@ -52,7 +54,7 @@
     plymouth.enable = false;
     protonplus.enable = false;
     rclone.enable = false;
-	retrodeck.enable = false;
+    retrodeck.enable = false;
     scribus.enable = false;
     sddm.enable = false;
     shell.enable = false;
@@ -69,13 +71,14 @@
     utils.enable = true;
     vlc.enable = false;
     warehouse.enable = false;
+    waydroid.enable = false;
     wezterm.enable = false;
     wifi-adapter.enable = true;
     zellij.enable = false;
-	zotero = {
-	  enable = false;
-	  autostart = false;
-	};
+    zotero = {
+      enable = false;
+      autostart = false;
+    };
     zswap.enable = true;
   };
 }

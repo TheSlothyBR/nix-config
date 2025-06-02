@@ -1,7 +1,9 @@
-{ config
-, lib
-, ...
-}:{
+{
+  config,
+  lib,
+  ...
+}:
+{
   options = {
     custom.bootloader = {
       enable = lib.mkEnableOption "Bootloader config";
@@ -15,9 +17,9 @@
         canTouchEfiVariables = true;
       };
       systemd-boot = {
-	    enable = config.custom.bootloader.systemd-boot.enable;
-	    editor = false;
-	  };
+        enable = config.custom.bootloader.systemd-boot.enable;
+        editor = false;
+      };
     };
   };
 }
