@@ -30,7 +30,7 @@
           vimAlias = true;
           enableLuaLoader = true;
 
-          useSystemClipboard = true;
+          clipboard.registers = "unnamedplus";
           lineNumberMode = "relative";
           searchCase = "smart";
           preventJunkFiles = true;

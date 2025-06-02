@@ -12,7 +12,7 @@
   };
 
   config = lib.mkIf config.custom.waydroid.enable {
-    virtualization.waydroid.enable = true;
+    virtualisation.waydroid.enable = true;
 
     environment.persistence."/persist/system" = {
       directories = [
