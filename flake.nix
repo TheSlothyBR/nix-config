@@ -117,25 +117,6 @@
               ssh-to-age
             ];
             text = ''
-                        trap 'mount -o remount,size=2G,noatime /nix/.rw-store; \
-                              swapoff /dev/zram0; \
-                              modprobe -r zram; \
-                              echo 1 > /sys/module/zswap/parameters/enabled; \
-                              umount -A /tmp/usb; \
-                              unset SOPS_AGE_KEY_FILE; \
-                              rm -rf /{dotfiles,tmp/usb,tmp/*{.age,_key,_key.pub}}' \
-                        EXIT;
-                        mkdir -p /tmp/usb
-                        mount ${globals.meta.usb} /tmp/usb
-                        
-                        modprobe zram
-                        zramctl /dev/zram0 --algorithm zstd --size "$(grep MemTotal /proc/meminfo | tr -dc '0-9')KiB"
-                        mkswap -U clear /dev/zram0
-                        swapon --discard --priority 150 /dev/zram0
-                        mount -o remount,size=6G,noatime /nix/.rw-store
-                        
-                        touch /tmp/luks_password
-
                         nix --experimental-features 'nix-command flakes' shell nixpkgs#git -c git clone https://github.com/${globals.meta.owner}/${globals.meta.repo}.git /dotfiles && cd /dotfiles
                         
                         configs=(
@@ -208,6 +189,25 @@
                           nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/home/''${FLAKE}/${globals.meta.flakePath}#''${FLAKE}"
                           exit
                         fi
+
+                        trap 'mount -o remount,size=2G,noatime /nix/.rw-store; \
+                              swapoff /dev/zram0; \
+                              modprobe -r zram; \
+                              echo 1 > /sys/module/zswap/parameters/enabled; \
+                              umount -A /tmp/usb; \
+                              unset SOPS_AGE_KEY_FILE; \
+                              rm -rf /{dotfiles,tmp/usb,tmp/*{.age,_key,_key.pub}}' \
+                        EXIT;
+                        mkdir -p /tmp/usb
+                        mount ${globals.meta.usb} /tmp/usb
+                        
+                        modprobe zram
+                        zramctl /dev/zram0 --algorithm zstd --size "$(grep MemTotal /proc/meminfo | tr -dc '0-9')KiB"
+                        mkswap -U clear /dev/zram0
+                        swapon --discard --priority 150 /dev/zram0
+                        mount -o remount,size=6G,noatime /nix/.rw-store
+                        
+                        touch /tmp/luks_password
 
                         export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.age
 
