@@ -206,7 +206,7 @@
 
                         if [[ NO_FORMAT -eq 0 ]]; then
                           nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/home/''${config}/${globals.meta.flakePath}#''${config}"
-                          exi
+                          exit
                         fi
 
                         export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.age
