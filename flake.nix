@@ -186,7 +186,7 @@
                         fi
 
                         if [[ NO_FORMAT -eq 0 ]]; then
-                          nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/home/''${FLAKE}/${globals.meta.flakePath}#''${FLAKE}"
+                          nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/dotfiles#''${FLAKE}"
                           exit
                         fi
 
@@ -251,11 +251,11 @@
                               exit
                             elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
                               nix --experimental-features 'nix-command flakes' run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
-                              nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/home/''${config}/${globals.meta.flakePath}#''${config}"
+                              nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/dotfiles#''${config}"
                               exit
                             else
                               nix --experimental-features 'nix-command flakes' run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
-                              nixos-install --root /mnt --no-root-password --flake "/mnt/persist/home/''${config}/${globals.meta.flakePath}#''${config}"
+                              nixos-install --root /mnt --no-root-password --flake "/dotfiles#''${config}"
                               exit
                             fi
                         
