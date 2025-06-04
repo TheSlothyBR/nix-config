@@ -171,7 +171,7 @@
                         done
 
                         if [[ NO_FORMAT -eq 0 ]]; then
-                          nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/''${FLAKE}/${globals.meta.flakePath}#''${FLAKE}"
+                          nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/home/''${FLAKE}/${globals.meta.flakePath}#''${FLAKE}"
                           exit
                         fi
 
