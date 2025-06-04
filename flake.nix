@@ -170,6 +170,11 @@
                           esac
                         done
 
+                        if [[ NO_FORMAT -eq 0 ]]; then
+                          nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/''${FLAKE}/${globals.meta.flakePath}#''${FLAKE}"
+                          exit
+                        fi
+
                         if [ ! -f "/dotfiles/flake.lock" ]; then
                           echo "Error: no placeholder flake.lock file found"
                           exit 1
@@ -183,11 +188,6 @@
                         if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
                           echo "Error: no placeholder secrets.yaml file found"
                           exit 1
-                        fi
-
-                        if [[ NO_FORMAT -eq 0 ]]; then
-                          nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/dotfiles#''${FLAKE}"
-                          exit
                         fi
 
                         trap 'mount -o remount,size=2G,noatime /nix/.rw-store; \
