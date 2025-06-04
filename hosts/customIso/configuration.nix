@@ -37,6 +37,7 @@
     ssh-to-age
     curl
     fsarchiver
+    lm_sensors
     (pkgs.writeShellApplication {
       name = "install";
       runtimeInputs = [ ];
