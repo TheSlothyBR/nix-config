@@ -50,7 +50,7 @@
       runtimeInputs = [ ];
       text = ''
         mount -o remount,size=2G,noatime /nix/.rw-store
-        swapoff /dev/zram0
+        swapoff /dev/zram0 ||:
         modprobe -r zram
         echo 1 > /sys/module/zswap/parameters/enabled
         umount -A /tmp/usb

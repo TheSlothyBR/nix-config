@@ -211,7 +211,7 @@
 
                         export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.age
 
-                        if grep -e "\s*-\s&''${FLAKE}\sage[0-9a-zA-Z]{59}$" "/dotfiles/.sops.yaml"; then
+                        if grep -qE "\s*-\s\&corsair\sage\w{59}\s*$" "/dotfiles/.sops.yaml"; then
                           cp "/tmp/usb/data/secrets/''${FLAKE}.age" "/tmp/''${FLAKE}.age"
                           sops -d --age "$(cat /tmp/"''${FLAKE}".age)" --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
                         else
@@ -219,7 +219,7 @@
                           ssh-to-age -private-key -i "/tmp/''${FLAKE}_ed25519_key" > "/tmp/''${FLAKE}.age"
                           age-keygen -y -o "/tmp/''${FLAKE}_pub.age" "/tmp/''${FLAKE}.age"
                           if grep -q "{}" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"; then
-                            sed -i -e "s@\s*-\s\&''${FLAKE}\s*@    - \&''${FLAKE} $(cat "/tmp/''${FLAKE}_pub.age")@g" /dotfiles/.sops.yaml
+                            sed -i -E 's@\s*-\s\&'"$FLAKE"'\s*$@    - \&'"$FLAKE"' '"$(cat "/tmp/''${FLAKE}_pub.age")"'@g' "/dotfiles/.sops.yaml"
                             read -rs -p "LUKS and Login Password: " PASS
                             touch /tmp/luks_password
                             printf '%s' "$PASS" > /tmp/luks_password
@@ -232,7 +232,7 @@
                             sops updatekeys -y "/dotfiles/hosts/common/secrets/secrets.yaml"
                             unset PASS
                           else
-                            sed -i -e "s@\s*-\s\&''${FLAKE}\s*@    - \&''${FLAKE} $(cat "/tmp/''${FLAKE}_pub.age")@g" /dotfiles/.sops.yaml
+                            sed -i -E 's@\s*-\s\&'"$FLAKE"'\s*$@    - \&'"$FLAKE"' '"$(cat "/tmp/''${FLAKE}_pub.age")"'@g' "/dotfiles/.sops.yaml"
                             sops updatekeys -y "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
                             sops updatekeys -y "/dotfiles/hosts/common/secrets/secrets.yaml"
                             sops -d --age "$(cat /tmp/"''${FLAKE}".age)" --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
