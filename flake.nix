@@ -143,6 +143,7 @@
                           corsair
                         )
 
+                        NO_FORMAT=1
                         NO_INSTALL=1
                         CORES=0
                         JOBS=1
@@ -161,6 +162,10 @@
                           -f|--flake)
                             FLAKE=$2
                             shift
+                            shift
+                            ;;
+                          --install-only)
+                            NO_FORMAT=0
                             shift
                             ;;
                           --format-only)
@@ -199,6 +204,11 @@
                           exit 1
                         fi
 
+                        if [[ NO_FORMAT -eq 0 ]]; then
+                          nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/home/''${config}/${globals.meta.flakePath}#''${config}"
+                          exi
+                        fi
+
                         export SOPS_AGE_KEY_FILE=/tmp/usb/data/secrets/keys.age
 
                         if grep -e "\s*-\s&''${FLAKE}\sage[0-9a-zA-Z]{59}$" "/dotfiles/.sops.yaml"; then
@@ -218,7 +228,7 @@
                   password: $(mkpasswd "$PASS")
                   luks: $PASS
               EOF
-                            sops -d --age "$(cat /tmp/"''${FLAKE}".age)" --extract "[\"''${FLAKE}\"][\"luks\"]" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" > /tmp/luks_password
+                            sops -e -i "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"
                             sops updatekeys -y "/dotfiles/hosts/common/secrets/secrets.yaml"
                             unset PASS
                           else
@@ -241,11 +251,11 @@
                               exit
                             elif [[ ! CORES -eq 0 ]] || [[ ! JOBS -eq 1 ]]; then
                               nix --experimental-features 'nix-command flakes' run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
-                              nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/dotfiles#''${config}"
+                              nixos-install --cores "$CORES" --max-jobs "$JOBS" --root /mnt --no-root-password --flake "/mnt/persist/home/''${config}/${globals.meta.flakePath}#''${config}"
                               exit
                             else
                               nix --experimental-features 'nix-command flakes' run github:nix-community/disko --no-write-lock-file -- --mode disko --flake "/dotfiles#''${config}"
-                              nixos-install --root /mnt --no-root-password --flake "/dotfiles#''${config}"
+                              nixos-install --root /mnt --no-root-password --flake "/mnt/persist/home/''${config}/${globals.meta.flakePath}#''${config}"
                               exit
                             fi
                         

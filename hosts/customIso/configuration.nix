@@ -24,7 +24,6 @@
 
   boot = {
     kernelPackages = pkgs.linuxKernel.packages.linux_6_14;
-    #extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
   };
 
   hardware.enableAllFirmware = true;
@@ -32,6 +31,10 @@
   environment.systemPackages = with pkgs; [
     neovim
     git
+    age
+    git
+    sops
+    ssh-to-age
     curl
     fsarchiver
     (pkgs.writeShellApplication {
