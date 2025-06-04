@@ -208,7 +208,7 @@
                           ssh-keygen -t ed25519 -f "/tmp/''${FLAKE}_ed25519_key" -N ""
                           ssh-to-age -private-key -i "/tmp/''${FLAKE}_ed25519_key" > "/tmp/''${FLAKE}.age"
                           age-keygen -y -o "/tmp/''${FLAKE}_pub.age" "/tmp/''${FLAKE}.age"
-                          if [ ! -f "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml" ]; then
+                          if grep -q "{}" "/dotfiles/hosts/''${FLAKE}/system/secrets/secrets.yaml"; then
                             sed -i -e "s@[[:space:]]*-[[:space:]]\&''${FLAKE}[[:space:]]*@    - \&''${FLAKE} $(cat "/tmp/''${FLAKE}_pub.age")@g" /dotfiles/.sops.yaml
                             read -rs -p "LUKS and Login Password: " PASS
                             touch /tmp/luks_password
