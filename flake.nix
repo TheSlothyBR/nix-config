@@ -93,6 +93,7 @@
         ./overlays/unstable-pkgs-overlay.nix
       ];
     };
+    defaultPackage = self.nixosConfigurations.corsair.config.system.build.toplevel;
     #  nixosConfigurations = lib.genAttrs (lib.custom.getSetValuesList globals [ "hostName" ] [ "meta" ]) (
     #    hostName:
     #    lib.nixosSystem {
