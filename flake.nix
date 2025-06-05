@@ -84,13 +84,14 @@
     rec {
     nixosConfigurations.corsair = lib.nixosSystem {
       specialArgs = {
-        inherit inputs outputs globals lib
-        isConfig = corsair;
-        isUser = corsair;
-        modules = [
-          ./hosts/corsair/configuration.nix
-          ./overlays/unstable-pkgs-overlay.nix
-        ]
+        inherit inputs outputs globals lib;
+        isConfig = globals.corsair.hostName;
+        isUser = globals.corsair.userName;
+      };
+      modules = [
+        ./hosts/corsair/configuration.nix
+        ./overlays/unstable-pkgs-overlay.nix
+      ];
     };
     #  nixosConfigurations = lib.genAttrs (lib.custom.getSetValuesList globals [ "hostName" ] [ "meta" ]) (
     #    hostName:
