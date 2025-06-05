@@ -83,6 +83,7 @@
     in
     rec {
     nixosConfigurations.corsair = lib.nixosSystem {
+      system = "x86_64-linux";
       specialArgs = {
         inherit inputs outputs globals lib;
         isConfig = globals.corsair.hostName;
