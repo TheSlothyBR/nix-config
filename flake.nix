@@ -83,7 +83,7 @@
       system = builtins.elemAt globals.meta.architectures 0;
     in
     rec {
-    nixosConfigurations.corsair = lib.nixosSystem {
+    nixosConfigurations.corsair = nixpkgs.lib.nixosSystem {
       specialArgs = {
         inherit inputs outputs globals lib;
         isConfig = globals.corsair.hostName;
