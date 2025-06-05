@@ -80,10 +80,10 @@
       lib = (
         (_: _.lib.extend (final: prev: (import ./lib final) // inputs.home-manager.lib)) inputs.nixpkgs
       );
+      system = builtins.elemAt globals.meta.architectures 0;
     in
     rec {
     nixosConfigurations.corsair = lib.nixosSystem {
-      system = "x86_64-linux";
       specialArgs = {
         inherit inputs outputs globals lib;
         isConfig = globals.corsair.hostName;
@@ -94,7 +94,7 @@
         ./overlays/unstable-pkgs-overlay.nix
       ];
     };
-    defaultPackage = self.nixosConfigurations.corsair.config.system.build.toplevel;
+    defaultPackage.system = self.nixosConfigurations.corsair.config.system.build.toplevel;
     #  nixosConfigurations = lib.genAttrs (lib.custom.getSetValuesList globals [ "hostName" ] [ "meta" ]) (
     #    hostName:
     #    lib.nixosSystem {
